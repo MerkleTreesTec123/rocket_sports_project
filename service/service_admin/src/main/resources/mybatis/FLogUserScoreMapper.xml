@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FLogUserScoreMapper">
+
+	<sql id="logUserScoreColumn">
+		fid,
+		fuid,
+		fscore,
+		ftype,
+		fremark,
+		fcreatetime
+	</sql>
+
+	<select id="getPageList" resultType="FLogUserScore" parameterType="java.util.Map">
+		select
+		<include refid="logUserScoreColumn" />
+		from f_log_user_score
+		where 1=1
+		<if test="keyword != null">
+			and fuid = #{keyword,jdbcType=VARCHAR}
+		</if>
+		<if test="type != null">
+			and ftype = #{type,jdbcType=VARCHAR}
+		</if>
+		<if test="beginDate != null">
+			<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d')]]>
+		</if>
+		<if test="endDate != null">
+			<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') < date_format(#{endDate},'%Y-%m-%d')]]>
+		</if>
+		order by ${orderField} ${orderDirection}
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="countPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(fid)
+		from f_log_user_score
+		where 1=1
+		<if test="keyword != null">
+			and fuid = #{keyword,jdbcType=VARCHAR}
+		</if>
+		<if test="type != null">
+			and ftype = #{type,jdbcType=VARCHAR}
+		</if>
+		<if test="beginDate != null">
+			<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d')]]>
+		</if>
+		<if test="endDate != null">
+			<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') < date_format(#{endDate},'%Y-%m-%d')]]>
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,92 @@
+<div class="layui-form" lay-href="/csQuestion/csQuestionList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">用户id：</label>
+            <div class="layui-input-inline">
+                <input name="fuid" th:value="${fuid }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">发起人：</label>
+            <div class="layui-input-inline">
+                <input name="fquestion" th:value="${fquestion }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">问题详情：</label>
+            <div class="layui-input-inline">
+                <input name="fdetail" th:value="${fdetail }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">处理人：</label>
+            <div class="layui-input-inline">
+                <input name="foperation" th:value="${foperation }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-inline">
+                <select type="combox" name="fstatus">
+                    <option value="-1" th:selected="${fstatus == -1}">全部</option>
+                    <option value="0" th:selected="${fstatus == 0}">未处理</option>
+                    <option value="1" th:selected="${fstatus == 1}">已处理</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addCsQuestion.html"
+                    lay-href="csQuestion/goCsQuestionJSP.html?url=csQuestion/addCsQuestion"
+                    lay-target="dialog" lay-height="320" lay-width="800">新增</button>
+
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateCsQuestion.html"
+                    lay-href="csQuestion/goCsQuestionJSP.html?url=csQuestion/updateCsQuestion"
+                    lay-checked="fid" lay-target="dialog" lay-height="630" lay-width="800">修改</button>
+
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteCsQuestion.html"
+                    lay-href="csQuestion/deleteCsQuestion.html"
+                    lay-checked="fid" lay-target="ajax" lay-tips="确定要禁用吗?">删除</button>
+        </div>
+
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>用户UID</th>
+                <th>发起人</th>
+                <th>处理人</th>
+                <th>问题详情</th>
+                <th>处理结果</th>
+                <th>状态</th>
+                <th>创建日期</th>
+                <th>更新日期</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="question : ${csQuestionList.data}">
+                <td>
+                    <input type="checkbox" th:name="${question.fid}" lay-skin="primary" />
+                </td>
+                <td th:text="${question.fuid}"></td>
+                <td th:text="${question.fquestion}"></td>
+                <td th:text="${question.foperation}"></td>
+                <td th:text="${question.fdetail}"></td>
+                <td th:text="${question.fresult}"></td>
+                <td th:text="${question.fstatus == 0 ? '未解决' : '已解决'}"></td>
+                <td th:text="${question.fcreatetime == null ? '':#dates.format(question.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${question.fupdatetime == null ? '':#dates.format(question.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${csQuestionList.totalPages}, lay-curr=${csQuestionList.currentPage}"></div>
+</div>

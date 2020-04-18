@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FLogAdminActionMapper">
+
+	<sql id="logAdminActionColumn">
+		fid, fadminid, fuid, ftype, fdatatype, fcapitaltype, fdata, fcontent, fip,fupdatetime, fcreatetime
+	</sql>
+	
+	<insert id="insert" parameterType="FLogAdminAction" keyProperty="fid">
+		insert into f_log_admin_action (
+			fadminid, 
+			fuid,
+			ftype, 
+			fdatatype, 
+			fcapitaltype,
+			fdata, 
+			fcontent, 
+			fip,
+			fupdatetime, 
+			fcreatetime
+		) values ( 
+			#{fadminid,jdbcType=INTEGER},
+			#{fuid,jdbcType=INTEGER},
+			#{ftype,jdbcType=INTEGER}, 
+			#{fdatatype,jdbcType=INTEGER}, 
+			#{fcapitaltype,jdbcType=INTEGER},
+			#{fdata,jdbcType=DECIMAL}, 
+			#{fcontent,jdbcType=VARCHAR},
+			#{fip,jdbcType=VARCHAR},
+			#{fupdatetime,jdbcType=TIMESTAMP}, 
+			#{fcreatetime,jdbcType=TIMESTAMP})
+	</insert>
+	
+	
+	<select id="getPageList" resultType="FLogAdminAction" parameterType="java.util.Map">
+    select <include refid="logAdminActionColumn" />
+    from f_log_admin_action
+    where 1=1
+    <if test="keyword != null">
+    and (fadminid = #{keyword,jdbcType=INTEGER}
+		or fuid = #{keyword,jdbcType=INTEGER})
+    </if>
+	<if test="beginDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') >= date_format(#{beginDate,jdbcType=VARCHAR},'%Y-%m-%d')]]>
+	</if>
+	<if test="endDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') < date_format(#{endDate,jdbcType=VARCHAR},'%Y-%m-%d')]]>
+	</if> 
+	order by ${orderField} ${orderDirection}
+	limit #{offset},#{limit}
+  </select>
+  
+  <select id="countPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(fid)
+    from f_log_admin_action
+    where 1=1
+    <if test="keyword != null">
+		and (fadminid = #{keyword,jdbcType=INTEGER}
+		or fuid = #{keyword,jdbcType=INTEGER})
+    </if>
+	<if test="beginDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') >= date_format(#{beginDate,jdbcType=VARCHAR},'%Y-%m-%d')]]>
+	</if>
+	<if test="endDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') < date_format(#{endDate,jdbcType=VARCHAR},'%Y-%m-%d')]]>
+	</if>    
+  </select>
+</mapper>

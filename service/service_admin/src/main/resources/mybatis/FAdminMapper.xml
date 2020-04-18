@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FAdminMapper" >
+  
+  <sql id="adminColumn">
+  	  f_admin.fid, f_admin.fname, f_admin.fpassword, 
+      f_admin.fcreatetime, f_admin.fstatus, f_admin.version, 
+      f_admin.froleid, f_admin.fgoogleauthenticator, f_admin.fgoogleurl, 
+      f_admin.fgooglebind, f_admin.fopengooglevalidate, f_admin.fgooglevalidate,
+      f_admin.fagentid
+  </sql>
+  
+  <select id="findByPrimary" parameterType="FAdmin" resultType="FAdmin">
+  	select <include refid="adminColumn" />
+    from f_admin 
+    where 1=1
+    <if test="fname != null">
+    	and fname = #{fname}
+    </if>
+    <if test="fpassword != null">
+    	and fpassword = #{fpassword}
+    </if>
+    <if test="fagentid != null">
+    	and fagentid = #{fagentid}
+    </if>
+  </select>
+  
+  <insert id="insert" parameterType="FAdmin" keyProperty="fid">
+    insert into f_admin (
+      fname, 
+      fpassword, 
+      fcreatetime, 
+      fstatus, 
+      version, 
+      froleid, 
+      fgoogleauthenticator, 
+      fgoogleurl, 
+      fgooglebind, 
+      fopengooglevalidate, 
+      fgooglevalidate,
+      fagentid
+    ) values ( 
+      #{fname,jdbcType=VARCHAR}, 
+      #{fpassword,jdbcType=VARCHAR}, 
+      #{fcreatetime,jdbcType=TIMESTAMP}, 
+      #{fstatus,jdbcType=INTEGER}, 
+      #{version,jdbcType=INTEGER}, 
+      #{froleid,jdbcType=INTEGER}, 
+      #{fgoogleauthenticator,jdbcType=VARCHAR}, 
+      #{fgoogleurl,jdbcType=VARCHAR}, 
+      #{fgooglebind,jdbcType=BIT}, 
+      #{fopengooglevalidate,jdbcType=BIT},
+      #{fgooglevalidate,jdbcType=BIT},
+      #{fagentid,jdbcType=INTEGER}
+     )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FAdmin" >
+    update f_admin set 
+      fname = #{fname,jdbcType=VARCHAR},
+      fpassword = #{fpassword,jdbcType=VARCHAR},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fstatus = #{fstatus,jdbcType=INTEGER},
+      version = version + 1,
+      froleid = #{froleid,jdbcType=INTEGER},
+      fgoogleauthenticator = #{fgoogleauthenticator,jdbcType=VARCHAR},
+      fgoogleurl = #{fgoogleurl,jdbcType=VARCHAR},
+      fgooglebind = #{fgooglebind,jdbcType=BIT},
+      fopengooglevalidate = #{fopengooglevalidate,jdbcType=BIT},
+      fgooglevalidate = #{fgooglevalidate,jdbcType=BIT},
+      fagentid = #{fagentid}
+    where fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="FAdmin" parameterType="java.lang.Integer" >
+    select <include refid="adminColumn" />
+    from f_admin
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectAdminPageList" resultType="FAdmin" parameterType="java.util.Map" >
+    select <include refid="adminColumn" /> , f_role.fname as rolename
+   	from f_admin left join f_role on f_admin.froleid = f_role.fid
+    where 1=1
+    <if test="fname != null">
+    	and f_admin.fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') 
+    </if>
+    order by f_admin.${orderField} ${orderDirection}
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countAdminByPage" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(f_admin.fid)
+    	from f_admin left join f_role on f_admin.froleid = f_role.fid
+    where 1=1
+    <if test="fname != null">
+    	and f_admin.fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') 
+    </if>
+  </select>
+  
+</mapper>

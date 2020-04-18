@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: "@profileActive@"
+
+mybatis:
+  check-config-location: true
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mybatis/*Mapper.xml
+  type-aliases-package: com.qkwl.common.dto

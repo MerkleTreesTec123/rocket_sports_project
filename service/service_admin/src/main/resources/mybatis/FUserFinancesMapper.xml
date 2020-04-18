@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FUserFinancesMapper">
+
+	<resultMap id="userFinancesTotal" type="java.util.Map">
+		<result column="fcoinid" property="fcoinid" jdbcType="INTEGER" />
+		<result column="fname" property="fname" jdbcType="VARCHAR" />
+		<result column="famount" property="famount" jdbcType="DOUBLE" />
+		<result column="fplanamount" property="fplanamount" jdbcType="DOUBLE" />
+		<result column="fplanamountsend" property="fplanamountsend" jdbcType="DOUBLE" />
+	</resultMap>
+
+	<sql id="financesColumn">
+		fid, fuid, fcoinid, fname, frate, famount, fplanamount, fstate, fcreatetime,
+		fupdatetime, version
+	</sql>
+
+	<select id="selectUserFinancesList" resultType="FUserFinancesDTO" parameterType="java.util.Map">
+		select
+		<include refid="financesColumn" />
+		from f_user_finances
+		where 1=1
+		<if test="keyword != null">
+			and f_user_finances.fuid = #{keyword}
+		</if>
+		<if test="fcoinid != null">
+			and f_user_finances.fcoinid = #{fcoinid}
+		</if>
+		<if test="fstate != null">
+			and f_user_finances.fstate = #{fstate}
+		</if>
+		<if test="fcreatetime != null">
+			and DATE_FORMAT(f_user_finances.fcreatetime,'%Y-%m-%d') = DATE_FORMAT(#{fcreatetime},'%Y-%m-%d')
+		</if>
+		order by f_user_finances.${orderField} ${orderDirection}
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="selectUserFinancesCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from f_user_finances
+		where 1=1
+		<if test="keyword != null">
+			and f_user_finances.fuid = #{keyword}
+		</if>
+		<if test="fcoinid != null">
+			and f_user_finances.fcoinid = #{fcoinid}
+		</if>
+		<if test="fstate != null">
+			and f_user_finances.fstate = #{fstate}
+		</if>
+		<if test="fcreatetime != null">
+			and DATE_FORMAT(f_user_finances.fcreatetime,'%Y-%m-%d') = DATE_FORMAT(#{fcreatetime},'%Y-%m-%d')
+		</if>
+	</select>
+
+	<select id="selectUserFinancesBalance" resultType="FUserFinancesDTO">
+		select ifnull(sum(famount),0) famount, ifnull(sum(fplanamount),0) fplanamount
+		from f_user_finances
+		where 1=1
+		<if test="fuid != null">
+			and f_user_finances.fuid = #{fuid}
+		</if>
+		<if test="fcoinid != null">
+			and f_user_finances.fcoinid = #{fcoinid}
+		</if>
+		<if test="fstate != null">
+			and f_user_finances.fstate = #{fstate}
+		</if>
+	</select>
+
+	<select id="selectUserFinancesTotal" resultMap="userFinancesTotal">
+		SELECT 
+			fcoinid,fname,
+			SUM((CASE WHEN fstate = 1 THEN famount ELSE 0 END)) famount,
+			SUM((CASE WHEN fstate = 1 THEN fplanamount ELSE 0 END)) fplanamount,
+			SUM((CASE WHEN fstate = 2 THEN fplanamount ELSE 0 END)) fplanamountsend
+		FROM f_user_finances GROUP BY fcoinid,fname
+		UNION ALL
+		SELECT 
+			fcoinid,'总量' as fname,
+			SUM((CASE WHEN fstate = 1 THEN famount ELSE 0 END)) famount,
+			SUM((CASE WHEN fstate = 1 THEN fplanamount ELSE 0 END)) fplanamount,
+			SUM((CASE WHEN fstate = 2 THEN fplanamount ELSE 0 END)) fplanamountsend
+		FROM f_user_finances GROUP BY fcoinid;
+	</select>
+
+	<update id="update" parameterType="FUserFinancesDTO">
+		UPDATE f_user_finances SET
+		fuid = #{fuid,jdbcType=INTEGER},
+		fcoinid = #{fcoinid,jdbcType=INTEGER},
+		fname = #{fname,jdbcType=VARCHAR},
+		frate = #{frate,jdbcType=DECIMAL},
+		famount = #{famount,jdbcType=DECIMAL},
+		fplanamount = #{fplanamount,jdbcType=DECIMAL},
+		fstate = #{fstate,jdbcType=INTEGER},
+		fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+		fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+		version = version +1
+		WHERE fid = #{fid,jdbcType=INTEGER}
+		AND version = #{version,jdbcType=INTEGER}
+	</update>
+
+	<select id="select" resultType="FUserFinancesDTO" parameterType="java.lang.Integer">
+		select
+		<include refid="financesColumn"/>
+		from f_user_finances
+		where fid = #{fid}
+	</select>
+</mapper>

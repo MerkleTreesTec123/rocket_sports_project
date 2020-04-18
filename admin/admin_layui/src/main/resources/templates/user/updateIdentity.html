@@ -1,0 +1,25 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org"
+	 lay-href="admin/updateIdentity.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">真实姓名：</label>
+		<div class="layui-input-block">
+			<input type="hidden" name="fid" th:value="${info.fid }"/>
+			<input class="layui-input" name="fusername" lay-verify="required" th:value="${info.fusername}" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">身份证号：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fidentityno" th:value="${info.fidentityno}" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">状态：</label>
+		<div class="layui-input-block">
+			<select name="fisok">
+				<option th:value="2" th:text="未通过" th:selected="${info.fisok == 2}"></option>
+				<option th:value="1" th:text="通过" th:selected="${info.fisok == 1}"></option>
+			</select>
+		</div>
+	</div>
+</div>

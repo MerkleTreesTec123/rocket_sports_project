@@ -1,0 +1,115 @@
+<div class="layui-form" lay-href="admin/virtualCapitalOutList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词[会员信息、提现地址]</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">虚拟币类型</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="fcoinid">
+					<option th:each="v : ${coinMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == fcoinid}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">开始时间</label>
+			<div class="layui-input-inline">
+				<input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+						style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">结束时间</label>
+			<div class="layui-input-inline">
+				<input name="endDate" th:value="${endDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label" style="width: auto;">显示VIP6：</label>
+			<div class="layui-input-inline" style="width: auto;">
+				<input type="checkbox" name="isvip6" th:checked="${isvip6 }"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/viewVirtualCaptual.html"
+				lay-href="admin/goVirtualCapitaloperationJSP.html?url=capital/viewVirtualCapital" lay-checked="uid" lay-target="dialog" lay-height="320" lay-width="800" lay-tips="确定要审核吗?">审核</button>
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/viewVirtualCaptual.html?type=1"
+					lay-href="admin/goVirtualCapitaloperationChangeStatus.html?type=1" lay-checked="uid" lay-target="ajax" lay-tips="确定要锁定吗?">锁定</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/viewVirtualCaptual.html?type=2"
+					lay-href="admin/goVirtualCapitaloperationChangeStatus.html?type=2" lay-checked="uid" lay-target="ajax" lay-tips="确定要取消锁定吗?">取消锁定</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/viewVirtualCaptual.html?type=3"
+					lay-href="admin/goVirtualCapitaloperationChangeStatus.html?type=3" lay-checked="uid" lay-target="ajax" lay-tips="确定要取消提现吗?">取消提现</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/viewVirtualCaptual.html?type=4"
+					lay-href="admin/goVirtualCapitaloperationChangeStatus.html?type=4" lay-checked="uid" lay-target="ajax" lay-tips="确定要恢复提现吗?">恢复提现</button>
+
+			<!--针对部分币种的手动审核（线下转换）-->
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/viewVirtualCaptual.html"
+					lay-href="admin/goVirtualCapitaloperationJSP.html?url=capital/viewVirtualCapitalManual" lay-checked="uid" lay-target="dialog" lay-height="320" lay-width="800" lay-tips="确定要手动审核吗?">手动审核</button>
+
+			<!-- 拒绝，需要填写拒绝理由 -->
+			<button class="layui-btn layui-btn-small layui-btn-danger" shiro:hasPermission="admin/viewVirtualCaptual.html"
+					lay-href="admin/goVirtualCapitaloperationJSP.html?url=capital/viewVirtualCapitalRefuse" lay-checked="uid" lay-target="dialog" lay-height="320" lay-width="800" lay-tips="确定拒绝吗?">拒绝</button>
+
+		</div>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>UID</th>
+					<th>登录名</th>
+					<th>会员昵称</th>
+					<th>真实姓名</th>
+					<th>用户等级</th>
+					<th>虚拟币类型</th>
+					<th>类型</th>
+					<th>状态</th>
+					<th data-order-field="famount">金额</th>
+					<th data-order-field="ffees">手续费</th>
+					<th>提现地址</th>
+					<th>备注</th>
+					<th>订单来源</th>
+					<th>平台来源</th>
+					<th data-order-field="fcreatetime">创建时间</th>
+					<th data-order-field="fupdatetime">最后修改时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="list : ${virtualCapitaloperationList.data}">
+					<td>
+						<input type="checkbox" th:name="${list.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${list.fuid}"></td>
+					<td th:text="${list.floginname}"></td>
+					<td th:text="${list.fnickname}"></td>
+					<td th:text="${list.frealname}"></td>
+					<td th:text="${'VIP'+list.level}"></td>
+					<td th:text="${list.fcoinname}"></td>
+					<td th:text="${list.ftype_s}"></td>
+					<td th:text="${list.fstatus_s}"></td>
+					<td><span class="amount" th:text="${#decimal.format(list.famount, 1, 10)}"></span></td>
+					<td th:text="${#decimal.format(list.ffees, 1, 10)}"></td>
+					<td th:text="${list.fwithdrawaddress}"></td>
+					<td th:text="${list.memo}"></td>
+					<td th:text="${list.fsource_s}"></td>
+					<td th:text="${list.fplatform_s}"></td>
+					<td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${virtualCapitaloperationList.totalPages}, lay-curr=${virtualCapitaloperationList.currentPage}"></div>
+</div>

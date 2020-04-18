@@ -1,0 +1,17 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/updateLevel.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">等级：</label>
+		<div class="layui-input-inline">
+			<input type="hidden" name="uid" th:value="${fuser.fid}" />
+			<select name="level">
+				<option th:value="0" th:text="VIP0"></option>
+				<option th:value="1" th:text="VIP1"></option>
+				<option th:value="2" th:text="VIP2"></option>
+				<option th:value="3" th:text="VIP3"></option>
+				<option th:value="4" th:text="VIP4"></option>
+				<option th:value="5" th:text="VIP5"></option>
+				<option th:value="6" th:text="VIP6"></option>
+			</select>
+		</div>
+	</div>
+</div>

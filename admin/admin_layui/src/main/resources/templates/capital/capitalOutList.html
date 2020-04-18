@@ -1,0 +1,131 @@
+<div class="layui-form" lay-href="admin/capitalOutList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词[会员UID、会员名称、银行帐户、金额、收款人]</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">提现ID</label>
+			<div class="layui-input-inline">
+				<input name="capitalId" th:value="${capitalId }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">开始时间</label>
+			<div class="layui-input-inline">
+				<input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">结束时间</label>
+			<div class="layui-input-inline">
+				<input name="endDate" th:value="${endDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">提现类型</label>
+			<div class="layui-input-inline">
+				<select name="ftype">
+					<option value="-1" th:selected="${-1 == ftype}">全部提现</option>
+					<option value="2" th:selected="${2 == ftype}">银行卡提现</option>
+					<option value="7" th:selected="${7 == ftype}">支付宝提现</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label" style="width: auto;">显示VIP6：</label>
+			<div class="layui-input-inline" style="width: auto;">
+				<input type="checkbox" name="isvip6" th:checked="${isvip6 }"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalOutAudit.html"
+					lay-href="admin/capitalOutAudit.html?type=1&amp;online=0" lay-checked="uid" lay-target="ajax" lay-tips="确定要审核吗?">审核</button>
+		</div>
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalOutAudit.html?type=2"
+					lay-href="admin/capitalOutAudit.html?type=2&amp;online=0" lay-checked="uid" lay-target="ajax" lay-tips="确定要锁定吗?">锁定</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalOutAudit.html?type=2"
+					lay-href="admin/capitalOutAuditAll.html" lay-checked="ids" lay-target="ajax" lay-tips="确实要锁定这些记录吗?" lay-filter="allChoose">全部锁定</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalOutAudit.html?type=3"
+					lay-href="admin/capitalOutAudit.html?type=3&amp;online=0" lay-checked="uid" lay-target="ajax" lay-tips="确定要取消锁定吗?">取消锁定</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalOutAudit.html?type=4"
+					lay-href="admin/capitalOutAudit.html?type=4&amp;online=0" lay-checked="uid" lay-target="ajax" lay-tips="确定要取消提现吗?">取消提现</button>
+
+		</div>
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small"
+					lay-href="admin/viewUserWallet.html" lay-checked="cid" lay-target="info" lay-height="320" lay-width="800">查看会员资金情况</button>
+			<button class="layui-btn layui-btn-small"
+					lay-href="admin/viewUser.html" lay-checked="cid" lay-target="info" lay-height="500" lay-width="800">查看会员信息</button>
+			<button class="layui-btn layui-btn-small"
+					lay-href="admin/capitalOutExport.html" lay-target="export" lay-tips="确实要导出这些记录吗?">导出</button>
+		</div>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th><input type="checkbox" lay-skin="primary" lay-filter="allChoose" /></th>
+					<th>UID</th>
+					<th>登录名</th>
+					<th>会员昵称</th>
+					<th>真实姓名</th>
+					<th>用户等级</th>
+					<th>类型</th>
+					<th data-order-field="fstatus">状态</th>
+					<th data-order-field="famount">金额</th>
+					<th data-order-field="ffees">手续费</th>
+					<th>银行</th>
+					<th>收款帐号</th>
+					<th>登录名</th>
+					<th>备注</th>
+					<th>开户行地址</th>
+					<th>订单来源</th>
+					<th>平台来源</th>
+					<th data-order-field="fcreatetime">创建时间</th>
+					<th data-order-field="fupdatetime">最后修改时间</th>
+					<th>描述</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="capitaloperation : ${capitaloperationList.data}">
+					<td>
+						<input type="checkbox" th:name="${capitaloperation.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${capitaloperation.fuid}"></td>
+					<td th:text="${capitaloperation.floginname}"></td>
+					<td th:text="${capitaloperation.fnickname}"></td>
+					<td th:text="${capitaloperation.frealname}"></td>
+					<td th:text="${'VIP'+capitaloperation.level}"></td>
+					<td th:text="${capitaloperation.ftype_s}"></td>
+					<td th:text="${capitaloperation.fstatus_s}"></td>
+					<td><span class="amount" th:text="${#decimal.format(capitaloperation.famount, 1, 10)}"></span></td>
+					<td th:text="${#decimal.format(capitaloperation.ffees, 1, 10)}"></td>
+					<td th:text="${capitaloperation.fbank}"></td>
+					<td th:text="${capitaloperation.faccount}"></td>
+					<td th:text="${capitaloperation.fphone}"></td>
+					<td th:text="${capitaloperation.fid}"></td>
+					<td th:text="${capitaloperation.faddress}"></td>
+					<td th:text="${capitaloperation.fsource_s}"></td>
+					<td th:text="${capitaloperation.fplatform_s}"></td>
+					<td th:text="${capitaloperation.fcreatetime == null ? '':#dates.format(capitaloperation.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${capitaloperation.fupdatetime == null ? '':#dates.format(capitaloperation.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${capitaloperation.fremark}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${capitaloperationList.totalPages}, lay-curr=${capitaloperationList.currentPage}"></div>
+</div>

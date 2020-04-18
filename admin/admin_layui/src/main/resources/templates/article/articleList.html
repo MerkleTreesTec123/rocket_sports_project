@@ -1,0 +1,83 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="/article/articleList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">关键词：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">文章类型：</label>
+            <div class="layui-input-inline">
+                <select name="ftype">
+                    <option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">显示客户端：</label>
+            <div class="layui-input-inline">
+                <select name="apptype">
+                    <option th:each="type : ${appMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == apptype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addArticle.html"
+                    lay-href="article/goArticle.html?url=article/addArticle" lay-target="dialog"
+                    lay-width="850" lay-height="600">新增
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateArticle.html"
+                    lay-href="article/goArticle.html?url=article/updateArticle" lay-checked="uid" lay-target="dialog"
+                    lay-width="850" lay-height="600">修改
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteArticle.html"
+                    lay-href="article/deleteArticle.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要删除吗?">删除
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>序号</th>
+                <th>标题</th>
+                <th>类型</th>
+                <th>显示客户端</th>
+                <th>关键词</th>
+                <th data-order-field="fcreatedate">创建时间</th>
+                <th>创建人</th>
+                <th data-order-field="fupdatetime">修改时间</th>
+                <th>修改人</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="article,state : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${article.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${state.count}"></td>
+                <td th:text="${article.ftitle}"></td>
+                <td th:text="${article.farticletype_s}"></td>
+                <td th:text="${appMap[article.ftype]}"></td>
+                <td th:text="${article.fkeyword }"></td>
+                <td th:text="${article.fcreatedate == null ? '':#dates.format(article.fcreatedate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${article.fcreateadmin_s}"></td>
+                <td th:text="${article.fupdatetime == null ? '':#dates.format(article.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${article.fmodifyadmin_s}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

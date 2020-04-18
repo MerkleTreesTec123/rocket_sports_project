@@ -1,0 +1,52 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/virtualCapitalOutAudit.html">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">钱包密码：</label>
+			<div class="layui-input-block">
+				<input type="hidden" name="uid" th:value="${virtualCapitaloperation.fid}" th:disabled="true"/>
+				<input class="layui-input" type="password" name="fpassword" />
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">网络手续费：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="networkfee" placeholder="以太坊默认20 Gwei、合约默认25 Gwei、比特币默认 0.0001"/>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">登录名：</label>
+		<div class="layui-input-block">
+			<input class="layui-input layui-disabled" name="fname" th:value="${virtualCapitaloperation.floginname}" th:disabled="true" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">虚拟币类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="virtualcointype.fid" th:disabled="true">
+				<option th:text="${virtualCapitaloperation.fcoinname}" th:value="${virtualCapitaloperation.fcoinid}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">提现数量：</label>
+		<div class="layui-input-block">
+			<input class="layui-input layui-disabled" name="famount" lay-verify="required" th:value="${#decimal.format(virtualCapitaloperation.famount, 1, 10)}" th:disabled="true"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">提现手续费</label>
+		<div class="layui-input-block">
+			<input class="layui-input layui-disabled" name="ffees" lay-verify="required" th:value="${#decimal.format(virtualCapitaloperation.ffees, 1, 10)}" th:disabled="true"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">提现地址：</label>
+		<div class="layui-input-block">
+			<input class="layui-input layui-disabled" name="withdraw_virtual_address" lay-verify="required" th:value="${virtualCapitaloperation.fwithdrawaddress}" th:disabled="true"/>
+		</div>
+	</div>
+
+</div>

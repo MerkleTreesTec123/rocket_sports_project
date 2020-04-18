@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FApiAuthMapper" >
+
+  <sql id="Apicolumn">fid, fuid, fapikey, fsecretkey, fip,frate,fopenrate,fcount,frqip,fstatus, fcreatetime,fupdatetime</sql>
+
+  <insert id="insert" parameterType="FApiAuth" useGeneratedKeys="true" keyProperty="fid">
+    insert into f_api_auth
+    (
+    fuid,
+    fapikey,
+    fsecretkey,
+    fip,
+    fstatus,
+    frate,
+    fopenrate,
+    fcount,
+    frqip,
+    fcreatetime,
+    fupdatetime
+    )
+    values
+    (
+    #{fuid,jdbcType=INTEGER},
+    #{fapikey,jdbcType=VARCHAR},
+    #{fsecretkey,jdbcType=VARCHAR},
+    #{fip,jdbcType=VARCHAR},
+    #{fstatus,jdbcType=INTEGER},
+    #{frate,jdbcType=DECIMAL},
+    #{fopenrate,jdbcType=INTEGER},
+    #{fcount,jdbcType=INTEGER},
+    #{frqip,jdbcType=VARCHAR},
+    #{fcreatetime,jdbcType=TIMESTAMP},
+    #{fupdatetime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <select id="selectByPage" resultType="FApiAuth" parameterType="java.lang.Integer" >
+    select <include refid="Apicolumn" />
+    from f_api_auth
+    where fuid = #{fuid,jdbcType=INTEGER} 
+  </select>
+
+  <select id="selectByPrimaryKey" resultType="FApiAuth" parameterType="java.lang.Integer" >
+    select <include refid="Apicolumn" />
+    from f_api_auth
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <update id="updateByUser" parameterType="FApiAuth">
+  	update f_api_auth 
+  	set fstatus = #{fstatus,jdbcType=INTEGER},
+      fopenrate = #{fopenrate,jdbcType=INTEGER},
+      frate = #{frate,jdbcType=DECIMAL}
+    where fid = #{fid,jdbcType=INTEGER} 
+  </update>
+
+  <select id="selectAll" resultType="FApiAuth">
+    select <include refid="Apicolumn"/>
+    from f_api_auth
+    where 1=1
+  </select>
+</mapper>

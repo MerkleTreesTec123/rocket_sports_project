@@ -1,0 +1,25 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane"
+     lay-href="admin/updateRole.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色名称：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="roleId" th:value="${role.fid}"/>
+            <input name="fname" class="layui-input" lay-verify="required" th:value="${role.fname}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fdescription" lay-verify="required" th:value="${role.fdescription}"/>
+        </div>
+    </div>
+    <ul id="treeNode"></ul>
+    <script th:inline="javascript">
+        layui.tabletree({
+                            elem: '#treeNode' //指定元素
+                            ,check : 'checkbox'
+                            , nodes: [[${cPermissonTree}]]
+                        });
+        console.log([[${cPermissonTree}]]);
+    </script>
+</div>

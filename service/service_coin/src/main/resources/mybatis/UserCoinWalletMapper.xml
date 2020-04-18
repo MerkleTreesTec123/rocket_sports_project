@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.coin.mapper.UserCoinWalletMapper">
+
+  <sql id="userCoinWalletColumn">id, uid, coin_id, total, frozen, borrow, gmt_create, gmt_modified</sql>
+
+  <update id="update" parameterType="UserCoinWallet">
+    update user_coin_wallet set
+      total = #{total,jdbcType=DECIMAL},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectLock" resultType="UserCoinWallet">
+    select <include refid="userCoinWalletColumn" />
+    from user_coin_wallet
+    where uid = #{uid} and coin_id = #{coinId} for update
+  </select>
+
+  <select id="selectUid" resultType="UserCoinWallet">
+    select <include refid="userCoinWalletColumn" />
+    from user_coin_wallet
+    where uid = #{uid}
+  </select>
+
+</mapper>

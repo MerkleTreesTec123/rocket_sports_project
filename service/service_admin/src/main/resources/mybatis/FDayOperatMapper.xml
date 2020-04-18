@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FDayOperatMapper" >
+  <sql id="defaultColumn">
+  	 fid, flogin, fregister, frealname, fsms, fmail, fvip6, fcode, fscore, fsubmitquestion, freplyquestion, fupdatetime, fcreatetime
+  </sql>
+
+  <select id="getPageList" resultType="FDayOperat" parameterType="java.util.Map">
+  	select <include refid="defaultColumn" />
+  	from f_day_operat
+  	where 1=1
+   <if test="fcreatetime != null">
+   and date_format(fcreatetime, '%Y-%m-%d') = date_format(#{fcreatetime}, '%Y-%m-%d')
+   </if>
+  	order by ${orderField} ${orderDirection}
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+  	select count(fid)
+  	from f_day_operat
+  	where 1=1
+   <if test="fcreatetime != null">
+    and date_format(fcreatetime, '%Y-%m-%d') = date_format(#{fcreatetime}, '%Y-%m-%d')
+   </if>
+  </select>
+</mapper>

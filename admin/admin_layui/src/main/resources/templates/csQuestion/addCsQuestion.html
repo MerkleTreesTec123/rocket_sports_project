@@ -1,0 +1,20 @@
+<div class="layui-form layui-form-pane" lay-href="csQuestion/saveCsQuestion.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户id：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fuid" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发起人：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fquestion" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">问起详情:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-textarea-fixed" name="fdetail" lay-verify="required"></textarea>
+        </div>
+    </div>
+</div>

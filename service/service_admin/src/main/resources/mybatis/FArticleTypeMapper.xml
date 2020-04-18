@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FArticleTypeMapper" >
+
+  <resultMap id="BaseResultMap" type="FArticleType">
+    <id column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="fname" jdbcType="VARCHAR" property="fname" />
+    <result column="fkeywords" jdbcType="VARCHAR" property="fkeywords" />
+    <result column="fdescription" jdbcType="VARCHAR" property="fdescription" />
+    <result column="fcreatetime" jdbcType="TIMESTAMP" property="fcreatetime" />
+    <result column="fupdatetime" jdbcType="TIMESTAMP" property="fupdatetime" />
+    <result column="flanguageid" jdbcType="INTEGER" property="flanguageid" />
+    <result column="ftypeid" jdbcType="INTEGER" property="ftypeid" />
+  </resultMap>
+  
+  <sql id="articleTypeColumn">
+      fid, fname, fkeywords, fdescription, fcreatetime, fupdatetime, flanguageid, ftypeid
+  </sql>
+  
+  <select id="getArticleTypePageList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select <include refid="articleTypeColumn" /> from f_article_type where 1=1
+    <if test="keyword != null">
+      and	(
+      	fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	fkeywords like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	fdescription like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    order by ${orderField} ${orderDirection} 
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countArticleTypePageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(fid) from f_article_type where 1=1
+    <if test="keyword != null">
+      and	(
+      	fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	fkeywords like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	fdescription like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+      )
+    </if>
+  </select>
+  
+  <!-- Base -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from f_article_type where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="FArticleType" keyProperty="fid">
+    insert into f_article_type (
+      fname, 
+      fkeywords, 
+      fdescription, 
+      fcreatetime, 
+      fupdatetime, 
+      flanguageid, 
+      ftypeid
+    ) values (
+      #{fname,jdbcType=VARCHAR}, 
+      #{fkeywords,jdbcType=VARCHAR}, 
+      #{fdescription,jdbcType=VARCHAR}, 
+      #{fcreatetime,jdbcType=TIMESTAMP}, 
+      #{fupdatetime,jdbcType=TIMESTAMP}, 
+      #{flanguageid,jdbcType=INTEGER}, 
+      #{ftypeid,jdbcType=INTEGER} )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="FArticleType">
+    update f_article_type set 
+      fname = #{fname,jdbcType=VARCHAR},
+      fkeywords = #{fkeywords,jdbcType=VARCHAR},
+      fdescription = #{fdescription,jdbcType=VARCHAR},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      flanguageid = #{flanguageid,jdbcType=INTEGER},
+      ftypeid = #{ftypeid,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="FArticleType">
+    select <include refid="articleTypeColumn" /> from f_article_type where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultType="FArticleType">
+    select <include refid="articleTypeColumn" /> from f_article_type
+    <if test="lanId != null">
+      where flanguageid = #{lanId}
+    </if>
+  </select>
+  
+</mapper>

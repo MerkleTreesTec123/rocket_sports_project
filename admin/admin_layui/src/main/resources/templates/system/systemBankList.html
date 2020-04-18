@@ -1,0 +1,58 @@
+<div class="layui-form" lay-href="admin/systemBankList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addSystemBank.html"
+				lay-href="admin/goSystemBankJSP.html?url=system/addSystemBank"  lay-target="dialog" lay-height="300" lay-width="800">新增</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/forbbinSystemBank.html?status=1"
+				lay-href="admin/forbbinSystemBank.html?status=1" lay-checked="fid" lay-target="ajax" lay-tips="确定要禁用吗?">禁用</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/forbbinSystemBank.html?status=2"
+				lay-href="admin/forbbinSystemBank.html?status=2" lay-checked="fid" lay-target="ajax" lay-tips="确定要解除禁用吗?">启用</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateSystemBank.html"
+			lay-href="admin/goSystemBankJSP.html?url=system/updateSystemBank" lay-checked="fid" lay-target="dialog" lay-height="300" lay-width="800">修改</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>排序</th>
+					<th>银行名称</th>
+					<th>状态</th>
+					<th>开户姓名</th>
+					<th>开户地址</th>
+					<th>银行卡号</th>
+					<th>创建时间</th>
+					<th>类型</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="systembank : ${systembankList.data}">
+					<td>
+						<input type="checkbox" th:name="${systembank.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${systembank.fsortid}"></td>
+					<td th:text="${systembank.fbankname}"></td>
+					<td th:text="${systembank.fstatus_s}"></td>
+					<td th:text="${systembank.fownername}"></td>
+					<td th:text="${systembank.fbankaddress}"></td>
+					<td th:text="${systembank.fbanknumber}"></td>
+					<td th:text="${systembank.fcreatetime == null ? '':#dates.format(systembank.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${systembank.fbanktype_s}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${systembankList.totalPages}, lay-curr=${systembankList.currentPage}"></div>
+</div>

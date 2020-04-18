@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FLogConsoleVirtualRechargeMapper">
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from f_log_console_virtual_recharge where fid = #{fid,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="FLogConsoleVirtualRecharge" keyProperty="fid">
+		insert into f_log_console_virtual_recharge (
+			famount,
+			fcoinid,
+			ftype,
+			fstatus, 
+			fuid,
+			fissendmsg,
+			fcreatorid,
+			finfo,
+			fcreatetime,
+			activity_id,
+			version
+		) values (
+			#{famount,jdbcType=DECIMAL},
+			#{fcoinid,jdbcType=INTEGER},
+			#{ftype,jdbcType=INTEGER},
+			#{fstatus,jdbcType=INTEGER}, 
+			#{fuid,jdbcType=INTEGER}, 
+			#{fissendmsg,jdbcType=INTEGER},
+			#{fcreatorid,jdbcType=INTEGER},
+			#{finfo,jdbcType=VARCHAR},
+			#{fcreatetime,jdbcType=TIMESTAMP},
+			#{activityId,jdbcType=INTEGER},
+			#{version,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<update id="updateByPrimaryKey" parameterType="FLogConsoleVirtualRecharge">
+		update 
+			f_log_console_virtual_recharge
+		set
+			famount = #{famount,jdbcType=DECIMAL},
+			fcoinid = #{fcoinid,jdbcType=INTEGER},
+			ftype = #{ftype,jdbcType=INTEGER},
+			fstatus = #{fstatus,jdbcType=INTEGER},
+			fuid = #{fuid,jdbcType=INTEGER},
+			fissendmsg = #{fissendmsg,jdbcType=INTEGER},
+			fcreatorid = #{fcreatorid,jdbcType=INTEGER},
+			finfo = #{finfo,jdbcType=VARCHAR},
+			fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+			activity_id = #{activityId,jdbcType=INTEGER},
+			version = version + 1
+		where 
+			fid = #{fid,jdbcType=INTEGER} and version = #{version}
+	</update>
+
+	<update id="updateByHistoryActivity" parameterType="FLogConsoleVirtualRecharge">
+		update
+		f_log_console_virtual_recharge
+		set
+		activity_id = #{activityId,jdbcType=INTEGER},
+		version = version + 1
+		where
+		finfo like concat('%',#{finfo,jdbcType=VARCHAR},'%')
+		and fstatus = 2
+	</update>
+	
+	<select id="selectByPrimaryKey" resultType="FLogConsoleVirtualRecharge" parameterType="java.lang.Integer">
+		select 
+			fid,
+			famount,
+			fcoinid,
+			ftype,
+			fstatus, 
+			fuid, 
+			fissendmsg, 
+			fcreatorid,
+			finfo,
+			fcreatetime,
+			activity_id,
+			version
+		from 
+			f_log_console_virtual_recharge
+		where 
+			fid = #{fid,jdbcType=INTEGER}
+	</select>
+	
+	<!-- Admin -->
+	<select id="getAdminPageList" resultType="FLogConsoleVirtualRecharge" parameterType="java.util.Map">
+	 	select 
+	 		f_log_console_virtual_recharge.fid,
+	 		f_log_console_virtual_recharge.famount,
+	 		f_log_console_virtual_recharge.fcoinid,
+			f_log_console_virtual_recharge.ftype,
+	 		f_log_console_virtual_recharge.fstatus,
+	 		f_log_console_virtual_recharge.fuid,
+	 		f_log_console_virtual_recharge.fissendmsg,
+	 		f_log_console_virtual_recharge.fcreatorid,
+			f_log_console_virtual_recharge.finfo,
+	 		f_log_console_virtual_recharge.fcreatetime,
+			f_log_console_virtual_recharge.activity_id,
+	 		f_log_console_virtual_recharge.version,
+	 		f_user.floginname,
+	 		f_user.fnickname,
+	 		f_user.frealname,
+	 		f_admin.fname fadminname,
+	 		system_coin_type.name fcoinname
+	 	from 
+	 		f_log_console_virtual_recharge left join
+	 		f_user on f_user.fid = f_log_console_virtual_recharge.fuid left join
+	 		f_admin on f_admin.fid = f_log_console_virtual_recharge.fcreatorid left join
+			system_coin_type on system_coin_type.id = f_log_console_virtual_recharge.fcoinid
+	 		where 1=1 
+		<if test="keyword != null">
+			and (
+				f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.fid = #{keyword,jdbcType=VARCHAR}
+				)
+		</if>
+		<if test="fstatus != null">
+			and f_log_console_virtual_recharge.fstatus in
+			<foreach collection="fstatus" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="ftype != null">
+			and ftype = #{ftype,jdbcType=INTEGER}
+		</if>
+		<if test="coinId != null">
+			and fcoinid = #{coinId,jdbcType=INTEGER}
+		</if>
+		<if test="start != null and start == end">
+		<![CDATA[and DATE_FORMAT(f_log_console_virtual_recharge.fcreatetime,"%Y-%m-%d") = DATE_FORMAT(#{start},"%Y-%m-%d")]]>
+		</if>
+		<if test="start != null and start != end">
+		<![CDATA[and DATE_FORMAT(f_log_console_virtual_recharge.fcreatetime,"%Y-%m-%d") >= DATE_FORMAT(#{start},"%Y-%m-%d")]]>
+		</if>
+		<if test="end != null and start != end">
+		<![CDATA[and DATE_FORMAT(f_log_console_virtual_recharge.fcreatetime,"%Y-%m-%d") <= DATE_FORMAT(#{end},"%Y-%m-%d")]]>
+		</if>
+		<if test="orderField != null">
+			order by f_log_console_virtual_recharge.${orderField} ${orderDirection}
+		</if>
+		limit #{offset},#{limit}
+	</select>
+	 
+	 <select id="countAdminPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+	 	select count(*)
+	 	from 
+	 		f_log_console_virtual_recharge left join
+	 		f_user on f_user.fid = f_log_console_virtual_recharge.fuid left join
+	 		f_admin on f_admin.fid = f_log_console_virtual_recharge.fcreatorid
+	 	where 1=1
+		<if test="keyword != null">
+			and (
+				f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.fid = #{keyword,jdbcType=VARCHAR}
+				)
+		</if>
+		<if test="fstatus != null">
+			and f_log_console_virtual_recharge.fstatus in
+			<foreach collection="fstatus" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="ftype != null">
+		 and ftype = #{ftype,jdbcType=INTEGER}
+		</if>
+		<if test="coinId != null">
+			 and fcoinid = #{coinId,jdbcType=INTEGER}
+		</if>
+		<if test="start != null and start == end">
+		<![CDATA[and DATE_FORMAT(f_log_console_virtual_recharge.fcreatetime,"%Y-%m-%d") = DATE_FORMAT(#{start},"%Y-%m-%d")]]>
+		</if>
+		<if test="start != null and start != end">
+		<![CDATA[and DATE_FORMAT(f_log_console_virtual_recharge.fcreatetime,"%Y-%m-%d") >= DATE_FORMAT(#{start},"%Y-%m-%d")]]>
+		</if>
+		<if test="end != null and start != end">
+		<![CDATA[and DATE_FORMAT(f_log_console_virtual_recharge.fcreatetime,"%Y-%m-%d") <= DATE_FORMAT(#{end},"%Y-%m-%d")]]>
+		</if>
+	</select>
+	
+	
+	<select id="getTotalAmountByStatus" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		select ifnull(sum(famount), 0)
+	 	from 
+	 		f_log_console_virtual_recharge
+	 	where 1=1
+	 	<if test="status != null">
+			and f_log_console_virtual_recharge.fstatus = ${status}
+		</if>
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="coinid != null">
+			and fcoinid = #{coinid}
+		</if>
+		<if test="start != null">
+   		<![CDATA[and fcreatetime >= #{start,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="end != null">
+   		<![CDATA[and fcreatetime <= #{end,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+</mapper>

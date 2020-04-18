@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FStatisticsMapper">
+
+    <select id="sumRWrmb" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		<![CDATA[
+        SELECT
+            IFNULL(sum(famount), 0)
+        FROM f_wallet_capital_operation
+        WHERE finouttype = #{ftype}
+              AND fstatus = 3
+              AND fupdatetime >= #{beginDate}
+              AND fupdatetime <= #{endDate}
+        ]]>
+	</select>
+
+    <select id="sumOtherRmb" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		<![CDATA[
+        SELECT
+            IFNULL(sum(amount), 0)
+        FROM wallet_zsjf_capital_operation_recharge
+        WHERE status IN (1, 4)
+              AND gmt_modified >= #{beginDate}
+              AND gmt_modified <= #{endDate}
+        ]]>
+	</select>
+
+    <select id="sumRWcoin" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		<![CDATA[
+        SELECT
+            IFNULL(sum(famount), 0)
+        FROM f_virtual_capital_operation
+        WHERE ftype = #{ftype}
+              AND fstatus = 3
+              AND fcoinid = #{fcoinid}
+              AND fupdatetime >= #{beginDate}
+              AND fupdatetime <= #{endDate}
+        ]]>
+	</select>
+
+    <select id="sumBSrmb" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		<![CDATA[
+        SELECT
+            IFNULL(sum(fsuccessamount), 0)
+        FROM f_entrust_history
+        WHERE ftype = #{ftype}
+              AND (fstatus = 5 OR fstatus = 3)
+              AND flastupdattime >= #{beginDate}
+              AND flastupdattime <= #{endDate}
+        ]]>
+	</select>
+
+    <select id="sumBScoin" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        select IFNULL(sum(fcount-fleftcount),0)
+        from f_entrust_history
+        where ftype = #{ftype}
+        and (fstatus = 5 or fstatus = 3)
+        <if test="ftype == 0">
+            and fbuycoinid = #{fcoinid}
+        </if>
+        <if test="ftype == 1">
+            and fsellcoinid = #{fcoinid}
+        </if>
+        <![CDATA[
+		and flastupdattime >= #{beginDate} 
+		and flastupdattime <= #{endDate}
+		]]>
+    </select>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.admin.bc.dao.ReportTradeMapper">
+
+  <select id="selectReportByHour" parameterType="java.util.Map" resultType="ReportTrade">
+    select * from report_trade
+    where 1 = 1
+    <if test="type != null">
+      AND type = #{type}
+    </if>
+    <if test="tradeId != null">
+      AND trade_id = #{tradeId}
+    </if>
+    <if test="begin != null">
+      <![CDATA[AND gmt_begin >= #{begin}]]>
+    </if>
+    <if test="end != null">
+      <![CDATA[AND gmt_end <= #{end}]]>
+    </if>
+    ORDER BY gmt_begin
+  </select>
+
+
+  <select id="selectReportByDay" parameterType="java.util.Map" resultType="ReportTrade">
+    select
+    left(gmt_begin,10) as gmt_begin,
+    sum(trade_amount) as trade_amount,
+    sum(trade_count) as trade_count,
+    sum(trade_fee) as trade_fee
+    from report_trade
+    where 1 = 1
+    <if test="type != null">
+      AND type = #{type}
+    </if>
+    <if test="tradeId != null">
+      AND trade_id = #{tradeId}
+    </if>
+    <if test="begin != null">
+      <![CDATA[AND gmt_begin >= #{begin}]]>
+    </if>
+    <if test="end != null">
+      <![CDATA[AND gmt_end <= #{end}]]>
+    </if>
+    GROUP BY left(gmt_begin,10)
+    ORDER BY gmt_begin
+  </select>
+
+</mapper>

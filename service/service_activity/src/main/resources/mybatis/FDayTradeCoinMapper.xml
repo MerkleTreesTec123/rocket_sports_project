@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FDayTradeCoinMapper" >
+
+  <sql id="dayTradeCoinColumns">
+  	 fid, fcoinid, fbuy, fsell, fbuyfees, fsellfees, fbuyperson, fsellperson, fbuyentrust, fsellentrust, fupdatetime, fcreatetime, fagentid
+  </sql>
+  
+  <insert id="insert" parameterType="FDayTradeCoin" keyProperty="fid">
+    insert into f_day_trade_coin (
+      fcoinid, 
+      fbuy, 
+      fsell, 
+      fbuyfees, 
+      fsellfees,
+      fbuyperson, 
+      fsellperson, 
+      fbuyentrust, 
+      fsellentrust, 
+      fupdatetime, 
+      fcreatetime,
+      fagentid
+    ) values ( 
+      #{fcoinid,jdbcType=INTEGER}, 
+      #{fbuy,jdbcType=DECIMAL}, 
+      #{fsell,jdbcType=DECIMAL}, 
+      #{fbuyfees,jdbcType=DECIMAL},
+      #{fsellfees,jdbcType=DECIMAL}, 
+      #{fbuyperson,jdbcType=INTEGER}, 
+      #{fsellperson,jdbcType=INTEGER}, 
+      #{fbuyentrust,jdbcType=INTEGER}, 
+      #{fsellentrust,jdbcType=INTEGER}, 
+      #{fupdatetime,jdbcType=TIMESTAMP},
+      #{fcreatetime,jdbcType=TIMESTAMP}, 
+      #{fagentid,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateByModel" parameterType="FDayTradeCoin" >
+    update f_day_trade_coin set 
+      fcoinid = #{fcoinid,jdbcType=INTEGER},
+      fbuy = #{fbuy,jdbcType=DECIMAL},
+      fsell = #{fsell,jdbcType=DECIMAL},
+      fbuyfees = #{fbuyfees,jdbcType=DECIMAL},
+      fsellfees = #{fsellfees,jdbcType=DECIMAL},
+      fbuyperson = #{fbuyperson,jdbcType=INTEGER},
+      fsellperson = #{fsellperson,jdbcType=INTEGER},
+      fbuyentrust = #{fbuyentrust,jdbcType=INTEGER},
+      fsellentrust = #{fsellentrust,jdbcType=INTEGER},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fagentid = #{fagentid,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByDate" resultType="FDayTradeCoin" >
+    select <include refid="dayTradeCoinColumns"/> from f_day_trade_coin 
+    where date_format(fcreatetime, "%Y-%m-%d") = #{time} and fcoinid = #{fcoinid} and fagentid = #{fagentid}
+  </select>
+  <select id="selectAll" resultType="FDayTradeCoin" >
+    select <include refid="dayTradeCoinColumns"/> from f_day_trade_coin
+  </select>
+</mapper>

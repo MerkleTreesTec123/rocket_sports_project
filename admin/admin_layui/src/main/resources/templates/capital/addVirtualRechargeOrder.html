@@ -1,0 +1,47 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/virtualCoinRechargeOrderByWork.html">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">会员：</label>
+			<div class="layui-input-block">
+				<input type="hidden" name="fuid" lay-lookup="id"/>
+				<input class="layui-input" name="name" lay-verify="required" readonly="readonly" lay-lookup="name"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<i class="layui-icon layui-lookup" lay-href="user/userLookup.html"
+			   onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">虚拟币类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="fcoinid">
+				<option th:each="v:${coinMap}" th:text="${v.value}" th:value="${v.key}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">数量：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="famount" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">区块高度：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fblocknumber" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">tx_id：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="funiquenumber" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">充值地址：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="frechargeaddress" lay-verify="required"/>
+		</div>
+	</div>
+</div>

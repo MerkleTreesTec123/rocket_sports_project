@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.activity.dao.FWalletCapitalOperationMapper">
+
+	<sql id="operationColumn">
+		fid, fsysbankid, fcoinid, fuid, fcreatetime, famount, finouttype, ftype, fstatus,fremittancetype,
+		fremark, fbank, faccount, fpayee, fbank_code, fphone, fupdatetime, fadminid, ffees,version
+		,fischarge, faddress, fagentid, fsource, fplatform,fserialno
+	</sql>
+
+	<select id="getWalletCapitalOperationByParam" resultType="FWalletCapitalOperationDTO" parameterType="java.util.Map">
+		select <include refid="operationColumn"/>
+		from f_wallet_capital_operation
+		where 1=1
+		<if test="fserialno != null">
+			and fserialno = #{fserialno,jdbcType=VARCHAR}
+		</if>
+		<if test="fstatusList != null">
+			and f_wallet_capital_operation.fstatus in
+			<foreach collection="fstatusList" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="finouttype != null">
+			and finouttype = #{finouttype,jdbcType=INTEGER}
+		</if>
+		<if test="fserialno != null">
+			and fserialno is NOT NULL
+		</if>
+		<if test="begindate != null">
+			<![CDATA[and DATE_FORMAT(fupdatetime,"%Y-%m-%d %H:%i:%s") >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+			<![CDATA[and DATE_FORMAT(fupdatetime,"%Y-%m-%d %H:%i:%s") <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+	<select id="getWalletCapitalOperationStatusByParam" resultType="FWalletCapitalOperationDTO" parameterType="java.util.Map">
+		select fid, fstatus,version
+		from f_wallet_capital_operation
+		where 1=1
+		<if test="fstatusList != null">
+			and f_wallet_capital_operation.fstatus in
+			<foreach collection="fstatusList" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="finouttype != null">
+			and finouttype = #{finouttype,jdbcType=INTEGER}
+		</if>
+		<if test="fserialno != null">
+			and fserialno is NOT NULL
+		</if>
+		<if test="begindate != null">
+			<![CDATA[and DATE_FORMAT(fupdatetime,"%Y-%m-%d %H:%i:%s") >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+			<![CDATA[and DATE_FORMAT(fupdatetime,"%Y-%m-%d %H:%i:%s") <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+	<update id="updateStatusByPrimaryKey" parameterType="FWalletCapitalOperationDTO">
+		update f_wallet_capital_operation
+		set
+			fstatus = #{fstatus,jdbcType=INTEGER},
+			fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+			version = version + 1
+		where
+			fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="selectReport" resultType="ReportCapital" parameterType="java.util.Map">
+		<![CDATA[
+		SELECT
+			ifnull(sum(famount),0) AS amount,
+			ifnull(sum(ffees),0) AS fee
+		FROM f_wallet_capital_operation
+		WHERE finouttype = #{type, jdbcType=INTEGER}
+		AND fstatus = 3
+		AND fupdatetime >= #{begin, jdbcType=VARCHAR}
+		AND fupdatetime < #{end, jdbcType=VARCHAR}
+		]]>
+	</select>
+
+	<select id="countWalletCapitalOperation" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(fid)
+		from f_wallet_capital_operation
+		where
+		fuid = #{fuid,jdbcType=INTEGER}
+		<if test="finouttype != null">
+			and finouttype = #{finouttype,jdbcType=INTEGER}
+		</if>
+		<if test="begindate != null">
+			<![CDATA[and fcreatetime >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+			<![CDATA[and fcreatetime <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="fstatus != null">
+			and fstatus = #{fstatus,jdbcType=INTEGER}
+		</if>
+	</select>
+
+
+</mapper>

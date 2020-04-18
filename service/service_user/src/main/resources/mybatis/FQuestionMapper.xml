@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.FQuestionMapper" >
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_question
+    where 
+    	fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="FQuestion" keyProperty="fid">
+    insert into f_question (
+    	ftype, 
+    	ftelephone, 
+      	fuid, 
+      	fstatus, 
+      	fcreatetime, 
+      	fupdatetime, 
+      	faid, 
+      	fname, 
+      	version, 
+      	fcid, 
+      	fisanswer, 
+      	fdesc, 
+      	fanswer)
+    values (
+    	#{ftype,jdbcType=INTEGER}, 
+    	#{ftelephone,jdbcType=VARCHAR}, 
+     	#{fuid,jdbcType=INTEGER}, 
+     	#{fstatus,jdbcType=INTEGER}, 
+     	#{fcreatetime,jdbcType=TIMESTAMP}, 
+      	#{fupdatetime,jdbcType=TIMESTAMP}, 
+      	#{faid,jdbcType=INTEGER}, 
+      	#{fname,jdbcType=VARCHAR}, 
+      	#{version,jdbcType=INTEGER}, 
+      	#{fcid,jdbcType=INTEGER}, 
+      	#{fisanswer,jdbcType=INTEGER}, 
+      	#{fdesc,jdbcType=LONGVARCHAR}, 
+      	#{fanswer,jdbcType=LONGVARCHAR}
+    )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FQuestion" >
+    update f_question
+    set 
+    	ftype = #{ftype,jdbcType=INTEGER},
+      	ftelephone = #{ftelephone,jdbcType=VARCHAR},
+      	fuid = #{fuid,jdbcType=INTEGER},
+      	fstatus = #{fstatus,jdbcType=INTEGER},
+      	fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      	fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      	faid = #{faid,jdbcType=INTEGER},
+      	fname = #{fname,jdbcType=VARCHAR},
+      	version = version + 1,
+      	fcid = #{fcid,jdbcType=INTEGER},
+      	fisanswer = #{fisanswer,jdbcType=INTEGER},
+      	fdesc = #{fdesc,jdbcType=LONGVARCHAR},
+      	fanswer = #{fanswer,jdbcType=LONGVARCHAR}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="FQuestion" parameterType="java.lang.Integer" >
+    select fid, ftype, ftelephone, fuid, fstatus, fcreatetime, fupdatetime, faid, fname, 
+    version, fcid, fisanswer, fdesc, fanswer
+    from f_question
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+   
+   <select id="getPageFQuestionList" resultType="FQuestion" parameterType="java.util.Map">
+   	select fid, ftype, ftelephone, fuid, fstatus, fcreatetime, fupdatetime, faid, fname, 
+    version, fcid, fisanswer, fdesc, fanswer
+    from f_question
+    where fuid = #{fuid,jdbcType=INTEGER} and fstatus != 3
+    order by fcreatetime desc
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="getPageFQuestionCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+   	select count(fid)
+    from f_question
+    where fuid = #{fuid,jdbcType=INTEGER} and fstatus != 3
+  </select>
+
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.entrust.dao.FEntrustLogMapper" >
+
+  <sql id="columns"> 
+  	fid, ftradeid, fentrustid, fentrusttype, fmatchid, famount, fprize, fcount, fisactive, flastupdattime, fcreatetime, version
+  </sql>
+  
+  <select id="selectByEntrustId" resultType="EntrustLogDO" >
+    select <include refid="columns"/> from f_entrust_log where fentrustid = #{fentrustid}
+  </select>
+  
+</mapper>

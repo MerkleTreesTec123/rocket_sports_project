@@ -1,0 +1,57 @@
+<div class="layui-form" lay-href="/friendLink/linkList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">关键字[名称、URL]：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addLink.html"
+                lay-href="friendLink/goLinkJSP.html?url=friendLink/addLink"
+                lay-target="dialog" lay-height="380" lay-width="800">新增</button>
+
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateLink.html"
+                lay-href="friendLink/goLinkJSP.html?url=friendLink/updateLink"
+                lay-checked="fid" lay-target="dialog" lay-height="380" lay-width="800">修改</button>
+
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteLink.html"
+                lay-href="friendLink/deleteLink.html" lay-checked="fid" lay-target="ajax" lay-tips="确定要删除吗?">删除</button>
+
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>链接</th>
+                    <th>顺序</th>
+                    <th>描述</th>
+                    <th>创建时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="link : ${linkList.data}">
+                    <td>
+                        <input type="checkbox" th:name="${link.fid}" lay-skin="primary" />
+                    </td>
+                    <td th:text="${link.fname}"></td>
+                    <td th:text="${link.ftype_s}"></td>
+                    <td th:text="${link.furl}"></td>
+                    <td th:text="${link.forder}"></td>
+                    <td th:text="${link.fdescription}"></td>
+                    <td th:text="${link.fcreatetime == null ? '':#dates.format(link.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${linkList.totalPages}, lay-curr=${linkList.currentPage}"></div>
+</div>

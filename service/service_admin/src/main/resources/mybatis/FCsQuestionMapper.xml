@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FCsQuestionMapper" >
+
+  <sql id="csColumn">fid, fquestion, foperation, fuid,
+      fstatus, fcreatetime, fupdatetime,
+      version, fdetail, fresult</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_cs_question
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="FCsQuestion" >
+    insert into f_cs_question (fquestion, foperation, fuid,
+      fstatus, fcreatetime, fupdatetime,
+      version, fdetail, fresult
+      )
+    values (#{fquestion,jdbcType=VARCHAR}, #{foperation,jdbcType=VARCHAR}, #{fuid,jdbcType=INTEGER},
+      #{fstatus,jdbcType=INTEGER}, #{fcreatetime,jdbcType=TIMESTAMP}, #{fupdatetime,jdbcType=TIMESTAMP},
+      #{version,jdbcType=INTEGER}, #{fdetail,jdbcType=LONGVARCHAR}, #{fresult,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FCsQuestion" >
+    update f_cs_question
+    set fquestion = #{fquestion,jdbcType=VARCHAR},
+      foperation = #{foperation,jdbcType=VARCHAR},
+      fstatus = #{fstatus,jdbcType=INTEGER},
+      fuid = #{fuid,jdbcType=INTEGER},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      version = version + 1,
+      fdetail = #{fdetail,jdbcType=LONGVARCHAR},
+      fresult = #{fresult,jdbcType=LONGVARCHAR}
+    where fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="FCsQuestion" parameterType="java.lang.Integer" >
+    select <include refid="csColumn" />
+    from f_cs_question
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultType="FCsQuestion" >
+    select <include refid="csColumn" />
+    from f_cs_question
+  </select>
+  
+  
+  <select id="selectByPage" resultType="FCsQuestion" parameterType="java.util.Map" >
+    select <include refid="csColumn" />
+    from f_cs_question
+    where 1=1
+    <if test="fuid != null">
+      and fuid like concat('%',#{fuid},'%')
+    </if>
+    <if test="fquestion != null">
+		and fquestion like concat('%',#{fquestion},'%') 
+	</if>
+	<if test="foperation != null">
+		and foperation like concat('%',#{foperation},'%') 
+	</if>
+	<if test="fstatus != null">
+		and fstatus = #{fstatus}
+	</if>
+	<if test="fdetail != null">
+		and fdetail like concat('%',#{fdetail},'%') 
+	</if>
+	order by ${orderField} ${orderDirection}
+	limit #{offset},#{limit}
+  </select>
+  
+  <select id="countByPage" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(*)
+    from f_cs_question
+    where 1=1
+    <if test="fuid != null">
+        and fuid like concat('%',#{fuid},'%')
+    </if>
+    <if test="fquestion != null">
+		and fquestion like concat('%',#{fquestion},'%') 
+	</if>
+	<if test="foperation != null">
+		and foperation like concat('%',#{foperation},'%') 
+	</if>
+	<if test="fstatus != null">
+		and fstatus = #{fstatus}
+	</if>
+	<if test="fdetail != null">
+		and fdetail like concat('%',#{fdetail},'%') 
+	</if>
+  </select>
+</mapper>

@@ -1,0 +1,47 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="admin/updateCoinFee.html">
+    <input type="hidden" name="fid" th:value="${coinType.id}"/>
+    <fieldset th:each="fee : ${allFees}" class="layui-elem-field layui-field-title">
+        <legend th:text="${'VIP'+fee.levelVip}"></legend>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">最大提现：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" th:name="${'withdrawMax'+fee.id}" lay-verify="required"
+                           th:value="${#decimal.format(fee.withdrawMax, 1, 10)}"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">最小提现：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" th:name="${'withdrawMin'+fee.id}" lay-verify="required"
+                           th:value="${#decimal.format(fee.withdrawMin, 1, 10)}"/>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">提现费率：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" th:name="${'withdrawFee'+fee.id}" lay-verify="required"
+                           th:value="${#decimal.format(fee.withdrawFee, 1, 10)}"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">提现次数：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" th:name="${'withdrawTimes'+fee.id}" lay-verify="required"
+                           th:value="${fee.withdrawTimes}"/>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">每天提现额度：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" th:name="${'withdrawDayLimit'+fee.id}" lay-verify="required"
+                           th:value="${#decimal.format(fee.withdrawDayLimit, 1, 10)}"/>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

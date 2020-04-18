@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.market.mapper.FEntrustLogMapper">
+
+	<resultMap id="allInfo" type="java.util.Map">
+		<result column="sum(fcount)" property="sum" jdbcType="DECIMAL" />
+		<result column="max(fprize)" property="max" jdbcType="DECIMAL" />
+		<result column="min(fprize)" property="min" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<sql id="entrustLogColumns">
+  	 	fid, ftradeid, fentrusttype, fentrustid, fmatchid, famount, fprize, fcount
+  	 	, fisactive, flastupdattime, fcreatetime, version
+  	</sql>
+  	
+	<select id="selectByDate" resultType="FEntrustLog">
+		select <include refid="entrustLogColumns"/> from f_entrust_log
+        <![CDATA[ where ftradeid = #{ftradeid} and date_format(fcreatetime, "%Y-%m-%d %H:%i") >= date_format(#{time}, "%Y-%m-%d %H:%i") and fisactive = 1;]]>
+    </select>
+    
+	<select id="selectSuccess" resultType="FEntrustLog">
+		select <include refid="entrustLogColumns"/> from f_entrust_log
+        <![CDATA[ where ftradeid = #{ftradeid} and fisactive = 1 order by fcreatetime desc limit 0,#{max};]]>
+    </select>
+    
+	<select id="select24ByDate" resultMap="allInfo">
+		select sum(fcount), max(fprize), min(fprize) from f_entrust_log
+        <![CDATA[ where ftradeid = #{ftradeid} and date_format(fcreatetime, "%Y-%m-%d %H:%i") >= date_format(#{time}, "%Y-%m-%d %H:%i")  and fisactive = 1;]]>
+    </select>
+    
+	<select id="selectKaiByData" resultType="FEntrustLog">
+		select <include refid="entrustLogColumns"/> from f_entrust_log
+		<![CDATA[
+			where ftradeid = #{ftradeid}
+			and date_format(fcreatetime, "%Y-%m-%d") < #{nowZero}
+			and date_format(fcreatetime, "%Y-%m-%d") >= #{yesterZero}
+			order by fcreatetime desc limit 0,1;
+		]]>
+    </select>
+    
+	<select id="selectLastByData" resultType="FEntrustLog">
+		select <include refid="entrustLogColumns"/> from f_entrust_log
+		<![CDATA[ where ftradeid = #{ftradeid} order by fcreatetime desc limit 0,1;]]>
+    </select>
+</mapper>

@@ -1,0 +1,71 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="systemArgs/saveSystemArgs.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">KEY:</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="key" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">URL:</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="furl"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">参数类型:</label>
+        <div class="layui-input-block">
+            <select type="combox" name="type">
+                <option th:each="v : ${typeMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片链接：</label>
+        <div class="layui-input-block">
+            <input class="layui-upload-file" type="file" name="file"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">参数值:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-textarea-fixed" id="systemArgsImg" name="value"
+                      lay-verify="required"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-textarea-fixed" name="desc" lay-verify="required"></textarea>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    layui.use(['upload'], function () {
+        var $ = layui.jquery, layer = layui.layer;
+
+        // 图片上传
+        var msgIndex = 0;
+        layui.upload({
+                         url: '/article/upload.html?type=3',
+                         type: "jpg|png",
+                         before: function () {
+                             msgIndex = layer.msg('上传中······', {
+                                 icon: 16
+                                 , shade: 0.01
+                                 , time: 0
+                             });
+                         },
+                        success: function (res) {
+                            layer.close(msgIndex);
+                            if (res.state === "SUCCESS") {
+                                $("#findexImg").val(res.url);
+                            } else {
+                                layer.msg(res.state, {
+                                    icon: 2
+                                    , shift: 6
+                                });
+                            }
+                        }
+                     });
+    });
+</script>

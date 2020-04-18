@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.SystemCoinSettingMapper">
+
+	<insert id="insert" parameterType="SystemCoinSetting">
+		insert into system_coin_setting (id, coin_id, level_vip,
+		withdraw_max, withdraw_min, withdraw_fee,
+		withdraw_times, withdraw_day_limit,
+		gmt_create, gmt_modified, version)
+		values (#{id,jdbcType=INTEGER}, #{coinId,jdbcType=INTEGER}, #{levelVip,jdbcType=INTEGER},
+		#{withdrawMax,jdbcType=DECIMAL}, #{withdrawMin,jdbcType=DECIMAL}, #{withdrawFee,jdbcType=DECIMAL},
+		#{withdrawTimes,jdbcType=INTEGER}, #{withdrawDayLimit,jdbcType=DECIMAL},
+		#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="SystemCoinSetting">
+		update system_coin_setting
+		set coin_id = #{coinId,jdbcType=INTEGER},
+		level_vip = #{levelVip,jdbcType=INTEGER},
+		withdraw_max = #{withdrawMax,jdbcType=DECIMAL},
+		withdraw_min = #{withdrawMin,jdbcType=DECIMAL},
+		withdraw_fee = #{withdrawFee,jdbcType=DECIMAL},
+		withdraw_times = #{withdrawTimes,jdbcType=INTEGER},
+		withdraw_day_limit = #{withdrawDayLimit,jdbcType=DECIMAL},
+		gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+		version = version + 1
+		where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+	</update>
+	<select id="selectAll" resultType="SystemCoinSetting">
+		select id, coin_id, level_vip, withdraw_max, withdraw_min, withdraw_fee, withdraw_times,
+		withdraw_day_limit, gmt_create, gmt_modified, version
+		from system_coin_setting
+	</select>
+	
+	<select id="selectSystemCoinSetting" resultType="SystemCoinSetting">
+		select id, coin_id, level_vip, withdraw_max, withdraw_min, withdraw_fee, withdraw_times,
+		withdraw_day_limit, gmt_create, gmt_modified, version
+		from system_coin_setting
+		where coin_id = #{coinId} and level_vip = #{levelVip}
+	</select>
+	
+	<select id="selectListByCoinId" resultType="SystemCoinSetting" parameterType="java.lang.Integer">
+		select id, coin_id, level_vip, withdraw_max, withdraw_min, withdraw_fee, withdraw_times,
+		withdraw_day_limit, gmt_create, gmt_modified, version
+		from system_coin_setting
+		where coin_id = #{coinId}
+	</select>
+</mapper>

@@ -1,0 +1,11 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/updateTradeStop.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">状态：</label>
+		<div class="layui-input-block">
+			<input type="hidden" name="id" th:value="${tradeType.id}" />
+			<select type="combox" name="status">
+				<option th:each="v : ${statusMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == tradeType.status}"></option>
+			</select>
+		</div>
+	</div>
+</div>

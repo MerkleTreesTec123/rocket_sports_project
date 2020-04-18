@@ -1,0 +1,9 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/checkVirtualCoinRechargeOrder.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">确认数：</label>
+		<div class="layui-input-block">
+			<input type="hidden" class="layui-input" name="id" lay-verify="required" th:value="${virtualCapitaloperation.fid}"/>
+			<input class="layui-input" name="confirmations" lay-verify="required"/>
+		</div>
+	</div>
+</div>

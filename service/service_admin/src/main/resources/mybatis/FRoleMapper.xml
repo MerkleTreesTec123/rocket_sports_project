@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FRoleMapper" >
+  <resultMap id="BaseResultMap" type="FRole" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fdescription" property="fdescription" jdbcType="VARCHAR" />
+    <result column="fname" property="fname" jdbcType="VARCHAR" />
+    <collection property="froleSecurities" ofType="FRoleSecurity" column="fid" select="com.qkwl.service.admin.bc.dao.FRoleSecurityMapper.selectByRoleId" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="FRole" keyProperty="fid">
+    insert into f_role (fdescription, fname
+      )
+    values (#{fdescription,jdbcType=VARCHAR}, #{fname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="FRole" >
+    update f_role
+    set fdescription = #{fdescription,jdbcType=VARCHAR},
+      fname = #{fname,jdbcType=VARCHAR}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select fid, fdescription, fname
+    from f_role
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select fid, fdescription, fname
+    from f_role
+  </select>
+  
+  <select id="selectRolePageList" resultType="FRole" parameterType="java.util.Map" >
+   select fid, fdescription, fname
+    from f_role
+    where 1=1
+    <if test="keyword != null">
+    	and fname like concat('%',#{fname,jdbcType=VARCHAR},'%')
+    </if>
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countRoleByPage" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(fid)
+    from f_role
+    where 1=1
+    <if test="keyword != null">
+    	and fname like concat('%',#{fname,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+</mapper>

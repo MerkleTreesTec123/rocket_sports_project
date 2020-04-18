@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.FUserFinancesMapper">
+
+	<sql id="financesColumn">
+		fid, fuid, fcoinid, fname, frate, famount, fplanamount, fstate, fcreatetime,
+		fupdatetime, version
+	</sql>
+
+	<insert id="insert" parameterType="com.qkwl.service.user.model.FUserFinancesDO">
+		insert into f_user_finances (fid, fuid, fcoinid,
+		fname, frate, famount,
+		fplanamount, fstate, fcreatetime,
+		fupdatetime, version)
+		values (#{fid,jdbcType=INTEGER}, #{fuid,jdbcType=INTEGER}, #{fcoinid,jdbcType=INTEGER},
+		#{fname,jdbcType=VARCHAR}, #{frate,jdbcType=DECIMAL}, #{famount,jdbcType=DECIMAL},
+		#{fplanamount,jdbcType=DECIMAL}, #{fstate,jdbcType=INTEGER}, #{fcreatetime,jdbcType=TIMESTAMP},
+		#{fupdatetime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+	</insert>
+
+	<update id="update" parameterType="com.qkwl.service.user.model.FUserFinancesDO">
+		UPDATE f_user_finances SET
+		fuid = #{fuid,jdbcType=INTEGER},
+		fcoinid = #{fcoinid,jdbcType=INTEGER},
+		fname = #{fname,jdbcType=VARCHAR},
+		frate = #{frate,jdbcType=DECIMAL},
+		famount = #{famount,jdbcType=DECIMAL},
+		fplanamount = #{fplanamount,jdbcType=DECIMAL},
+		fstate = #{fstate,jdbcType=INTEGER},
+		fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+		fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+		version = version +1
+		WHERE fid = #{fid,jdbcType=INTEGER}
+		AND version = #{version,jdbcType=INTEGER}
+	</update>
+
+	<select id="select" resultType="com.qkwl.service.user.model.FUserFinancesDO" parameterType="java.lang.Integer">
+		select
+		<include refid="financesColumn"/>
+		from f_user_finances
+		where fid = #{fid}
+	</select>
+
+	<select id="selectUserFinancesList" resultType="com.qkwl.service.user.model.FUserFinancesDO" parameterType="java.util.Map">
+		select
+		<include refid="financesColumn" />
+		from f_user_finances
+		where 1=1
+		<if test="fuid != null">
+			and f_user_finances.fuid = #{fuid}
+		</if>
+		<if test="fcoinid != null">
+			and f_user_finances.fcoinid = #{fcoinid}
+		</if>
+		order by fcreatetime desc
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="selectUserFinancesCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from f_user_finances
+		where 1=1
+		<if test="fuid != null">
+			and f_user_finances.fuid = #{fuid}
+		</if>
+		<if test="fcoinid != null">
+			and f_user_finances.fcoinid = #{fcoinid}
+		</if>
+	</select>
+
+</mapper>

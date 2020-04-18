@@ -1,0 +1,28 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="/admin/addVirtualFinances.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">币种：</label>
+        <div class="layui-input-block">
+            <select name="fcoinid">
+                <option th:each="type : ${coinMap }" th:value="${type.key}" th:text="${type.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fname" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">冻结天数：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fdays" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年化利率：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="frate" lay-verify="required"/>
+        </div>
+    </div>
+</div>

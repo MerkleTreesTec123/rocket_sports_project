@@ -1,0 +1,55 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="user/userLookup.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">会员信息</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">UID</label>
+            <div class="layui-input-inline">
+                <input name="uid" th:value="${uid }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="160%">
+            <thead>
+            <tr>
+                <th>操作</th>
+                <th>UID</th>
+                <th>显示ID</th>
+                <th>登录名</th>
+                <th>昵称</th>
+                <th>邮箱</th>
+                <th>真实姓名</th>
+                <th>证件号码</th>
+                <th>会员状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${userList.data}">
+                <td>
+                    <button class="layui-btn layui-btn-small"
+                            th:onclick="${'layui.lookup.backLook({id:'+user.fid+',name:'''+user.floginname+'''})'}">带回
+                    </button>
+                </td>
+                <td th:text="${user.fid}"></td>
+                <td th:text="${user.fshowid}"></td>
+                <td th:text="${user.floginname}"></td>
+                <td th:text="${user.fnickname}"></td>
+                <td th:text="${user.femail}"></td>
+                <td th:text="${user.frealname}"></td>
+                <td th:text="${user.fidentityno}"></td>
+                <td th:text="${user.fstatus==1?'正常':'禁用'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${userList.totalPages}, lay-curr=${userList.currentPage}"></div>
+</div>

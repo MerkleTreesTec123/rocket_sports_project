@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.SystemActivityMapper" >
+
+  <sql id="activityColumn">id, name, status, archive_status, gmt_create, gmt_modified, version</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from system_activity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="SystemActivity" >
+    insert into system_activity (name, status,
+      archive_status, gmt_create, gmt_modified, 
+      version)
+    values (#{name,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+      #{archiveStatus,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="SystemActivity" >
+    update system_activity
+    set name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      archive_status = #{archiveStatus,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="SystemActivity" parameterType="java.lang.Integer" >
+    select <include refid="activityColumn" />
+    from system_activity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultType="SystemActivity" >
+    select <include refid="activityColumn" />
+    from system_activity
+  </select>
+
+  <select id="selectByPage" resultType="SystemActivity" parameterType="java.util.Map">
+    select <include refid="activityColumn" />
+    from system_activity
+    where 1=1
+    <if test="keyword != null">
+      and name like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+    ORDER by ${orderField} ${orderDirection}
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countByPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*)
+    from system_activity
+    where 1=1
+    <if test="keyword != null">
+      and name like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+</mapper>

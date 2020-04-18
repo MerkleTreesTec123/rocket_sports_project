@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.market.mapper.FPeriodMapper">
+ 
+ 
+  <insert id="insert" parameterType="FPeriod" keyProperty="fid">
+    insert into f_period (
+      ftradeid,
+      fkai, 
+      fgao, 
+      fdi, 
+      fshou, 
+      fliang, 
+      ftime
+    ) values (
+      #{ftradeid,jdbcType=INTEGER},
+      #{fkai,jdbcType=DECIMAL}, 
+      #{fgao,jdbcType=DECIMAL}, 
+      #{fdi,jdbcType=DECIMAL}, 
+      #{fshou,jdbcType=DECIMAL}, 
+      #{fliang,jdbcType=DECIMAL}, 
+      #{ftime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="selectforId" parameterType="java.lang.Integer" resultType="FPeriod">
+    select * from f_period where ftradeid = #{ftradeid,jdbcType=INTEGER}
+  </select>
+
+</mapper>

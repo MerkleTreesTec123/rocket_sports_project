@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.match.dao.FEntrustLogMapper">
+
+	<sql id="entrustLogColumns">
+		fid, ftradeid, fentrustid, fentrusttype, fmatchid, famount, fprize, fcount,
+		fisactive, flastupdattime, fcreatetime, version, fremark, fuid,ffees,coinid,deduction
+	</sql>
+
+	<insert id="insert" parameterType="FEntrustLog" keyProperty="fid">
+		insert into f_entrust_log (
+		ftradeid,
+		fentrusttype,
+		fentrustid,
+		fmatchid,
+		fprize,
+		fcount,
+		famount,
+		fisactive,
+		flastupdattime,
+		fcreatetime,
+		version,
+		fremark,
+		fuid,
+		ffees,
+		coinid,
+		deduction
+		) values (
+		#{ftradeid},
+		#{fentrusttype},
+		#{fentrustid},
+		#{fmatchid},
+		#{fprize},
+		#{fcount},
+		#{famount},
+		#{fisactive},
+		#{flastupdattime},
+		#{fcreatetime},
+		#{version},
+		#{fremark},
+		#{fuid},
+		#{ffees},
+		#{coinid},
+		#{deduction})
+	</insert>
+</mapper>

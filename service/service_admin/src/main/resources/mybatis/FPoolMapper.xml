@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FPoolMapper" >
+
+  <resultMap id="BaseResultMap" type="FPool" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fcoinid" property="fcoinid" jdbcType="INTEGER" />
+    <result column="faddress" property="faddress" jdbcType="VARCHAR" />
+    <result column="fstatus" property="fstatus" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="poolColumn">
+      fid, fcoinid, faddress, fstatus, version
+  </sql>
+
+  <select id="getVirtualCoinAddressNumList" resultType="java.util.Map" parameterType="java.util.Map">
+    select coin.name as name, ifnull(count(pool.fid),0) as num
+	from f_pool as pool INNER JOIN system_coin_type as coin on pool.fcoinid = coin.id  where 1 = 1
+    <if test="keyword != null">
+      and  (coin.name like concat('%',#{keyword,jdbcType=VARCHAR},'%') or coin.short_name like concat('%',#{keyword,jdbcType=VARCHAR},'%') )
+    </if>
+    and (pool.fstatus=0 or pool.fstatus is null)
+	group by pool.fcoinid
+    limit #{offset},#{limit}    
+  </select>
+  
+   <select id="countVirtualCoinAddressNumList" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(tab.name) as count from (
+    	select coin.name as name, count(pool.fid) as num
+		from f_pool as pool INNER JOIN system_coin_type as coin on pool.fcoinid = coin.id  where 1 = 1
+	    <if test="keyword != null">
+	      and  (coin.name like concat('%',#{keyword,jdbcType=VARCHAR},'%') or coin.short_name like concat('%',#{keyword,jdbcType=VARCHAR},'%') )
+	    </if>
+	    and (pool.fstatus=0 or pool.fstatus is null)
+	    group by pool.fcoinid
+    ) as tab
+  </select>
+  
+  <insert id="insert" parameterType="FPool" keyProperty="fid">
+    insert into f_pool (
+      fcoinid, 
+      faddress, 
+      fstatus, 
+      version
+    ) values (
+      #{fcoinid,jdbcType=INTEGER}, 
+      #{faddress,jdbcType=VARCHAR}, 
+      #{fstatus,jdbcType=INTEGER}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+
+</mapper>

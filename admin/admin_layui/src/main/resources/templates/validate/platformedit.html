@@ -1,0 +1,57 @@
+<div class="layui-form layui-form-pane" lay-href="validate/platformedit.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">平台名称：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="id" th:value="${platform.id}"/>
+            <input class="layui-input" name="name" lay-verify="required" th:value="${platform.name}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">域名：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="domain" lay-verify="required" th:value="${platform.domain}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">签名：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="sign" th:value="${platform.sign}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">普通短信账号：</label>
+        <div class="layui-input-block">
+            <select name="smsId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"
+                        th:selected="${v.key == platform.smsId}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">语音短信账号：</label>
+        <div class="layui-input-block">
+            <select name="voiceSmsId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"
+                        th:selected="${v.key == platform.voiceSmsId}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">国际短信账号：</label>
+        <div class="layui-input-block">
+            <select name="internationalSmsId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"
+                        th:selected="${v.key == platform.internationalSmsId}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮件账号：</label>
+        <div class="layui-input-block">
+            <select name="emailId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"
+                        th:selected="${v.key == platform.emailId}"></option>
+            </select>
+        </div>
+    </div>
+</div>

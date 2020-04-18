@@ -1,0 +1,189 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="admin/capitalCharts.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">币种类型：</label>
+            <div class="layui-input-inline">
+                <select name="coinId">
+                    <option th:each="coin : ${coinMap}" th:value="${coin.key}" th:text="${coin.value}"
+                        th:selected="${coin.key == coinId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">数据类型：</label>
+            <div class="layui-input-inline">
+                <select name="dataId">
+                    <option th:each="data : ${dataTypeMap}" th:value="${data.key}" th:text="${data.value}"
+                            th:selected="${data.key == dataId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">周期类型：</label>
+            <div class="layui-input-inline">
+                <select name="cycleId">
+                    <option th:each="cycle : ${cycleMap}" th:value="${cycle.key}" th:text="${cycle.value}"
+                            th:selected="${cycle.key == cycleId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">选择日期：</label>
+            <div class="layui-input-inline">
+                <input name="day" th:value="${day }" class="layui-input" onclick="layui.laydate({elem: this})" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+        <div class="capitalcharts layui-hide">
+            <input type="hidden" id="coinId" th:value="${coinId }"/>
+            <input type="hidden" id="dataId" th:value="${dataId }"/>
+            <input type="hidden" id="cycleId" th:value="${cycleId }"/>
+            <input type="hidden" id="day" th:value="${day }"/>
+        </div>
+    </div>
+    <hr/>
+    <div id="capitalCharts" style="height:400px;">
+
+    </div>
+    <hr/>
+    <div th:if="${dataId > 0}" style="bottom:0;">
+    <div>
+        充提统计数据
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>统计时间</th>
+                <th th:text="${'充值('+coinName+')'}"></th>
+                <th th:text="${'提现('+coinName+')'}"></th>
+            </tr>
+            </thead>
+            <tbody lay-height="300px">
+            <tr th:if="${data != null}" th:each="list : ${data}">
+                <td th:text="${list.time}"></td>
+                <td th:text="${list.recharge == null ? '':#decimal.format(list.recharge, 1, 10)}"></td>
+                <td th:text="${list.withdraw == null ? '':#decimal.format(list.withdraw, 1, 10)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+<div id="report3" class="layui-hide"></div>
+<script type="text/javascript" src="js/echarts/echarts.min.js"></script>
+<script type="application/javascript">
+    /*<![CDATA[*/
+    var $ = layui.jquery;
+    // 基于准备好的dom，初始化echarts实例
+    var charts = echarts.init(document.getElementById('capitalCharts'));
+    $("#report3").parents(".layui-tab-item").css("overflow-y", "auto").css("height", "100%");
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '充提统计'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['充值','提现']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : []
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'充值',
+                type:'line',
+                data:[]
+            },
+            {
+                name:'提现',
+                type:'line',
+                data:[]
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    charts.setOption(option);
+    var coinId = $(".capitalcharts #coinId").val();
+    var dataId = $(".capitalcharts #dataId").val();
+    var cycleId = $(".capitalcharts #cycleId").val();
+    var day = $(".capitalcharts #day").val();
+
+    if(coinId >= 0 && dataId > 0 && cycleId > 0 && day != ""){
+        $.post("/charts/capitalReport.html", {"coinId":coinId, "dataId":dataId, "cycleId":cycleId, "day":day}, function(data){
+            var obj = data.data;
+            var xaxis = obj.xaxis;
+            var coin = obj.coin;
+            var line = obj.line;
+            var recharge = [];
+            var withdraw = [];
+            for(var i = 0; i < line.length; i++){
+                var cline = line[i];
+                if(cline.type == 1){
+                    recharge = cline.amount;
+                }else{
+                    withdraw = cline.amount;
+                }
+            }
+
+            // 填入数据
+            charts.setOption({
+                title: {
+                    text: '充提统计-'+coin
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : xaxis
+                    }
+                ],
+                series: [
+                    {
+                        name:'充值',
+                        type:'line',
+                        data:recharge
+                    },
+                    {
+                        name:'提现',
+                        type:'line',
+                        data:withdraw
+                    }
+                ]
+            });
+
+
+        });
+    }
+
+
+    /*]]>*/
+//
+
+</script>

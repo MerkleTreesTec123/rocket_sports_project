@@ -1,0 +1,35 @@
+<div class="layui-form layui-form-pane" lay-href="validate/accountedit.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">发送类型：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="id" th:value="${account.id}" />
+            <select name="type">
+                <option th:each="v:${typeMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == account.type}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号名称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="name" lay-verify="required" th:value="${account.name}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="accessKey" lay-verify="required" th:value="${account.accessKey}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="secretKey" lay-verify="required" th:value="${account.secretKey}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">URL：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="url" lay-verify="required" th:value="${account.url}"/>
+        </div>
+    </div>
+</div>

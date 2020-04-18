@@ -1,0 +1,66 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+     lay-href="/report/dayTradeCoinList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">交易币种：</label>
+            <div class="layui-input-inline">
+                <select name="ftype">
+                    <option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">日期：</label>
+            <div class="layui-input-inline">
+                <input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({elem: this})"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateDayTrade.html"
+                lay-href="report/updateDayTrade.html" lay-target="ajax" lay-tips="确定手动生成统计吗?">手动统计(请勿重复点击)
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>交易币种</th>
+                <th data-order-field="fbuy">买</th>
+                <th data-order-field="fsell">卖</th>
+                <th data-order-field="fbuyfees">买手续费</th>
+                <th data-order-field="fsellfees">卖手续费</th>
+                <th data-order-field="fbuyperson">买单交易人数</th>
+                <th data-order-field="fsellperson">卖单交易人数</th>
+                <th data-order-field="fbuyentrust">买单笔数</th>
+                <th data-order-field="fsellentrust">卖单笔数</th>
+                <th data-order-field="fupdatetime">最后更新时间</th>
+                <th data-order-field="fcreatetime">创建日期</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td th:text="${state.count}"></td>
+                <td th:text="${list.fcoinname}"></td>
+                <td th:text="${#decimal.format(list.fbuy,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fsell,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fbuyfees,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fsellfees,1,10)}"></td>
+                <td th:text="${list.fbuyperson}"></td>
+                <td th:text="${list.fsellperson}"></td>
+                <td th:text="${list.fbuyentrust}"></td>
+                <td th:text="${list.fsellentrust}"></td>
+                <td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

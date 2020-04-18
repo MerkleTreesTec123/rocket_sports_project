@@ -1,0 +1,195 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/updateCoinType.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">排序：</label>
+		<div class="layui-input-block">
+			<input type="hidden" name="id" th:value="${coinType.id}" />
+			<input class="layui-input" name="sortId" lay-verify="required" th:value="${coinType.sortId}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">币种名称：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="name" lay-verify="required" th:value="${coinType.name}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">币种简称：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="shortName" lay-verify="required" th:value="${coinType.shortName}" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">币种类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="type">
+					<option th:each="v : ${typeMap}" th:value="${v.key}" th:text="${v.value}"
+							th:selected="${v.key == coinType.type}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">钱包类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="coinType">
+					<option th:each="v : ${coinTypeMap}" th:value="${v.key}" th:text="${v.value}"
+							th:selected="${v.key == coinType.coinType}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">显示平台：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="platformId">
+				<option th:each="v : ${platformMap}" th:value="${v.key}" th:text="${v.value}"
+						th:selected="${v.key == coinType.platformId}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否提现：</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="isWithdraw" th:checked="${coinType.isWithdraw}" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否充值：</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="isRecharge" th:checked="${coinType.isRecharge}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否PUSH：</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="isPush" th:checked="${coinType.isPush}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否理财：</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="isFinances" th:checked="${coinType.isFinances}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">风控伐值：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="riskNum" lay-verify="required" th:value="${coinType.riskNum}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">weblogo：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="webLogo" id="fweblogo" th:value="${coinType.webLogo}"/>
+			<input class="layui-upload-file" type="file" name="file" data-file="fweblogo"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">applogo：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="appLogo" id="fapplogo" th:value="${coinType.appLogo}"/>
+			<input class="layui-upload-file" type="file" name="file" data-file="fapplogo"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">资产ID：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="assetId" th:value="${coinType.assetId}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">符号：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="symbol" th:value="${coinType.symbol}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">accesskey</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="accessKey" lay-verify="required" th:value="${coinType.accessKey}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">secretkey</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="secrtKey" lay-verify="required" th:value="${coinType.secrtKey}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">eth_account</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="ethAccount" th:value="${coinType.ethAccount}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">合约账户</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="contractAccount" th:value="${coinType.contractAccount}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">合约Wei</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="contractWei" th:value="${coinType.contractWei}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">IP地址</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="ip" lay-verify="required" th:value="${coinType.ip}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">端口号</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="port" lay-verify="required" th:value="${coinType.port}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">网络手续费</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="networkFee" lay-verify="required" th:value="${#decimal.format(coinType.networkFee, 1, 10)}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">充值确认数</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="confirmations" lay-verify="required" th:value="${coinType.confirmations}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">区块链地址</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="explorerUrl" lay-verify="required" th:value="${coinType.explorerUrl}"/>
+		</div>
+	</div>
+</div>
+<script>
+    layui.use(['upload'], function () {
+        var $ = layui.jquery
+            , layer = layui.layer;
+        // 图片上传
+        var msgIndex = 0;
+        layui.upload({
+                         url: '/article/upload.html?type=4',
+                         type: "jpg|png",
+                         before: function () {
+                             msgIndex = layer.msg('上传中······', {
+                                 icon: 16
+                                 , shade: 0.01
+                                 , time: 0
+                             });
+                         },
+                         success: function (res, input) {
+                             layer.close(msgIndex);
+                             if (res.state === "SUCCESS") {
+                                 $("#" + $(input).data().file).val(res.url);
+                                 console.log($(input).data().file);
+                             } else {
+                                 layer.msg(res.state, {
+                                     icon: 2
+                                     , shift: 6
+                                 });
+                             }
+                         }
+                     });
+    });
+</script>

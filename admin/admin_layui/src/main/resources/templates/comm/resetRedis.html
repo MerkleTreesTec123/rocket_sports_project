@@ -1,0 +1,11 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="/admin/resetRedisData.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型：</label>
+        <div class="layui-input-block">
+            <select type="combox" name="type">
+                <option th:each="v : ${typeMap}" th:value="${v.key}"
+                        th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+</div>

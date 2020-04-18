@@ -1,0 +1,51 @@
+<div class="layui-form" lay-href="/log/logscoreList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">用户UID：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">类型：</label>
+            <div class="layui-input-inline">
+                <select type="combox" name="ftype">
+                    <option th:each="v : ${typeMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>会员UID</th>
+                <th data-order-field="fscore">积分</th>
+                <th data-order-field="ftype">积分类型</th>
+                <th>备注</th>
+                <th data-order-field="fcreatetime">创建日期</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log,iterStat : ${logList.data}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${log.fuid}"></td>
+                <td th:text="${log.fscore}"></td>
+                <td th:text="${log.ftype_s}"></td>
+                <td th:text="${log.fremark}"></td>
+                <td th:text="${log.fcreatetime == null ? '':#dates.format(log.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${logList.totalPages}, lay-curr=${logList.currentPage}"></div>
+</div>

@@ -1,0 +1,76 @@
+<div class="layui-form" lay-href="admin/userIdentityList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="fstatus">
+					<option value="-1">全部</option>
+					<option value="0" th:selected="${fstatus eq 0}">待审核</option>
+					<option value="1" th:selected="${fstatus eq 1}">已审核</option>
+					<option value="2" th:selected="${fstatus eq 2}">未通过</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">证件类型</label>
+			<div class="layui-input-inline">
+				<select type="combox"  name="ftype">
+					<option value="-1">全部</option>
+					<option value="0" th:selected="${ftype eq 0}">身份证</option>
+					<option value="1" th:selected="${ftype eq 1}">护照</option>
+					<option value="2" th:selected="${ftype eq 2}">通行证</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/reviewIdentity.html"
+				lay-href="admin/reviewIdentity.html?fstatus=1" lay-checked="uid" lay-target="ajax" lay-tips="确定要审核吗?">审核</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/reviewIdentity.html"
+				lay-href="admin/reviewIdentity.html?fstatus=2" lay-checked="uid" lay-target="ajax" lay-tips="确定要驳回吗?">驳回</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="160%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>用户id</th>
+					<th>真实姓名</th>
+					<th>状态</th>
+					<th>证件类型</th>
+					<th>国家</th>
+					<th>证件编号</th>
+					<th data-order-field="fcreatetime">提交时间</th>
+					<th data-order-field="fupdatetime">审核时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="identity : ${page.data}">
+					<td>
+						<input type="checkbox" th:name="${identity.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${identity.fuid}"></td>
+					<td th:text="${identity.fname}"></td>
+					<td th:text="${identity.fstatus_s}"></td>
+					<td th:text="${identity.ftype_s}"></td>
+					<td th:text="${identity.fcountry}"></td>
+					<td th:text="${identity.fcode}"></td>
+					<td th:text="${identity.fcreatetime == null ? '': #dates.format(identity.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${identity.fcreatetime == null ? '': #dates.format(identity.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

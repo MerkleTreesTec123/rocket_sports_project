@@ -1,0 +1,50 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" >
+	<div class="layui-form-item">
+		<label class="layui-form-label">登录名：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.floginname }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">会员状态：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.fstatus_s }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">提现状态：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.fiscny_s }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">真实姓名：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.frealname }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">证件号码：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.fidentityno }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">会员等级：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.level }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">电话号码：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.ftelephone }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">邮箱地址：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${fuser.femail }" readonly="readonly"/>
+		</div>
+	</div>
+</div>

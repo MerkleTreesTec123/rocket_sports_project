@@ -1,0 +1,190 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="admin/tradeCharts.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">交易类型：</label>
+            <div class="layui-input-inline">
+                <select name="tradeId">
+                    <option th:each="trade : ${tradeTypeMap}" th:value="${trade.key}" th:text="${trade.value}"
+                        th:selected="${trade.key == tradeId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">数据类型：</label>
+            <div class="layui-input-inline">
+                <select name="dataId">
+                    <option th:each="data : ${dataTypeMap}" th:value="${data.key}" th:text="${data.value}"
+                            th:selected="${data.key == dataId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">周期类型：</label>
+            <div class="layui-input-inline">
+                <select name="cycleId">
+                    <option th:each="cycle : ${cycleMap}" th:value="${cycle.key}" th:text="${cycle.value}"
+                            th:selected="${cycle.key == cycleId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">选择日期：</label>
+            <div class="layui-input-inline">
+                <input name="day" th:value="${day }" class="layui-input" onclick="layui.laydate({elem: this})" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+        <div class="tradedata layui-hide">
+            <input type="hidden" id="tradeId" th:value="${tradeId }"/>
+            <input type="hidden" id="dataId" th:value="${dataId }"/>
+            <input type="hidden" id="cycleId" th:value="${cycleId }"/>
+            <input type="hidden" id="day" th:value="${day }"/>
+        </div>
+    </div>
+    <hr/>
+    <div id="tradeCharts" style="height:400px;">
+
+    </div>
+    <hr/>
+    <div th:if="${dataId > 0}" style="bottom:0;">
+    <div>
+        交易统计数据
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>统计时间</th>
+                <th th:text="${'买入('+buyName+')'}"></th>
+                <th th:text="${'卖出('+sellName+')'}"></th>
+            </tr>
+            </thead>
+            <tbody lay-height="300px">
+            <tr th:if="${data != null}" th:each="list : ${data}">
+                <td th:text="${list.time}"></td>
+                <td th:text="${list.buy == null ? '':#decimal.format(list.buy, 1, 10)}"></td>
+                <td th:text="${list.sell == null ? '':#decimal.format(list.sell, 1, 10)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+<div id="report1" class="layui-hide"></div>
+<script type="text/javascript" src="js/echarts/echarts.min.js"></script>
+<script type="application/javascript">
+    /*<![CDATA[*/
+    var $ = layui.jquery;
+    $("#report1").parents(".layui-tab-item").css("overflow-y", "auto").css("height", "100%");
+    // 基于准备好的dom，初始化echarts实例
+    var tradeCharts = echarts.init(document.getElementById('tradeCharts'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '交易统计'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['买入','卖出']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : []
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'买入',
+                type:'line',
+                data:[]
+            },
+            {
+                name:'卖出',
+                type:'line',
+                data:[]
+            }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    tradeCharts.setOption(option);
+    var tradeId = $(".tradedata #tradeId").val();
+    var dataId = $(".tradedata #dataId").val();
+    var cycleId = $(".tradedata #cycleId").val();
+    var day = $(".tradedata #day").val();
+
+    if(tradeId > 0 && dataId > 0 && cycleId > 0 && day != ""){
+        $.post("/charts/tradeReport.html", {"tradeId":tradeId, "dataId":dataId, "cycleId":cycleId, "day":day}, function(data){
+            var obj = data.data;
+            var xaxis = obj.xaxis;
+            var trade = obj.trade;
+            var line = obj.line;
+            var buy = [];
+            var sell = [];
+            for(var i = 0; i < line.length; i++){
+                var cline = line[i];
+                if(cline.type == 0){
+                    buy = cline.amount;
+                }else{
+                    sell = cline.amount;
+                }
+            }
+
+            // 填入数据
+            tradeCharts.setOption({
+                title: {
+                    text: '交易统计-'+trade
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : xaxis
+                    }
+                ],
+                series: [
+                    {
+                        name:'买入',
+                        type:'line',
+                        data:buy
+                    },
+                    {
+                        name:'卖出',
+                        type:'line',
+                        data:sell
+                    }
+                ]
+            });
+
+
+        });
+    }
+
+
+    /*]]>*/
+//
+
+</script>

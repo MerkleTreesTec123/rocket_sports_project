@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.admin.bc.dao.FVirtualCapitalOperationMapper">
+
+	<sql id="operationColumn">fid, fuid, fcoinid, fcreatetime, famount, ffees, ftype, fstatus, fupdatetime,
+		fwithdrawaddress, frechargeaddress, funiquenumber, fconfirmations, fhasowner,fbtcfees,
+		fblocknumber, version, fsource, fnonce, fplatform, memo</sql>
+
+	<insert id="insertRecharge" parameterType="FVirtualCapitalOperationDTO" keyProperty="fid">
+		insert into f_virtual_capital_operation (
+		fuid,
+		fcoinid,
+		fadminid,
+		fcreatetime,
+		famount,
+		ffees,
+		ftype,
+		fstatus,
+		fupdatetime,
+		fwithdrawaddress,
+		frechargeaddress,
+		funiquenumber,
+		fconfirmations,
+		fhasowner,
+		fblocknumber,
+		version,
+		fagentid,
+		fsource,
+		tx_time,
+		memo
+		) values (
+		#{fuid,jdbcType=INTEGER},
+		#{fcoinid,jdbcType=INTEGER},
+		#{fadminid,jdbcType=INTEGER},
+		#{fcreatetime,jdbcType=TIMESTAMP},
+		#{famount,jdbcType=DECIMAL},
+		#{ffees,jdbcType=DECIMAL},
+		#{ftype,jdbcType=INTEGER},
+		#{fstatus,jdbcType=INTEGER},
+		#{fupdatetime,jdbcType=TIMESTAMP},
+		#{fwithdrawaddress,jdbcType=VARCHAR},
+		#{frechargeaddress,jdbcType=VARCHAR},
+		#{funiquenumber,jdbcType=VARCHAR},
+		#{fconfirmations,jdbcType=INTEGER},
+		#{fhasowner,jdbcType=BIT},
+		#{fblocknumber,jdbcType=INTEGER},
+		#{version,jdbcType=INTEGER},
+		#{fagentid,jdbcType=INTEGER},
+		#{fsource,jdbcType=INTEGER},
+		#{txTime,jdbcType=TIMESTAMP},
+		#{memo,jdbcType=VARCHAR} )
+	</insert>
+
+	<select id="countVirtualCapitalOperation" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(fid)
+		from f_virtual_capital_operation
+		where
+		fuid = #{fuid,jdbcType=INTEGER} and
+		ftype = #{ftype,jdbcType=INTEGER}
+		<if test="fcoinid != null">
+			and fcoinid = #{fcoinid,jdbcType=INTEGER}
+		</if>
+		<if test="fstatus != null">
+			and fstatus = #{fstatus,jdbcType=INTEGER}
+		</if>
+	</select>
+
+
+	<select id="getTotalAmountByType" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		select ifnull(sum(ifnull(famount,0) + ifnull(ffees,0) + ifnull(fbtcfees,0)),0)
+		from
+		f_virtual_capital_operation
+		where 1=1
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="coinid != null">
+			and fcoinid = #{coinid}
+		</if>
+		<if test="type != null">
+			and ftype = #{type}
+		</if>
+		<if test="status != null">
+			and fstatus = #{status}
+		</if>
+		<if test="start != null">
+			<![CDATA[and fcreatetime >= #{start,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="end != null">
+			<![CDATA[and fcreatetime <= #{end,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+	<select id="getAdminPageList" resultType="FVirtualCapitalOperationDTO" parameterType="java.util.Map">
+		select
+		f_virtual_capital_operation.fid,
+		f_virtual_capital_operation.fuid,
+		f_virtual_capital_operation.fcoinid,
+		f_virtual_capital_operation.fcreatetime,
+		f_virtual_capital_operation.famount,
+		f_virtual_capital_operation.ffees,
+		f_virtual_capital_operation.fbtcfees,
+		f_virtual_capital_operation.ftype,
+		f_virtual_capital_operation.fstatus,
+		f_virtual_capital_operation.fupdatetime,
+		f_virtual_capital_operation.fwithdrawaddress,
+		f_virtual_capital_operation.frechargeaddress,
+		f_virtual_capital_operation.funiquenumber,
+		f_virtual_capital_operation.fconfirmations,
+		f_virtual_capital_operation.fhasowner,
+		f_virtual_capital_operation.fblocknumber,
+		f_virtual_capital_operation.version,
+		f_virtual_capital_operation.fsource,
+		f_virtual_capital_operation.fplatform,
+		f_virtual_capital_operation.memo,
+		f_user.floginname,
+		f_user.fnickname,
+		f_user.frealname,
+		system_coin_type.name fcoinname,
+		f_user_score.flevel level,
+		f_admin.fname fadminname
+		from
+		f_virtual_capital_operation left join
+		f_user on f_user.fid = f_virtual_capital_operation.fuid left join
+		system_coin_type on system_coin_type.id = f_virtual_capital_operation.fcoinid left join
+		f_admin on f_admin.fid = f_virtual_capital_operation.fadminid left join
+		f_user_score on f_virtual_capital_operation.fuid = f_user_score.fuid
+		where 1=1 and f_virtual_capital_operation.fuid is not null
+		<if test="keyword != null">
+			and (
+			f_virtual_capital_operation.fwithdrawaddress like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_virtual_capital_operation.frechargeaddress like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.fid = #{keyword,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="fcoinid != null">
+			and f_virtual_capital_operation.fcoinid = #{fcoinid}
+		</if>
+		<if test="ftype != null">
+			and f_virtual_capital_operation.ftype = #{ftype}
+		</if>
+		<if test="fstatus != null">
+			and f_virtual_capital_operation.fstatus in
+			<foreach collection="fstatus" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="start != null and start == end">
+			<![CDATA[and f_virtual_capital_operation.fupdatetime = #{start}]]>
+		</if>
+		<if test="start != null and start != end">
+			<![CDATA[and f_virtual_capital_operation.fupdatetime >= #{start}]]>
+		</if>
+		<if test="end != null and start != end">
+			<![CDATA[and f_virtual_capital_operation.fupdatetime <= #{end}]]>
+		</if>
+		<if test="isvip6">
+			and f_user_score.flevel = 6
+		</if>
+		<if test="orderField != null">
+			order by f_virtual_capital_operation.${orderField} ${orderDirection}
+		</if>
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="countAdminPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from
+		f_virtual_capital_operation left join
+		f_user on f_user.fid = f_virtual_capital_operation.fuid left join
+		system_coin_type on system_coin_type.id = f_virtual_capital_operation.fcoinid left join
+		f_user_score on f_virtual_capital_operation.fuid = f_user_score.fuid
+		where 1=1 and f_virtual_capital_operation.fuid is not null
+		<if test="keyword != null">
+			and (
+			f_virtual_capital_operation.fwithdrawaddress like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_virtual_capital_operation.frechargeaddress like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.fid = #{keyword,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="fcoinid != null">
+			and f_virtual_capital_operation.fcoinid = #{fcoinid}
+		</if>
+		<if test="ftype != null">
+			and f_virtual_capital_operation.ftype = #{ftype}
+		</if>
+		<if test="fstatus != null">
+			and f_virtual_capital_operation.fstatus in
+			<foreach collection="fstatus" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="isvip6">
+			and f_user_score.flevel = 6
+		</if>
+		<if test="start != null and start == end">
+			<![CDATA[and f_virtual_capital_operation.fupdatetime = #{start}]]>
+		</if>
+		<if test="start != null and start != end">
+			<![CDATA[and f_virtual_capital_operation.fupdatetime >= #{start}]]>
+		</if>
+		<if test="end != null and start != end">
+			<![CDATA[and f_virtual_capital_operation.fupdatetime <= #{end}]]>
+		</if>
+	</select>
+
+	<select id="selectAllById" resultType="FVirtualCapitalOperationDTO" parameterType="java.lang.Integer">
+  	select
+  		f_virtual_capital_operation.fid,
+  		f_virtual_capital_operation.fuid,
+  		f_virtual_capital_operation.fcoinid,
+  		f_virtual_capital_operation.fcreatetime,
+  		f_virtual_capital_operation.famount,
+  		f_virtual_capital_operation.ffees,
+  		f_virtual_capital_operation.fbtcfees,
+  		f_virtual_capital_operation.ftype,
+  		f_virtual_capital_operation.fstatus,
+  		f_virtual_capital_operation.fupdatetime,
+  		f_virtual_capital_operation.fwithdrawaddress,
+  		f_virtual_capital_operation.frechargeaddress,
+  		f_virtual_capital_operation.funiquenumber,
+  		f_virtual_capital_operation.fconfirmations,
+  		f_virtual_capital_operation.fhasowner,
+  		f_virtual_capital_operation.fblocknumber,
+  		f_virtual_capital_operation.fnonce,
+  		f_virtual_capital_operation.version,
+  		f_virtual_capital_operation.fsource,
+	  	f_virtual_capital_operation.fplatform,
+		f_virtual_capital_operation.memo,
+  		f_user.floginname,
+  		f_user.fnickname,
+  		f_user.frealname,
+  		system_coin_type.name fcoinname
+  	from
+  		f_virtual_capital_operation left join
+  		f_user on f_user.fid = f_virtual_capital_operation.fuid left join
+  		system_coin_type on system_coin_type.id = f_virtual_capital_operation.fcoinid left join
+  		f_admin on f_admin.fid = f_virtual_capital_operation.fadminid
+  	where 
+  		f_virtual_capital_operation.fid=#{fid}
+  </select>
+
+	<!-- Base -->
+
+	<insert id="insert" parameterType="FVirtualCapitalOperationDTO" keyProperty="fid">
+    insert into f_virtual_capital_operation (
+    	fuid, 
+    	fcoinid, 
+      	fcreatetime, 
+      	famount, 
+      	ffees,
+      	fbtcfees, 
+      	ftype, 
+      	fstatus, 
+      	fupdatetime, 
+      	fwithdrawaddress, 
+      	frechargeaddress, 
+      	funiquenumber, 
+      	fconfirmations,  
+      	fhasowner, 
+      	fblocknumber, 
+      	version,
+      	fsource,
+      	fplatform,
+		memo)
+    values (
+    	#{fuid,jdbcType=INTEGER}, 
+    	#{fcoinid,jdbcType=INTEGER}, 
+      	#{fcreatetime,jdbcType=TIMESTAMP}, 
+      	#{famount,jdbcType=DECIMAL}, 
+      	#{ffees,jdbcType=DECIMAL}, 
+      	#{fbtcfees,jdbcType=DECIMAL}, 
+      	#{ftype,jdbcType=INTEGER}, 
+      	#{fstatus,jdbcType=INTEGER}, 
+      	#{fupdatetime,jdbcType=TIMESTAMP}, 
+      	#{fwithdrawaddress,jdbcType=VARCHAR}, 
+      	#{frechargeaddress,jdbcType=VARCHAR}, 
+      	#{funiquenumber,jdbcType=VARCHAR}, 
+      	#{fconfirmations,jdbcType=INTEGER},  
+      	#{fhasowner,jdbcType=BIT}, 
+      	#{fblocknumber,jdbcType=INTEGER}, 
+      	#{version,jdbcType=INTEGER}, 
+      	#{fsource,jdbcType=INTEGER},
+      	#{fplatform,jdbcType=INTEGER},
+		#{memo,jdbcType=VARCHAR}
+	)
+  </insert>
+
+	<update id="updateByPrimaryKey" parameterType="FVirtualCapitalOperationDTO">
+    update f_virtual_capital_operation
+    set 
+    	fuid = #{fuid,jdbcType=INTEGER},
+      	fcoinid = #{fcoinid,jdbcType=INTEGER},
+      	fadminid = #{fadminid,jdbcType=INTEGER},
+      	fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      	famount = #{famount,jdbcType=DECIMAL},
+      	ffees = #{ffees,jdbcType=DECIMAL},
+      	fbtcfees = #{fbtcfees,jdbcType=DECIMAL},
+      	ftype = #{ftype,jdbcType=INTEGER},
+      	fstatus = #{fstatus,jdbcType=INTEGER},
+      	fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      	fwithdrawaddress = #{fwithdrawaddress,jdbcType=VARCHAR},
+      	frechargeaddress = #{frechargeaddress,jdbcType=VARCHAR},
+      	funiquenumber = #{funiquenumber,jdbcType=VARCHAR},
+      	fconfirmations = #{fconfirmations,jdbcType=INTEGER},
+      	fhasowner = #{fhasowner,jdbcType=BIT},
+      	fblocknumber = #{fblocknumber,jdbcType=INTEGER},
+      	fsource = #{fsource,jdbcType=INTEGER},
+      	fnonce = #{fnonce,jdbcType=INTEGER},
+      	fplatform = #{fplatform,jdbcType=INTEGER},
+		memo = #{memo,jdbcType=VARCHAR},
+      	version = version + 1
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+
+  <select id="selectNonce" resultType="java.lang.Integer">
+    select MAX(fnonce) from f_virtual_capital_operation where fcoinid = #{fcoinid} and ftype = 2
+  </select>
+
+	<select id="selectByTx" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*) from f_virtual_capital_operation where funiquenumber = #{funiquenumber,jdbcType=VARCHAR} and ftype = 1
+	</select>
+
+</mapper>

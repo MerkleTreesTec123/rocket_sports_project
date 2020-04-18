@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.CommissionRecordMapper" >
+  
+  <sql id="recordColumn">
+  	  id,uid,introuid,coinid,amount,status,createtime,updatetime,remark,coinname
+  </sql>
+
+    <select id="select" parameterType="java.lang.Integer" resultType="CommissionRecord">
+        select <include refid="recordColumn" />
+        from commission_record
+        where 1=1 and id = #{id}
+    </select>
+
+  <select id="getAll" parameterType="CommissionRecord" resultType="CommissionRecord">
+  	select <include refid="recordColumn" />
+    from commission_record
+    where 1=1
+    <if test="uid != null">
+    	and uid = #{uid,jdbcType=INTEGER}
+    </if>
+      <if test="status != null">
+          and status = #{status,jdbcType=INTEGER}
+      </if>
+    <if test="introuid != null">
+    	and introuid = #{introuid,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="getCount" parameterType="java.util.Map" resultType="CommissionRecord">
+    select count(*)
+    from commission_record
+    where 1=1
+    <if test="uid != null">
+      and uid = #{uid,jdbcType=INTEGER}
+    </if>
+    <if test="status != null">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="introuid != null">
+      and introuid = #{introuid,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="getPageRecord" parameterType="java.util.Map" resultType="CommissionRecord">
+    select <include refid="recordColumn" />
+    from commission_record
+    where 1=1
+    <if test="uid != null">
+      and uid = #{uid,jdbcType=INTEGER}
+    </if>
+    <if test="status != null">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="introuid != null">
+      and introuid = #{introuid,jdbcType=INTEGER}
+    </if>
+    order by id DESC limit #{offset},#{limit}
+  </select>
+
+  <update id="update" parameterType="CommissionRecord">
+    update commission_record set
+      status = #{status,jdbcType=INTEGER},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

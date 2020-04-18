@@ -1,0 +1,20 @@
+<div class="layui-form layui-form-pane" lay-href="admin/updateHistoryActivity.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">活动备注：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="finfo" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">关联活动：</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="activityId" lay-lookup="id"/>
+                <input class="layui-input" lay-verify="required" lay-lookup="name" readonly="readonly" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <i class="layui-icon layui-lookup" lay-href="activity/lookActivityList.html" onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+        </div>
+    </div>
+</div>

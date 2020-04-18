@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FSystemBankinfoWithdrawMapper" >
+
+  <resultMap id="BaseResultMap" type="FSystemBankinfoWithdraw" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fcnname" property="fcnname" jdbcType="VARCHAR" />
+    <result column="ftwname" property="ftwname" jdbcType="VARCHAR" />
+    <result column="fenname" property="fenname" jdbcType="VARCHAR" />
+    <result column="flogo" property="flogo" jdbcType="VARCHAR" />
+    <result column="ftype" property="ftype" jdbcType="INTEGER" />
+    <result column="fsort" property="fsort" jdbcType="INTEGER" />
+    <result column="fstate" property="fstate" jdbcType="BIT" />
+    <result column="bank_code" property="bank_code" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="bankinfoWithdrawColumn">
+      fid, fcnname, ftwname, fenname, flogo, ftype, fsort, fstate,bank_code
+  </sql>
+
+  <select id="selectAll" resultType="FSystemBankinfoWithdraw" >
+    select <include refid="bankinfoWithdrawColumn" /> from f_system_bankinfo_withdraw
+  </select>
+  
+</mapper>

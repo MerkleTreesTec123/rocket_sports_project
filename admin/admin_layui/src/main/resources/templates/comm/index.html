@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>管理平台</title>
+    <link rel="stylesheet" href="js/layui/css/layui.css"></link>
+    <link rel="stylesheet" href="css/main.css"></link>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin layui-border-box">
+    <div class="layui-header">
+        <ul class="layui-nav layui-nav-btn no-padding">
+            <li class="layui-index-logo layui-logo-border">
+                <a href="javascript:void(0)" th:target="_blank">
+                    <div class="layui-logo"></div>
+                </a>
+            </li>
+            <li class="layui-index-title layui-logo-border">
+                <a href="javascript:void(0)" onclick="window.location.reload();">
+                    <div class="layui-title"> Rocket 管理控制台</div>
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a class="layui-index-a" href="javascript:void(0)">
+                    <div class="layui-title" th:text="'当前管理员：'+${loginAdmin.fname}"></div>
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                |
+            </li>
+            <th:block shiro:hasPermission="clearRedisData">
+                <li class="layui-nav-item">
+                    <a class="layui-index-a"
+                       lay-href="admin/goDealRedis.html?url=comm/clearRedis"
+                       lay-target="dialog" lay-height="330" lay-width="500">清空Redis</a>
+                </li>
+                <li class="layui-nav-item">
+                    |
+                </li>
+            </th:block>
+            <th:block shiro:hasPermission="restRedisData">
+                <li class="layui-nav-item">
+                    <a class="layui-index-a" shiro:hasPermission="restRedisData"
+                       lay-href="admin/goDealRedis.html?url=comm/resetRedis"
+                       lay-target="dialog" lay-height="330" lay-width="500">重置Redis</a>
+                </li>
+                <li class="layui-nav-item">
+                    |
+                </li>
+            </th:block>
+            <th:block shiro:hasPermission="restMarketData">
+                <li class="layui-nav-item">
+                    <a class="layui-index-a" shiro:hasPermission="restMarketData"
+                       lay-href="admin/restMarket.html"
+                       lay-target="dialog" lay-height="330" lay-width="500">重置行情</a>
+                </li>
+                <li class="layui-nav-item">
+                    |
+                </li>
+            </th:block>
+            <li class="layui-nav-item">
+                <a class="layui-index-a"
+                   lay-href="admin/googleAuthenticationBind.html"
+                   lay-target="dialog" lay-height="500" lay-width="500">绑定谷歌身份验证</a>
+            </li>
+            <li class="layui-nav-item">
+                |
+            </li>
+            <li class="layui-nav-item">
+                <a class="layui-index-a"
+                   lay-href="admin/updatePassword"
+                   lay-target="dialog" lay-height="500" lay-width="500">修改密码</a>
+            </li>
+            <li class="layui-nav-item">
+                |
+            </li>
+            <li class="layui-nav-item">
+                <a th:href="@{/admin/logout.html}"> 退出 </a>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll" th:include="comm/layout :: left_menu"></div>
+    </div>
+    <div class="layui-body">
+        <div class="layui-tab layui-tab-card" lay-filter="right_tab" lay-allowclose="true">
+            <ul class="layui-tab-title">
+                <li class="layui-this">
+                    我的主页
+                </li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-index-center">
+                        <div class="center-bg"></div>
+                        <div class="center-label">欢迎回来！</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="layui-footer">
+        &lt;!&ndash; 底部固定区域 &ndash;&gt;
+    </div>-->
+</div>
+</body>
+</html>
+<script type="text/javascript" src="js/layui/layui.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="application/javascript">
+    layui.use(['form'], function () {
+        var $ = layui.jquery, layform = layui.form();
+
+        $(".layui-index-a").click(function () {
+            var $that = $(this)
+            var lay_tips = $that.attr("lay-tips"),
+                lay_target = $that.attr("lay-target"),
+                lay_href = $that.attr("lay-href"),
+                lay_id = $that.parents(".layui-tab-item").attr("lay-id");
+            if (lay_target === "ajax") {
+                layer.confirm(lay_tips, {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    layer.close(index);
+                    $.post(lay_href, {}, function (result) {
+                        if (result.code == 200) {
+                            layer.alert(result.msg, {
+                                title: "成功",
+                                icon: 1
+                            }, function (index) {
+                                layer.close(index);
+                            });
+                        } else {
+                            layer.alert(result.msg, {
+                                title: "错误",
+                                icon: 2
+                            });
+                        }
+                    });
+                })
+            }
+            if (lay_target === "dialog") {
+                var width = $that.attr("lay-width") || 800,
+                    height = $that.attr("lay-height") || 600, title = $that.text();
+                $.post(lay_href, {}, function (result) {
+                    layer.open({
+                                   title: title,
+                                   type: 1,
+                                   skin: 'layui-layer-rim', // 加上边框
+                                   area: [width + 'px', height + 'px'], // 宽高
+                                   content: result,
+                                   btn: ["保存", "取消"],
+                                   yes: function (index, layero) {
+                                       layero.find(".layui-btn[lay-filter='save']").click();
+                                   },
+                                   success: function (layero, index) {
+                                       layero.find(".layui-form").append(
+                                           '<div class="layui-form-item layui-hide"><button class="layui-btn" lay-id="'
+                                           + lay_id + '" lay-submit="" lay-filter="save">保存</button></div>');
+                                   }
+                               });
+                    layform.render();
+                });
+            }
+        })
+    });
+    function btcAmountKeyUp() {
+        var amount = document.getElementById("amount").value;
+        var btc_amount = document.getElementById("btc_amount").value;
+        var unit = new Number(btc_amount / amount).toFixed(10);
+        document.getElementById("unit").value = unit;
+    };
+</script>
+
+<link rel="stylesheet" href="js/uedit/themes/default/css/umeditor.min.css" type="text/css"/>
+<script type="text/javascript" src="js/plugin/jquery.min.js"></script>
+<script type="text/javascript" src="js/uedit/third-party/template.min.js"></script>
+<script type="text/javascript" src="js/uedit/umeditor.min.js"></script>
+<script type="text/javascript" src="js/uedit/umeditor.config.js"></script>
+<script type="text/javascript" src="js/uedit/lang/zh-cn/zh-cn.js"></script>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.match.dao.UserMapper" >
+
+  <select id="getIntroByUID" parameterType="java.lang.Integer" resultType="Fuser">
+   SELECT fintrouid
+   FROM f_user
+   WHERE 1=1
+   AND fid = #{fid}
+  </select>
+</mapper>

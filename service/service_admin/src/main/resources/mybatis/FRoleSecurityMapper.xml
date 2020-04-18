@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FRoleSecurityMapper" >
+  <resultMap id="BaseResultMap" type="FRoleSecurity" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fsecurityid" property="fsecurityid" jdbcType="INTEGER" />
+    <result column="froleid" property="froleid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.Integer" >
+    delete from f_role_security
+    where froleid = #{froleid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="java.util.List" >
+    insert into f_role_security (fsecurityid, froleid)
+   	values 
+     <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.fsecurityid,jdbcType=INTEGER}, #{item.froleid,jdbcType=INTEGER})
+    </foreach>  
+  </insert>
+  
+  <select id="selectByRoleId" parameterType="java.lang.Integer" resultType="FRoleSecurity">
+  	select fid, fsecurityid, froleid
+  	from f_role_security
+  	where froleid = #{froleid,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

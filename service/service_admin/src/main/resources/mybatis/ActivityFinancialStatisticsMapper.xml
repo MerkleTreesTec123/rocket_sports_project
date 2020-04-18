@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.ActivityFinancialStatisticsMapper" >
+
+
+
+  <select id="selectByPage" resultType="ActivityFinancialStatistics" parameterType="java.util.Map">
+    select id, activity_id, record_number, name, coin_id, amount, gmt_create
+    from activity_financial_statistics
+    where 1=1
+    <if test="keyword != null">
+      and name like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="coinId != null">
+      and coin_id = #{coinId}
+    </if>
+    order by ${orderField} ${orderDirection}
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countByPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*)
+    from activity_financial_statistics
+    where 1=1
+    <if test="keyword != null">
+      and name like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="coinId != null">
+      and coin_id = #{coinId}
+    </if>
+  </select>
+
+
+  <insert id="archiveActivityData" parameterType="java.lang.Integer">
+    INSERT INTO activity_financial_statistics (activity_id, record_number, name, coin_id, amount, gmt_create)
+    SELECT
+        f_log_console_virtual_recharge.activity_id as activity_id,
+        count(f_log_console_virtual_recharge.fid) as record_number,
+        system_activity.name AS name,
+        f_log_console_virtual_recharge.fcoinid AS coin_id,
+        sum(f_log_console_virtual_recharge.famount) AS amount,
+        now() AS gmt_create
+    FROM
+        f_log_console_virtual_recharge,
+        system_activity
+    WHERE
+        system_activity.id = f_log_console_virtual_recharge.activity_id
+        and f_log_console_virtual_recharge.ftype = 3
+        and f_log_console_virtual_recharge.activity_id = #{id}
+    group by f_log_console_virtual_recharge.fcoinid
+  </insert>
+</mapper>

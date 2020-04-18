@@ -1,0 +1,43 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="/admin/validateAuthenticator.html">
+    <div class="layui-form-item">
+        <div id="qrcode" style="text-align: center;"></div>
+    </div>
+    <div class="layui-form-item">
+        请先扫瞄二维码或手工输入密钥,将手机上生成的动态验证码填写到下边输入框
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">设备名称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input layui-disabled" th:value="${device_name}" disabled="disabled"/>
+        </div>
+    </div>
+    <div class="layui-form-item" th:if="${GoogleBind==false}">
+        <label class="layui-form-label">谷歌验证码：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="code" lay-verify="required"/>
+            <input class="layui-input layui-hide" name="totpKey" th:value="${totpKey}"/>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        var $ = layui.jquery, jQuery = layui.jquery;
+    </script>
+    <script type="text/javascript" src="js/plugin/jquery.qrcode.min.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        $(function () {
+            if (navigator.userAgent.indexOf("MSIE") > 0) {
+                jQuery('#qrcode').qrcode({
+                                             text: [[${qecode}]],
+                                             width: "150",
+                                             height: "150",
+                                             render: "table"
+                                         });
+            } else {
+                jQuery('#qrcode').qrcode({
+                                             text: [[${qecode}]],
+                                             width: "150",
+                                             height: "150"
+                                         });
+            }
+        });
+    </script>
+</div>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FDaySumMapper" >
+
+  <sql id="Columns">
+  	 fid, fcoinid, ftotle, frozen, fcreatetime
+  </sql>
+  
+  <insert id="insert" parameterType="FDaySum" keyProperty="fid">
+    insert into f_day_sum (
+      fcoinid, 
+      ftotle, 
+      frozen, 
+      fcreatetime
+    ) values (
+      #{fcoinid,jdbcType=INTEGER}, 
+      #{ftotle,jdbcType=DECIMAL}, 
+      #{frozen,jdbcType=DECIMAL}, 
+      #{fcreatetime,jdbcType=TIMESTAMP} )
+  </insert>
+  
+  <update id="updateByModel" parameterType="FDaySum" >
+    update f_day_sum set 
+      fcoinid = #{fcoinid,jdbcType=INTEGER},
+      ftotle = #{ftotle,jdbcType=DECIMAL},
+      frozen = #{frozen,jdbcType=DECIMAL},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByDate" resultType="FDaySum" >
+    select <include refid="Columns"/> from f_day_sum where date_format(fcreatetime, "%Y-%m-%d") = #{time} and fcoinid = #{fcoinid}
+  </select>
+  
+  <select id="selectAll" resultType="FDaySum" >
+    select <include refid="Columns"/> from f_day_sum
+  </select>
+</mapper>

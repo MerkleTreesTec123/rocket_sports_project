@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.ReportCapitalMapper" >
+
+  <insert id="insert" parameterType="ReportCapital" >
+    insert into report_capital (coin_id, type,
+      amount, fee, hour_index, 
+      gmt_begin, gmt_end)
+    values (#{coinId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
+      #{amount,jdbcType=DECIMAL}, #{fee,jdbcType=DECIMAL}, #{hourIndex,jdbcType=INTEGER}, 
+      #{gmtBegin,jdbcType=TIMESTAMP}, #{gmtEnd,jdbcType=TIMESTAMP})
+  </insert>
+
+</mapper>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.FUserMapper" >
+
+  
+  <sql id="userColumns">fid, floginname, fnickname, floginpassword, ftradepassword, ftelephone, 
+    femail, frealname, fidentityno, fidentitytype, fgoogleauthenticator, fgoogleurl, 
+    fstatus, fhasrealvalidate, fhasrealvalidatetime, fistelephonebind, fismailbind, fgooglebind, 
+    fupdatetime, fareacode, version, fintrouid, finvalidateintrocount, fiscny, 
+    fiscoin, fbirth, flastlogintime, fregistertime, ftradepwdtime, fleverlock, fqqopenid, 
+    funionid, fagentid, fshowid, flastip, folduid, fplatform
+  </sql>
+  
+  <select id="getUserListByParam" resultType="FUser" parameterType="FUser">
+    select <include refid="userColumns" />
+    from f_user where 1=1 
+    <if test="floginname != null">
+		and floginname = #{floginname}
+	</if>
+	<if test="floginpassword != null">
+		and floginpassword = #{floginpassword}
+	</if>
+	<if test="ftelephone != null">
+		and ftelephone = #{ftelephone}
+	</if>
+	<if test="femail != null">
+		and femail = #{femail}
+	</if>
+	<if test="fidentityno != null">
+		and fidentityno = #{fidentityno}
+	</if>
+	<if test="fqqopenid != null">
+		and fqqopenid = #{fqqopenid}
+	</if>
+	<if test="funionid != null">
+		and funionid = #{funionid}
+	</if>
+	<if test="fagentid != null and fagentid !=0">
+		and fagentid = #{fagentid}
+	</if>
+  </select>
+
+	<select id="getUserCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select IFNULL(COUNT(fid),0) as rowCount
+		from f_user where 1=1
+		<if test="floginname != null">
+			and floginname = #{floginname}
+		</if>
+		<if test="floginpassword != null">
+			and floginpassword = #{floginpassword}
+		</if>
+		<if test="ftelephone != null">
+			and ftelephone = #{ftelephone}
+		</if>
+		<if test="femail != null">
+			and femail = #{femail}
+		</if>
+		<if test="fidentityno != null">
+			and fidentityno = #{fidentityno}
+		</if>
+		<if test="fqqopenid != null">
+			and fqqopenid = #{fqqopenid}
+		</if>
+		<if test="funionid != null">
+			and funionid = #{funionid}
+		</if>
+		<if test="notUid != null">
+			and fid != #{notUid}
+		</if>
+	</select>
+  
+  <update id="updateLoginTime" parameterType="FUser" >
+    update f_user set 
+    	flastlogintime = #{flastlogintime},
+    	flastip = #{flastip},
+    	version = version + 1 
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <update id="updateLeverLock" parameterType="FUser" >
+    update f_user set 
+    	fleverlock = #{fleverlock,jdbcType=INTEGER},
+    	version = version + 1
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+
+  <!-- Base -->
+  <insert id="insert" parameterType="FUser" keyProperty="fid">
+    insert into f_user (
+    	floginname, 
+      	fnickname, 
+      	floginpassword, 
+      	ftradepassword, 
+      	ftelephone, 
+      	femail, 
+      	frealname, 
+      	fidentityno, 
+      	fidentitytype, 
+      	fgoogleauthenticator, 
+      	fgoogleurl, 
+      	fstatus, 
+      	fhasrealvalidate, 
+      	fhasrealvalidatetime, 
+      	fistelephonebind, 
+      	fismailbind, 
+      	fgooglebind, 
+      	fupdatetime, 
+      	fareacode, 
+      	version, 
+      	fintrouid, 
+      	finvalidateintrocount, 
+      	fiscny, 
+      	fiscoin, 
+      	fbirth, 
+      	flastlogintime, 
+      	fregistertime, 
+      	fleverlock, 
+      	fqqopenid, 
+      	funionid,
+      	fagentid,
+      	fshowid,
+      	flastip,
+      	folduid,
+      	fplatform
+      )
+    values (
+    	#{floginname,jdbcType=VARCHAR}, 
+      	#{fnickname,jdbcType=VARCHAR}, 
+      	#{floginpassword,jdbcType=VARCHAR}, 
+      	#{ftradepassword,jdbcType=VARCHAR}, 
+      	#{ftelephone,jdbcType=VARCHAR}, 
+      	#{femail,jdbcType=VARCHAR}, 
+      	#{frealname,jdbcType=VARCHAR}, 
+      	#{fidentityno,jdbcType=VARCHAR}, 
+      	#{fidentitytype,jdbcType=INTEGER}, 
+      	#{fgoogleauthenticator,jdbcType=VARCHAR}, 
+      	#{fgoogleurl,jdbcType=VARCHAR}, 
+      	#{fstatus,jdbcType=INTEGER}, 
+      	#{fhasrealvalidate,jdbcType=BIT}, 
+      	#{fhasrealvalidatetime,jdbcType=TIMESTAMP}, 
+      	#{fistelephonebind,jdbcType=BIT}, 
+      	#{fismailbind,jdbcType=BIT}, 
+      	#{fgooglebind,jdbcType=BIT}, 
+      	#{fupdatetime,jdbcType=TIMESTAMP}, 
+      	#{fareacode,jdbcType=VARCHAR}, 
+      	#{version,jdbcType=INTEGER}, 
+      	#{fintrouid,jdbcType=INTEGER}, 
+      	#{finvalidateintrocount,jdbcType=INTEGER}, 
+      	#{fiscny,jdbcType=BIT}, 
+      	#{fiscoin,jdbcType=BIT}, 
+      	#{fbirth,jdbcType=DATE}, 
+      	#{flastlogintime,jdbcType=TIMESTAMP}, 
+      	#{fregistertime,jdbcType=TIMESTAMP}, 
+      	#{fleverlock,jdbcType=INTEGER}, 
+      	#{fqqopenid,jdbcType=VARCHAR}, 
+      	#{funionid,jdbcType=VARCHAR},
+      	#{fagentid,jdbcType=INTEGER},
+      	#{fshowid,jdbcType=INTEGER},
+      	#{flastip,jdbcType=VARCHAR},
+      	#{folduid,jdbcType=INTEGER},
+      	#{fplatform,jdbcType=INTEGER}
+    )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FUser">
+    update f_user
+    set 
+      	floginname = #{floginname,jdbcType=VARCHAR},
+      	fnickname = #{fnickname,jdbcType=VARCHAR},
+      	floginpassword = #{floginpassword,jdbcType=VARCHAR},
+      	ftradepassword = #{ftradepassword,jdbcType=VARCHAR},
+      	ftelephone = #{ftelephone,jdbcType=VARCHAR},
+      	femail = #{femail,jdbcType=VARCHAR},
+      	frealname = #{frealname,jdbcType=VARCHAR},
+      	fidentityno = #{fidentityno,jdbcType=VARCHAR},
+      	fidentitytype = #{fidentitytype,jdbcType=INTEGER},
+      	fgoogleauthenticator = #{fgoogleauthenticator,jdbcType=VARCHAR},
+      	fgoogleurl = #{fgoogleurl,jdbcType=VARCHAR},
+      	fstatus = #{fstatus,jdbcType=INTEGER},
+      	fhasrealvalidate = #{fhasrealvalidate,jdbcType=BIT},
+      	fhasrealvalidatetime = #{fhasrealvalidatetime,jdbcType=TIMESTAMP},
+      	fistelephonebind = #{fistelephonebind,jdbcType=BIT},
+      	fismailbind = #{fismailbind,jdbcType=BIT},
+      	fgooglebind = #{fgooglebind,jdbcType=BIT},
+      	fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      	fareacode = #{fareacode,jdbcType=VARCHAR},
+      	version = version + 1,
+      	fintrouid = #{fintrouid,jdbcType=INTEGER},
+      	finvalidateintrocount = #{finvalidateintrocount,jdbcType=INTEGER},
+      	fiscny = #{fiscny,jdbcType=BIT},
+      	fiscoin = #{fiscoin,jdbcType=BIT},
+      	fbirth = #{fbirth,jdbcType=DATE},
+      	flastlogintime = #{flastlogintime,jdbcType=TIMESTAMP},
+      	fregistertime = #{fregistertime,jdbcType=TIMESTAMP},
+      	ftradepwdtime = #{ftradepwdtime,jdbcType=TIMESTAMP},
+      	fleverlock = #{fleverlock,jdbcType=INTEGER},
+      	fqqopenid = #{fqqopenid,jdbcType=VARCHAR},
+      	funionid = #{funionid,jdbcType=VARCHAR},
+      	fagentid = #{fagentid,jdbcType=INTEGER},
+      	fshowid = #{fshowid,jdbcType=INTEGER},
+		folduid = #{folduid,jdbcType=INTEGER},
+      	fplatform = #{fplatform,jdbcType=INTEGER}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+	<update id="updateSecurityByPrimaryKey" parameterType="FUser">
+		update f_user
+		set
+		floginname = #{floginname,jdbcType=VARCHAR},
+      	fnickname = #{fnickname,jdbcType=VARCHAR},
+		ftelephone = #{ftelephone,jdbcType=VARCHAR},
+		femail = #{femail,jdbcType=VARCHAR},
+		floginpassword = #{floginpassword,jdbcType=VARCHAR},
+      	ftradepassword = #{ftradepassword,jdbcType=VARCHAR},
+      	ftradepwdtime = #{ftradepwdtime,jdbcType=TIMESTAMP},
+		frealname = #{frealname,jdbcType=VARCHAR},
+		fidentityno = #{fidentityno,jdbcType=VARCHAR},
+		fidentitytype = #{fidentitytype,jdbcType=INTEGER},
+		fgoogleauthenticator = #{fgoogleauthenticator,jdbcType=VARCHAR},
+		fgoogleurl = #{fgoogleurl,jdbcType=VARCHAR},
+		fhasrealvalidate = #{fhasrealvalidate,jdbcType=BIT},
+		fhasrealvalidatetime = #{fhasrealvalidatetime,jdbcType=TIMESTAMP},
+		fistelephonebind = #{fistelephonebind,jdbcType=BIT},
+		fismailbind = #{fismailbind,jdbcType=BIT},
+		fgooglebind = #{fgooglebind,jdbcType=BIT},
+		fareacode = #{fareacode,jdbcType=VARCHAR},
+		version = version + 1,
+		finvalidateintrocount = #{finvalidateintrocount,jdbcType=INTEGER},
+		fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+		fbirth = #{fbirth,jdbcType=DATE}
+		where
+		fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+	</update>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="FUser">
+    select <include refid="userColumns"/>
+    from f_user
+    where 
+    	fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByShowId" parameterType="java.lang.Integer" resultType="FUser">
+    select <include refid="userColumns"/>
+    from f_user
+    where 
+    	fshowid = #{fshowid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectIntroUserCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*)
+    from f_user
+    where 
+    	fintrouid = #{fuid,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectIpUserCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*)
+    from f_user
+    where 
+    	flastip = #{flastip,jdbcType=VARCHAR}
+  </select>
+	
+  <update id="updateFshowidByFid">
+    update f_user
+    set fshowid = #{fshowid,jdbcType=INTEGER}
+    where 
+    	fid = #{fid,jdbcType=INTEGER}
+  </update>
+
+	<select id="selectMigrationUser" parameterType="FUser" resultType="java.lang.Integer">
+		select count(*)
+		from f_user
+		where floginname = #{floginname}
+		<if test="ftelephone != null">
+			or ftelephone = #{ftelephone}
+		</if>
+		<if test="femail != null">
+			or femail = #{femail}
+		</if>
+	</select>
+
+	<select id="selectUserByOldUid" resultType="FUser">
+		select <include refid="userColumns" /> from f_user where folduid = #{folduid,jdbcType=INTEGER}
+	</select>
+
+</mapper>

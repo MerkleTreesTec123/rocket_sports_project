@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FLogModifyCapitalOperationMapper" >
+
+  <insert id="insert" parameterType="FLogModifyCapitalOperation" keyProperty="fid">
+    insert into f_log_modify_capital_operation (
+    	faccount, 
+    	fadminid, 
+      	fbank, 
+      	fpayee, 
+      	fphone, 
+      	famount, 
+      	fmodifyamount, 
+      	fupdatetime
+    )
+    values (
+    	#{faccount,jdbcType=VARCHAR}, 
+    	#{fadminid,jdbcType=INTEGER}, 
+      	#{fbank,jdbcType=VARCHAR}, 
+      	#{fpayee,jdbcType=VARCHAR}, 
+      	#{fphone,jdbcType=VARCHAR}, 
+      	#{famount,jdbcType=DECIMAL}, 
+      	#{fmodifyamount,jdbcType=DECIMAL}, 
+      	#{fupdatetime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+ 
+</mapper>

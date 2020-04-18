@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.SystemTradeTypeMapper" >
+
+  <sql id="systemTradeTypeColumn">id, sort_id, type, status, buy_coin_id, sell_coin_id, is_share, is_stop, open_time,
+    stop_time, buy_fee, sell_fee, remote_id, price_wave, price_range, min_count, max_count, min_price,
+    max_price, amount_offset, price_offset, digit, open_price, agent_id, gmt_create, gmt_modified,order_amount,
+    version,tradeBlock</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from system_trade_type
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="SystemTradeType" >
+    insert into system_trade_type (id, sort_id, type, 
+      status, buy_coin_id, sell_coin_id, 
+      is_share, is_stop, open_time, stop_time, 
+      buy_fee, sell_fee, remote_id, 
+      price_wave, price_range, min_count, max_count,
+      min_price, max_price, amount_offset, 
+      price_offset, digit, open_price, order_amount,
+      agent_id, gmt_create, gmt_modified,
+      version,tradeBlock)
+    values (#{id,jdbcType=INTEGER}, #{sortId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{buyCoinId,jdbcType=INTEGER}, #{sellCoinId,jdbcType=INTEGER}, 
+      #{isShare,jdbcType=BIT}, #{isStop,jdbcType=BIT}, #{openTime,jdbcType=TIME}, #{stopTime,jdbcType=TIME}, 
+      #{buyFee,jdbcType=DECIMAL}, #{sellFee,jdbcType=DECIMAL}, #{remoteId,jdbcType=INTEGER}, 
+      #{priceWave,jdbcType=DECIMAL}, #{priceRange,jdbcType=DECIMAL}, #{minCount,jdbcType=DECIMAL}, #{maxCount,jdbcType=DECIMAL},
+      #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{amountOffset,jdbcType=VARCHAR}, 
+      #{priceOffset,jdbcType=VARCHAR}, #{digit,jdbcType=VARCHAR}, #{openPrice,jdbcType=DECIMAL},#{orderAmount,jdbcType=DECIMAL}, 
+      #{agentId,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP},
+      #{version,jdbcType=INTEGER},#{tradeBlock,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="SystemTradeType" >
+    update system_trade_type
+    set sort_id = #{sortId,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      buy_coin_id = #{buyCoinId,jdbcType=INTEGER},
+      sell_coin_id = #{sellCoinId,jdbcType=INTEGER},
+      is_share = #{isShare,jdbcType=BIT},
+      is_stop = #{isStop,jdbcType=BIT},
+      open_time = #{openTime,jdbcType=TIME},
+      stop_time = #{stopTime,jdbcType=TIME},
+      buy_fee = #{buyFee,jdbcType=DECIMAL},
+      sell_fee = #{sellFee,jdbcType=DECIMAL},
+      remote_id = #{remoteId,jdbcType=INTEGER},
+      price_wave = #{priceWave,jdbcType=DECIMAL},
+      price_range = #{priceRange,jdbcType=DECIMAL},
+      min_count = #{minCount,jdbcType=DECIMAL},
+      max_count = #{maxCount,jdbcType=DECIMAL},
+      min_price = #{minPrice,jdbcType=DECIMAL},
+      max_price = #{maxPrice,jdbcType=DECIMAL},
+      order_amount = #{orderAmount,jdbcType=DECIMAL},
+      amount_offset = #{amountOffset,jdbcType=VARCHAR},
+      price_offset = #{priceOffset,jdbcType=VARCHAR},
+      digit = #{digit,jdbcType=VARCHAR},
+      open_price = #{openPrice,jdbcType=DECIMAL},
+      agent_id = #{agentId,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER},
+      tradeBlock = #{tradeBlock,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="SystemTradeType" parameterType="java.lang.Integer" >
+    select <include refid="systemTradeTypeColumn" />
+    from system_trade_type
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultType="SystemTradeType" >
+    select <include refid="systemTradeTypeColumn" />
+    from system_trade_type  ORDER BY sort_id ASC
+  </select>
+
+  <select id="selectSystemTradeTypeList" resultType="SystemTradeType">
+    select
+    <include refid="systemTradeTypeColumn" />
+    from system_trade_type
+    where 1=1
+    <if test="agentId != null">
+      and agent_id = #{agentId}
+    </if>
+    order by ${orderfield} ${orderdirection}
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="selectSystemTradeTypeCount" resultType="java.lang.Integer">
+    select count(*)
+    from system_trade_type
+    where 1=1
+    <if test="agentId != null">
+      and agent_id = #{agentId}
+    </if>
+  </select>
+
+  <select id="selectTradeType" resultType="SystemTradeType">
+    select <include refid="systemTradeTypeColumn" />
+    from system_trade_type
+    where sell_coin_id = #{sellCoinId,jdbcType=INTEGER} AND buy_coin_id = #{buyCoinId,jdbcType=INTEGER}
+  </select>
+</mapper>

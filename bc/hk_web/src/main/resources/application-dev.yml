@@ -1,0 +1,37 @@
+redis:
+  host: 127.0.0.1
+  port: 6379
+  #password: MoXbua9TmsG94qbGS6hq
+  timeout: 5000
+  pool:
+    minIdle: 500
+    maxIdle: 500
+    maxTotal: 2000
+    maxWaitMillis: 5000
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: true
+
+aliyun:
+  mq:
+    accessKey: LTAIfkp3bsnn8Q4Y
+    secretKey: 6kkR8Kj0rRRNpLXGAJaVPIsS06Ujgj
+    onsAddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+    topic:
+      entrust_state: SG_HOTCOIN_ENTRUST_STATE_TEST
+      user_action: SG_HOTCOIN_USER_ACTION_TEST
+      admin_action: SG_HOTCOIN_ADMIN_ACTION_TEST
+      validate: SG_HOTCOIN_VALIDATE_TEST
+      score: SG_HOTCOIN_SCORE_TEST
+    pid:
+      entrustState: PID_SG_HOTCOIN_ENTRUST_STATE_TEST
+      validate: PID_SG_HOTCOIN_VALIDATE_TEST
+      score: PID_SG_HOTCOIN_SCORE_TEST
+      userAction: PID_SG_HOTCOIN_USER_ACTION_TEST
+      adminAction: PID_SG_HOTCOIN_ADMIN_ACTION_TEST
+    cid:
+      entrustState: CID_SG_HOTCOIN_ENTRUST_STATE_TEST
+      validate: CID_SG_HOTCOIN_VALIDATE_TEST
+      score: CID_SG_HOTCOIN_SCORE_TEST
+      userAction: CID_SG_HOTCOIN_USER_ACTION_TEST
+      adminAction: CID_SG_HOTCOIN_ADMIN_ACTION_TEST

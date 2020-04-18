@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FLogAdminActionMapper">
+
+	<sql id="logAdminActionColumn">
+		fid, fadminid, fuid, fagentid, ftype, fdatatype, fcapitaltype, fdata, fcontent, fip, fupdatetime, fcreatetime
+	</sql>
+	
+	<insert id="insert" parameterType="FLogAdminAction" keyProperty="fid">
+		insert into f_log_admin_action (
+			fadminid, 
+			fuid,
+			fagentid,
+			ftype, 
+			fdatatype, 
+			fcapitaltype,
+			fdata, 
+			fcontent, 
+			fip,
+			fupdatetime, 
+			fcreatetime
+		) values ( 
+			#{fadminid,jdbcType=INTEGER},
+			#{fuid,jdbcType=INTEGER},
+			#{fagentid,jdbcType=INTEGER},
+			#{ftype,jdbcType=INTEGER}, 
+			#{fdatatype,jdbcType=INTEGER}, 
+			#{fcapitaltype,jdbcType=INTEGER},
+			#{fdata,jdbcType=DECIMAL}, 
+			#{fcontent,jdbcType=VARCHAR},
+			#{fip,jdbcType=VARCHAR},
+			#{fupdatetime,jdbcType=TIMESTAMP}, 
+			#{fcreatetime,jdbcType=TIMESTAMP} )
+	</insert>
+	
+</mapper>

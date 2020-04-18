@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.admin.bc.dao.FWalletCapitalOperationMapper">
+
+	<sql id="operationColumn">
+		fid, fcoinid, fsysbankid, fuid, fcreatetime, famount, finouttype, ftype, fstatus,fremittancetype,
+		fremark, fbank, faccount, fpayee, fbank_code, fphone, fupdatetime, fadminid, ffees,version,fischarge, faddress, fsource,
+		fplatform, fserialno
+	</sql>
+
+	<select id="countWalletCapitalOperation" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select count(fid)
+		from f_wallet_capital_operation
+		where
+		fuid = #{fuid,jdbcType=INTEGER} 
+		<if test="finouttype != null">
+			and finouttype = #{finouttype,jdbcType=INTEGER}
+		</if>
+		<if test="fstatus != null">
+			and fstatus = #{fstatus,jdbcType=INTEGER}
+		</if>		
+		<if test="begindate != null">
+   		<![CDATA[and fupdatetime >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+   		<![CDATA[and fupdatetime <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+	<!-- Admin -->
+	<select id="getAdminPageList" resultType="FWalletCapitalOperationDTO" parameterType="java.util.Map">
+		select
+		f_wallet_capital_operation.fid,
+		f_wallet_capital_operation.fsysbankid,
+		f_wallet_capital_operation.fuid,
+		f_wallet_capital_operation.fcreatetime,
+		f_wallet_capital_operation.famount,
+		f_wallet_capital_operation.finouttype,
+		f_wallet_capital_operation.ftype,
+		f_wallet_capital_operation.fstatus,
+		f_wallet_capital_operation.fremittancetype,
+		f_wallet_capital_operation.fremark,
+		f_wallet_capital_operation.fbank,
+		f_wallet_capital_operation.faccount,
+		f_wallet_capital_operation.fpayee,
+		f_wallet_capital_operation.fbank_code,
+		f_wallet_capital_operation.fphone,
+		f_wallet_capital_operation.fupdatetime,
+		f_wallet_capital_operation.fadminid,
+		f_wallet_capital_operation.ffees,
+		f_wallet_capital_operation.version,
+		f_wallet_capital_operation.fischarge,
+		f_wallet_capital_operation.faddress,
+		f_wallet_capital_operation.fsource,
+		f_wallet_capital_operation.fplatform,
+		f_wallet_capital_operation.fserialno,
+		f_user.floginname,
+		f_user.fnickname,
+		f_user.frealname,
+		f_admin.fname fadminname,
+		f_user_score.flevel level
+		from
+		f_wallet_capital_operation left join
+		f_user on f_wallet_capital_operation.fuid = f_user.fid left join
+		f_admin on f_admin.fid = f_wallet_capital_operation.fadminid left join
+		f_user_score on f_wallet_capital_operation.fuid = f_user_score.fuid
+		where 1=1
+		<if test="keyword != null">
+			and (
+			f_wallet_capital_operation.fuid like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_wallet_capital_operation.fbank like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_wallet_capital_operation.faccount like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_wallet_capital_operation.fphone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_wallet_capital_operation.fpayee like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_wallet_capital_operation.famount like concat(#{keyword,jdbcType=VARCHAR},if(LOCATE('.',#{keyword,jdbcType=VARCHAR})>0,'','.'),'%') or
+			f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+			f_user.fid = #{keyword,jdbcType=VARCHAR}
+			)
+		</if>
+		<if test="start != null and start == end">
+			<![CDATA[and f_wallet_capital_operation.fupdatetime = #{start}]]>
+		</if>
+		<if test="start != null and start != end">
+			<![CDATA[and f_wallet_capital_operation.fupdatetime >= #{start}]]>
+		</if>
+		<if test="end != null and start != end">
+			<![CDATA[and f_wallet_capital_operation.fupdatetime <= #{end}]]>
+		</if>
+		<if test="fid != null">
+			and f_wallet_capital_operation.fid = #{fid}
+		</if>
+		<if test="ftype != null">
+			and f_wallet_capital_operation.ftype = #{ftype}
+		</if>
+		<if test="finouttype != null">
+			and f_wallet_capital_operation.finouttype = #{finouttype}
+		</if>
+		<if test="amountLimit and amountLimit!=null">
+			<![CDATA[and f_wallet_capital_operation.famount >= 500000]]>
+		</if>
+		<if test="!amountLimit and amountLimit!=null">
+			<![CDATA[and f_wallet_capital_operation.famount < 500000]]>
+		</if>
+		<if test="serialno!=null and serialno == 1">
+			<![CDATA[and LENGTH(f_wallet_capital_operation.fserialno) < 10]]>
+		</if>
+		<if test="serialno!=null and serialno == 2">
+			<![CDATA[and LENGTH(f_wallet_capital_operation.fserialno) > 10]]>
+		</if>
+		<if test="fstatus != null">
+			and f_wallet_capital_operation.fstatus in
+			<foreach collection="fstatus" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="isvip6">
+			and f_user_score.flevel = 6
+		</if>
+		<if test="orderField != null">
+			order by f_wallet_capital_operation.${orderField} ${orderDirection}
+		</if>
+		limit #{offset},#{limit}
+	</select>
+	
+	<select id="countAdminPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) 
+		from 
+			f_wallet_capital_operation left join
+			f_user on f_wallet_capital_operation.fuid = f_user.fid left JOIN
+			f_user_score on f_wallet_capital_operation.fuid = f_user_score.fuid
+		where 1=1
+		<if test="keyword != null">
+			and (
+				f_wallet_capital_operation.fuid like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_wallet_capital_operation.fbank like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_wallet_capital_operation.faccount like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+				f_wallet_capital_operation.fphone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+				f_wallet_capital_operation.fpayee like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_wallet_capital_operation.famount like concat(#{keyword,jdbcType=VARCHAR},if(LOCATE('.',#{keyword,jdbcType=VARCHAR})>0,'','.'),'%') or
+				f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+				f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+				f_user.fid = #{keyword,jdbcType=VARCHAR}
+				)  
+		</if>
+		<if test="start != null and start == end">
+			<![CDATA[and f_wallet_capital_operation.fupdatetime = #{start}]]>
+		</if>
+		<if test="start != null and start != end">
+			<![CDATA[and f_wallet_capital_operation.fupdatetime >= #{start}]]>
+		</if>
+		<if test="end != null and start != end">
+			<![CDATA[and f_wallet_capital_operation.fupdatetime <= #{end}]]>
+		</if>
+		<if test="fid != null">
+			and f_wallet_capital_operation.fid = #{fid}
+		</if>
+		<if test="ftype != null">
+			and f_wallet_capital_operation.ftype = #{ftype}
+		</if>
+		<if test="finouttype != null">
+			and f_wallet_capital_operation.finouttype = #{finouttype}
+		</if>
+		<if test="amountLimit and amountLimit!=null">
+			<![CDATA[and f_wallet_capital_operation.famount >= 500000]]>
+		</if>
+		<if test="!amountLimit and amountLimit!=null">
+			<![CDATA[and f_wallet_capital_operation.famount < 500000]]>
+		</if>
+		<if test="serialno!=null and serialno == 1">
+			<![CDATA[and LENGTH(f_wallet_capital_operation.fserialno) < 10]]>
+		</if>
+		<if test="serialno!=null and serialno == 2">
+			<![CDATA[and LENGTH(f_wallet_capital_operation.fserialno) > 10]]>
+		</if>
+		<if test="fstatus != null">
+			and f_wallet_capital_operation.fstatus in
+			<foreach collection="fstatus" item="item" open="(" separator="," close=")">
+		 		${item} 
+			</foreach>
+		</if>
+		<if test="isvip6">
+			and f_user_score.flevel = 6
+		</if>
+	</select>
+	
+	
+	<select id="getTotalAmountByType" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		select ifnull(sum(ifnull(famount, 0) + ifnull(ffees, 0)), 0)
+		from 
+			f_wallet_capital_operation
+		where 1=1
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="type != null">
+			and finouttype = #{type}
+		</if>
+		<if test="status != null">
+			and fstatus = #{status}
+		</if>
+		<if test="start != null">
+   		<![CDATA[and fcreatetime >= #{start,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="end != null">
+   		<![CDATA[and fcreatetime <= #{end,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="FWalletCapitalOperationDTO" keyProperty="fid">
+		insert into f_wallet_capital_operation (
+			fsysbankid,
+			fuid,
+			fcreatetime,
+			famount,
+			finouttype,
+			ftype,
+			fstatus,
+			fremittancetype,
+			fremark,
+			fbank,
+			faccount,
+			fpayee,
+			fbank_code,
+			fphone,
+			fupdatetime,
+			fadminid,
+			ffees,
+			version,
+			fischarge,
+			faddress,
+			fsource,
+			fplatform)
+		values (
+			#{fsysbankid,jdbcType=INTEGER},
+			#{fuid,jdbcType=INTEGER},
+			#{fcreatetime,jdbcType=TIMESTAMP},
+			#{famount,jdbcType=DECIMAL},
+			#{finouttype,jdbcType=INTEGER},
+			#{ftype,jdbcType=INTEGER},
+			#{fstatus,jdbcType=INTEGER},
+			#{fremittancetype,jdbcType=INTEGER},
+			#{fremark,jdbcType=VARCHAR},
+			#{fbank,jdbcType=VARCHAR},
+			#{faccount,jdbcType=VARCHAR},
+			#{fpayee,jdbcType=VARCHAR},
+			#{fbankCode,jdbcType=VARCHAR},
+			#{fphone,jdbcType=VARCHAR},
+			#{fupdatetime,jdbcType=TIMESTAMP},
+			#{fadminid,jdbcType=INTEGER},
+			#{ffees,jdbcType=DECIMAL},
+			#{version,jdbcType=INTEGER},
+			#{fischarge,jdbcType=TINYINT},
+			#{faddress,jdbcType=VARCHAR},
+			#{fsource,jdbcType=INTEGER},
+			#{fplatform,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="FWalletCapitalOperationDTO">
+		update f_wallet_capital_operation
+		set
+			fsysbankid = #{fsysbankid,jdbcType=INTEGER},
+			fuid = #{fuid,jdbcType=INTEGER},
+			fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+			famount = #{famount,jdbcType=DECIMAL},
+			finouttype = #{finouttype,jdbcType=INTEGER},
+			ftype = #{ftype,jdbcType=INTEGER},
+			fstatus = #{fstatus,jdbcType=INTEGER},
+			fremittancetype = #{fremittancetype,jdbcType=INTEGER},
+			fremark = #{fremark,jdbcType=VARCHAR},
+			fbank = #{fbank,jdbcType=VARCHAR},
+			faccount = #{faccount,jdbcType=VARCHAR},
+			fpayee = #{fpayee,jdbcType=VARCHAR},
+			fbank_code = #{fbankCode,jdbcType=VARCHAR},
+			fphone = #{fphone,jdbcType=VARCHAR},
+			fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+			fadminid = #{fadminid,jdbcType=INTEGER},
+			ffees = #{ffees,jdbcType=DECIMAL},
+			version = version + 1,
+			fischarge = #{fischarge,jdbcType=TINYINT},
+			faddress = #{faddress,jdbcType=VARCHAR},
+			fsource = #{fsource,jdbcType=INTEGER},
+			fplatform = #{fplatform,jdbcType=INTEGER},
+			fserialno = #{fserialno,jdbcType=VARCHAR}
+		where
+			fid = #{fid,jdbcType=INTEGER} and version = #{version}
+	</update>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="FWalletCapitalOperationDTO">
+		select
+			<include refid="operationColumn" />
+		from f_wallet_capital_operation
+		where
+		fid = #{fid,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectBySerialno" parameterType="java.lang.String" resultType="FWalletCapitalOperationDTO">
+		select
+		<include refid="operationColumn" />
+		from f_wallet_capital_operation
+		where
+		fserialno = #{fserialno,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectMatchRecord" resultType="FWalletCapitalOperationDTO">
+		select
+			f_wallet_capital_operation.fid,
+			f_wallet_capital_operation.fsysbankid,
+			f_wallet_capital_operation.fuid,
+			f_wallet_capital_operation.fcreatetime,
+			f_wallet_capital_operation.famount,
+			f_wallet_capital_operation.finouttype,
+			f_wallet_capital_operation.ftype,
+			f_wallet_capital_operation.fstatus,
+			f_wallet_capital_operation.fremittancetype,
+			f_wallet_capital_operation.fremark,
+			f_wallet_capital_operation.fbank,
+			f_wallet_capital_operation.faccount,
+			f_wallet_capital_operation.fpayee,
+			f_wallet_capital_operation.fbank_code,
+			f_wallet_capital_operation.fphone,
+			f_wallet_capital_operation.fupdatetime,
+			f_wallet_capital_operation.fadminid,
+			f_wallet_capital_operation.ffees,
+			f_wallet_capital_operation.version,
+			f_wallet_capital_operation.fischarge,
+			f_wallet_capital_operation.faddress,
+			f_wallet_capital_operation.fsource,
+			f_wallet_capital_operation.fplatform,
+			f_user.floginname,
+			f_user.fnickname,
+			f_user.frealname
+		from f_wallet_capital_operation
+		left join
+		f_user on f_wallet_capital_operation.fuid = f_user.fid
+		where f_wallet_capital_operation.fuid = #{fuid,jdbcType=INTEGER}
+		and f_wallet_capital_operation.famount = #{famount,jdbcType=DECIMAL}
+		and f_wallet_capital_operation.ftype = #{rechargeType,jdbcType=INTEGER}
+		and f_wallet_capital_operation.finouttype = 1
+	</select>
+
+	<select id="selectMatchRecordByAccountName" resultType="FWalletCapitalOperationDTO">
+		select
+		f_wallet_capital_operation.fid,
+		f_wallet_capital_operation.fsysbankid,
+		f_wallet_capital_operation.fuid,
+		f_wallet_capital_operation.fcreatetime,
+		f_wallet_capital_operation.famount,
+		f_wallet_capital_operation.finouttype,
+		f_wallet_capital_operation.ftype,
+		f_wallet_capital_operation.fstatus,
+		f_wallet_capital_operation.fremittancetype,
+		f_wallet_capital_operation.fremark,
+		f_wallet_capital_operation.fbank,
+		f_wallet_capital_operation.faccount,
+		f_wallet_capital_operation.fpayee,
+		f_wallet_capital_operation.fbank_code,
+		f_wallet_capital_operation.fphone,
+		f_wallet_capital_operation.fupdatetime,
+		f_wallet_capital_operation.fadminid,
+		f_wallet_capital_operation.ffees,
+		f_wallet_capital_operation.version,
+		f_wallet_capital_operation.fischarge,
+		f_wallet_capital_operation.faddress,
+		f_wallet_capital_operation.fsource,
+		f_wallet_capital_operation.fplatform,
+		f_user.floginname,
+		f_user.fnickname,
+		f_user.frealname
+		from f_wallet_capital_operation
+		left join
+		f_user on f_wallet_capital_operation.fuid = f_user.fid
+		where f_wallet_capital_operation.faccount = #{faccount,jdbcType=VARCHAR}
+		and f_wallet_capital_operation.famount = #{famount,jdbcType=DECIMAL}
+		and f_user.frealname = #{frealname,jdbcType=VARCHAR}
+		and f_wallet_capital_operation.ftype = #{rechargeType,jdbcType=INTEGER}
+		and f_wallet_capital_operation.finouttype = 1
+	</select>
+
+	<select id="selectBySerialNumber" parameterType="java.lang.String" resultType="FWalletCapitalOperationDTO">
+		select
+		<include refid="operationColumn" />
+		from f_wallet_capital_operation
+		where
+		fserialno = #{fserialno,jdbcType=VARCHAR}
+	</select>
+
+</mapper>

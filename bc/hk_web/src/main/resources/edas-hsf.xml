@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:hsf="http://www.taobao.com/hsf" xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.taobao.com/hsf
+       http://www.taobao.com/hsf/hsf.xsd"
+	   default-autowire="byName">
+
+	<hsf:consumer id="userServiceConsumer" interface="com.qkwl.common.rpc.user.IUserService"
+				  version="1.0" group="user">
+		<hsf:methodSpecials>
+			<hsf:methodSpecial name="updateCheckLogin" timeout="20000"/>
+			<hsf:methodSpecial name="insertRegister" timeout="20000"/>
+		</hsf:methodSpecials>
+	</hsf:consumer>
+
+	<hsf:consumer id="questionServiceConsumer" interface="com.qkwl.common.rpc.user.IQuestionService"
+				  version="1.0" group="user">
+	</hsf:consumer>
+
+	<hsf:consumer id="userApiServiceProvider" interface="com.qkwl.common.rpc.user.IUserApiService"
+				  version="1.0" group="user">
+	</hsf:consumer>
+
+	<hsf:consumer id="entrustServerConsumer" interface="com.qkwl.common.rpc.entrust.IEntrustServer"
+				  version="1.0" group="entrust">
+		<hsf:methodSpecials>
+			<hsf:methodSpecial name="listEntrust" timeout="20000"/>
+			<hsf:methodSpecial name="listEntrustHistory" timeout="20000"/>
+		</hsf:methodSpecials>
+	</hsf:consumer>
+
+	<hsf:consumer id="userIdentityServiceProvider" interface="com.qkwl.common.rpc.user.IUserIdentityService"
+				  version="1.0" group="user">
+	</hsf:consumer>
+
+	<hsf:consumer id="userSecurityServiceConsumer" interface="com.qkwl.common.rpc.user.IUserSecurityService"
+				  version="1.0" group="user">
+	</hsf:consumer>
+
+	<hsf:consumer id="userWalletServiceConsumer" interface="com.qkwl.common.rpc.capital.IUserWalletService"
+				  version="1.0" group="capital">
+	</hsf:consumer>
+
+	<hsf:consumer id="userFinancesServiceConsumer" interface="com.qkwl.common.rpc.capital.IUserFinancesService"
+				  version="1.0" group="capital">
+	</hsf:consumer>
+
+	<hsf:consumer id="userBandAddressServiceConsumer" interface="com.qkwl.common.rpc.capital.IUserCapitalAccountService"
+				  version="1.0" group="capital">
+	</hsf:consumer>
+
+	<hsf:consumer id="userPushServiceConsumer" interface="com.qkwl.common.rpc.capital.IUserPushService"
+				  version="1.0" group="capital">
+	</hsf:consumer>
+
+	<hsf:consumer id="userCapitalServiceConsumer" interface="com.qkwl.common.rpc.capital.IUserCapitalService"
+				  version="1.0" group="capital">
+	</hsf:consumer>
+
+	<hsf:consumer id="userVipServiceConsumer" interface="com.qkwl.common.rpc.capital.IUserVipService"
+				  version="1.0" group="capital">
+	</hsf:consumer>
+
+	<hsf:consumer id="userRewardCodeServiceConsumer" interface="com.qkwl.common.rpc.capital.IUserRewardCodeService"
+				  version="1.0" group="capital">
+	</hsf:consumer>
+</beans>

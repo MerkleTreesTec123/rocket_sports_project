@@ -1,0 +1,78 @@
+<div class="layui-form" lay-href="admin/operationLogList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词[会员信息、审核人]</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">开始时间</label>
+			<div class="layui-input-inline">
+				<input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">结束时间</label>
+			<div class="layui-input-inline">
+				<input name="endDate" th:value="${endDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addOperationLog.html"
+					lay-href="admin/goOperationLogJSP.html?url=capital/addOperationLog" lay-target="dialog" lay-height="350" lay-width="800">新增</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteOperationLog.html"
+					lay-href="admin/deleteOperationLog.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要删除吗?">删除</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/auditOperationLog.html"
+					lay-href="admin/auditOperationLog.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要审核吗?">审核</button>
+		</div>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>UID</th>
+					<th>登录名</th>
+					<th>会员昵称</th>
+					<th>真实姓名</th>
+					<th>汇款方式</th>
+					<th>状态</th>
+					<th>金额</th>
+					<th>描述</th>
+					<th>创建时间</th>
+					<th>修改时间</th>
+					<th>审核人</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="operationlog : ${operationlogList.data}">
+					<td>
+						<input type="checkbox" th:name="${operationlog.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${operationlog.fuid}"></td>
+					<td th:text="${operationlog.floginname}"></td>
+					<td th:text="${operationlog.fnickname}"></td>
+					<td th:text="${operationlog.frealname}"></td>
+					<td th:text="${operationlog.ftype_s}"></td>
+					<td th:text="${operationlog.fstatus_s}"></td>
+					<td><span class="amount" th:text="${#decimal.format(operationlog.famount, 1, 10)}"></span></td>
+					<td th:text="${operationlog.fdescription}"></td>
+					<td th:text="${operationlog.fcreatetime == null ? '':#dates.format(operationlog.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${operationlog.fupdatetime == null ? '':#dates.format(operationlog.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${operationlog.fadminname}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${operationlogList.totalPages}, lay-curr=${operationlogList.currentPage}"></div>
+</div>

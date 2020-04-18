@@ -1,0 +1,42 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/updateArticleType.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型名称：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${farticleType.fid}"/>
+            <input class="layui-input" name="fname" lay-verify="required" th:value="${farticleType.fname}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型ID：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="ftypeid" lay-verify="required" th:value="${farticleType.ftypeid}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">语言：</label>
+        <div class="layui-inline">
+            <input type="hidden" name="languageTypeLookup.id" lay-lookup="id" th:value="${farticleType.flanguageid}"/>
+            <input class="layui-input" lay-verify="required" name="languageTypeLookup.languageType"
+                   lay-lookup="languageType" th:value="${farticleType.flanguagename}"
+                   readonly="readonly"/>
+        </div>
+        <div class="layui-inline">
+            <i class="layui-icon layui-lookup" lay-href="/admin/lookLanguageTypeList.html"
+               onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">关键词：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fkeywords" lay-verify="required" th:value="${farticleType.fkeywords }"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fdescription" lay-verify="required"
+                   th:value="${farticleType.fdescription }"/>
+        </div>
+    </div>
+
+</div>

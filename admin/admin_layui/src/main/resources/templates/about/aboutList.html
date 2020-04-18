@@ -1,0 +1,48 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="/about/aboutList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">标题：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateAbout.html"
+                    lay-href="admin/goAbout.html?url=about/updateAbout" lay-checked="fid" lay-target="dialog"
+                    lay-width="850" lay-height="600">修改
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>序号</th>
+                <th>标题</th>
+                <th>类型名称</th>
+                <th>内容</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${list.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${state.count}"></td>
+                <td th:text="${list.ftitle}"></td>
+                <td th:text="${list.fshortname}"></td>
+                <td th:text="${list.fcontent_s}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

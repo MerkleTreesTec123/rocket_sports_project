@@ -1,0 +1,20 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/levelScore.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">UID：</label>
+		<div class="layui-input-inline">
+			<input type="text" class="layui-input" readonly="readonly" name="uid" th:value="${fuser.fid}" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">赠送积分：</label>
+		<div class="layui-input-inline">
+			<input type="text" class="layui-input" lay-verify="required" name="score" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">备注：</label>
+		<div class="layui-input-inline">
+			<input type="text" class="layui-input" lay-verify="required" name="remark" />
+		</div>
+	</div>
+</div>

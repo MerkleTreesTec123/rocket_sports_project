@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.ValidateStatisticsMapper" >
+
+
+  <insert id="insert" parameterType="com.qkwl.service.activity.model.ValidateStatisticsDO" >
+    insert into validate_statistics (id, platform, send_type, times, gmt_create,
+      gmt_modified, version)
+    values (#{id,jdbcType=INTEGER}, #{platform,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, 
+      #{times,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP},
+      #{gmtModified,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.activity.model.ValidateStatisticsDO" >
+    update validate_statistics
+    set platform = #{platform,jdbcType=INTEGER},
+      send_type = #{sendType,jdbcType=INTEGER},
+      times = #{times,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="com.qkwl.service.activity.model.ValidateStatisticsDO" parameterType="java.lang.Integer" >
+    select id, platform, send_type, times, gmt_create, gmt_modified, version
+    from validate_statistics
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+</mapper>

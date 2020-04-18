@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FFriendLinkMapper" >
+  <resultMap id="BaseResultMap" type="FFriendLink" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fname" property="fname" jdbcType="VARCHAR" />
+    <result column="fdescription" property="fdescription" jdbcType="VARCHAR" />
+    <result column="forder" property="forder" jdbcType="INTEGER" />
+    <result column="fcreatetime" property="fcreatetime" jdbcType="TIMESTAMP" />
+    <result column="furl" property="furl" jdbcType="VARCHAR" />
+    <result column="ftype" property="ftype" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="LinkColumn">
+       fid, fname, fdescription, forder, fcreatetime, furl, ftype, version
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_friend_link where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="FFriendLink" keyProperty="fid">
+    insert into f_friend_link (
+      fname, 
+      fdescription, 
+      forder, 
+      fcreatetime, 
+      furl, 
+      ftype, 
+      version
+    ) values (
+      #{fname,jdbcType=VARCHAR}, 
+      #{fdescription,jdbcType=VARCHAR}, 
+      #{forder,jdbcType=INTEGER}, 
+      #{fcreatetime,jdbcType=TIMESTAMP}, 
+      #{furl,jdbcType=VARCHAR}, 
+      #{ftype,jdbcType=INTEGER}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FFriendLink" >
+    update f_friend_link
+    set fname = #{fname,jdbcType=VARCHAR},
+      fdescription = #{fdescription,jdbcType=VARCHAR},
+      forder = #{forder,jdbcType=INTEGER},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      furl = #{furl,jdbcType=VARCHAR},
+      ftype = #{ftype,jdbcType=INTEGER},
+      version = version + 1
+    where fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select <include refid="LinkColumn" />
+    from f_friend_link
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="getLinkPageList" resultType="FFriendLink" parameterType="java.util.Map" >
+   select <include refid="LinkColumn" />
+    from f_friend_link
+    where 1=1
+    <if test="keyword != null">
+	   	and	( 
+	   		fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or  
+	   		furl like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+	   	)
+	</if>
+	order by ${orderfield} ${orderdirection}
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countLinkByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(fid)
+    from f_friend_link
+    where 1=1
+   	<if test="keyword != null">
+	   	and	( 
+	   		fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or  
+	   		furl like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+	   	)
+	</if>
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="LinkColumn" /> from f_friend_link order by forder asc
+	</select>
+</mapper>

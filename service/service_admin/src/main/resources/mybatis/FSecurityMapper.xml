@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FSecurityMapper">
+
+    <sql id="SecurityColumn">fid, fdescription, fname, fpriority, fparentid, furl</sql>
+
+    <select id="selectByPrimaryKey" resultType="FSecurity" parameterType="java.lang.Integer">
+        select
+        <include refid="SecurityColumn"/>
+        from f_security
+        where fid = #{fid,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from f_security
+		where fid = #{fid}
+	</delete>
+
+    <select id="getSecurityByPid" resultType="FSecurity" parameterType="java.util.Map">
+        select
+        <include refid="SecurityColumn"/>
+        from f_security
+        where 1=1
+        <if test="keyword != null">
+            and fname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+        </if>
+        and fparentid = #{fparentid}
+        order by ${orderField} ${orderDirection}
+        limit ${offset},${limit}
+    </select>
+
+    <select id="countSecurityByPid" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(fid)
+        from f_security
+        where 1=1
+        <if test="keyword != null">
+            and fname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+        </if>
+        and fparentid = #{fparentid}
+    </select>
+
+    <insert id="insert" parameterType="FSecurity" keyProperty="fid">
+		insert into f_security (
+			fdescription, 
+			fname,
+			fpriority, 
+			fparentid, 
+			furl
+		)values (
+		    #{fdescription,jdbcType=VARCHAR},
+			#{fname,jdbcType=VARCHAR},
+			#{fpriority,jdbcType=INTEGER}, 
+			#{fparentid,jdbcType=INTEGER}, 
+			#{furl,jdbcType=VARCHAR} )
+	</insert>
+    <update id="updateByPrimaryKey" parameterType="FSecurity">
+		update f_security
+		set fdescription = #{fdescription,jdbcType=VARCHAR},
+		fname = #{fname,jdbcType=VARCHAR},
+		fpriority = #{fpriority,jdbcType=INTEGER},
+		fparentid = #{fparentid,jdbcType=INTEGER},
+		furl = #{furl,jdbcType=VARCHAR}
+		where fid = #{fid,jdbcType=INTEGER}
+	</update>
+
+    <select id="selectAll" resultType="FSecurity">
+        select
+        <include refid="SecurityColumn"/>
+        from f_security
+    </select>
+    <select id="findFSecurityList" resultType="FSecurity">
+        select
+        <include refid="SecurityColumn"/>
+        from f_security where fid in (select fsecurityid from f_role_security
+        where froleid = #{froleid})
+    </select>
+    <select id="getSecurityByTree" resultType="FSecurity">
+        select
+        <include refid="SecurityColumn"/>
+        from f_security where FIND_IN_SET(fid, queryChildrenInfo(1))
+    </select>
+</mapper>

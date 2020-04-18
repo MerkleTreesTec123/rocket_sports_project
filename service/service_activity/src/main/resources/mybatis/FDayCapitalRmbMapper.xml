@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FDayCapitalRmbMapper" >
+ 
+  <sql id="daycapitalrmbColumns">
+  	 fid, fbank, fzfb, fwx, fsuma, fwithdraw, fwithdrawother, fwithdrawwait, ffees, fleverborrow, fleverrepay, fupdatetime, fcreatetime, fagentid
+  </sql>
+  
+  <insert id="insert" parameterType="FDayCapitalRmb" keyProperty="fid">
+    insert into f_day_capital_rmb (
+      fbank, 
+      fzfb, 
+      fwx, 
+      fsuma, 
+      fwithdraw,
+      fwithdrawother,
+      fwithdrawwait, 
+      ffees, 
+      fleverborrow,
+      fleverrepay,
+      fupdatetime,
+      fcreatetime,
+      fagentid
+    ) values (
+      #{fbank,jdbcType=DECIMAL}, 
+      #{fzfb,jdbcType=DECIMAL}, 
+      #{fwx,jdbcType=DECIMAL}, 
+      #{fsuma,jdbcType=DECIMAL}, 
+      #{fwithdraw,jdbcType=DECIMAL},
+      #{fwithdrawother,jdbcType=DECIMAL},
+      #{fwithdrawwait,jdbcType=DECIMAL}, 
+      #{ffees,jdbcType=DECIMAL}, 
+      #{fleverborrow,jdbcType=DECIMAL}, 
+      #{fleverrepay,jdbcType=DECIMAL}, 
+      #{fupdatetime,jdbcType=TIMESTAMP},
+      #{fcreatetime,jdbcType=TIMESTAMP},
+      #{fagentid,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateByModel" parameterType="FDayCapitalRmb" >
+    update f_day_capital_rmb set 
+      fbank = #{fbank,jdbcType=DECIMAL},
+      fzfb = #{fzfb,jdbcType=DECIMAL},
+      fwx = #{fwx,jdbcType=DECIMAL},
+      fsuma = #{fsuma,jdbcType=DECIMAL},
+      fwithdraw = #{fwithdraw,jdbcType=DECIMAL},
+      fwithdrawother = #{fwithdrawother,jdbcType=DECIMAL},
+      fwithdrawwait = #{fwithdrawwait,jdbcType=DECIMAL},
+      ffees = #{ffees,jdbcType=DECIMAL},
+      fleverborrow = #{fleverborrow,jdbcType=DECIMAL},
+      fleverrepay = #{fleverrepay,jdbcType=DECIMAL},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fagentid = #{fagentid,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByDate" resultType="FDayCapitalRmb">
+    select <include refid="daycapitalrmbColumns"/> from f_day_capital_rmb where date_format(fcreatetime, "%Y-%m-%d") = #{time} and fagentid = #{fagentid}
+  </select>
+  
+  <select id="selectAll" resultType="FDayCapitalRmb" >
+    select <include refid="daycapitalrmbColumns"/> from f_day_capital_rmb
+  </select>
+</mapper>

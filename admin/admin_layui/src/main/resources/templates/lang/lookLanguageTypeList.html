@@ -1,0 +1,45 @@
+<div class="layui-form" lay-href="admin/lookLanguageTypeList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">语言类型：</label>
+			<div class="layui-input-inline">
+				<select name="ftype">
+					<option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+							th:selected="${type.key == ftype}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="160%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>语言名称</th>
+					<th>语言缩写</th>
+					<th>语言包名</th>
+					<th>描述</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="languageType : ${languageTypeList.data}">
+					<td th:text="${languageType.fid}"></td>
+					<td th:text="${languageType.fname}"></td>
+					<td th:text="${languageType.fshortname}"></td>
+					<td th:text="${languageType.fpackagename}"></td>
+					<td th:text="${languageType.fdescription}"></td>
+					<td>
+						<button class="layui-btn layui-btn-small"
+								th:onclick="${'layui.lookup.backLook({id:'+languageType.fid+',languageType:'''+languageType.fname+'''})'}">带回</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${languageTypeList.totalPages}, lay-curr=${languageTypeList.currentPage}"></div>
+</div>

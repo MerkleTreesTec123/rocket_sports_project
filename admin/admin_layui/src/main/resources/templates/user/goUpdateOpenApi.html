@@ -1,0 +1,28 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/submitApiUpdate.html">
+	<div class="layui-form-item">
+		<div class="layui-input-inline">
+			<input id="fid" type="hidden" class="layui-input" name="fid" th:value="${api.fid}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否禁用</label>
+		<div class="layui-input-block">
+			<input type="radio" name="fstatus" value="2" title="禁用" th:checked="${api.fstatus == 2}"/>
+			<input type="radio" name="fstatus" value="1" title="开启" th:checked="${api.fstatus == 1}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">开启自定义手续费</label>
+		<div class="layui-input-block">
+			<input type="radio" name="fopenrate" value="0" title="不开启" th:checked="${api.fopenrate != 1}"/>
+			<input type="radio" name="fopenrate" value="1" title="开启" th:checked="${api.fopenrate == 1}"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">自定义手续费：</label>
+		<div class="layui-input-inline">
+			<input id="frate" class="layui-input" name="frate" th:value="${api.frate}"/>
+		</div>
+	</div>
+
+</div>

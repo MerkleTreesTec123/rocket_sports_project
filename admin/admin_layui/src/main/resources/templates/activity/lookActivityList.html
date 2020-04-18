@@ -1,0 +1,43 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="activity/lookActivityList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">活动：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>活动名称</th>
+                <th>活动状态</th>
+                <th>归档状态</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${list.data}">
+                <td>
+                    <button class="layui-btn layui-btn-small"
+                            th:onclick="${'layui.lookup.backLook({id:'+item.id+',name:'''+item.name+'''})'}">带回
+                    </button>
+                </td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${statusMap[item.status]}"></td>
+                <td th:text="${item.archiveStatus == 0 ? '未归档': '已归档'}"></td>
+                <td th:text="${item.gmtCreate == null ? '':#dates.format(item.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${item.gmtModified == null ? '':#dates.format(item.gmtModified, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${list.totalPages}, lay-curr=${list.currentPage}"></div>
+</div>

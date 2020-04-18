@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.FRewardCodeMapper" >
+
+  <sql id="CodeColumn">
+  	fid, fuid, ftype, fcode, famount, fstate, fcreatetime, fupdatetime, version, 
+    fbatch, fislimituser, fislimituse, fusenum, fusedate
+  </sql>
+  
+  <select id="selectByCode" resultType="com.qkwl.service.user.model.FRewardCodeDO" parameterType="string">
+  	select <include refid="CodeColumn" />
+    from f_reward_code
+    where 1=1
+    	and fcode = #{fcode}
+  </select>
+  
+  <select id="selectListByCode" resultType="com.qkwl.service.user.model.FRewardCodeDO" parameterType="java.util.Map">
+  	select <include refid="CodeColumn" />
+    from f_reward_code
+    where 1=1
+    <if test="fuid != null">
+    and fuid = #{fuid}
+    </if>
+    <if test="fcode != null">
+    and fcode = #{fcode}
+    </if>
+    <if test="fstate != null">
+    and fstate = #{fstate}
+    </if>
+    order by fupdatetime desc
+    limit #{offset},#{limit}
+    
+  </select>
+  
+  <select id="countListByCode" resultType="java.lang.Integer" parameterType="java.util.Map">
+  select count(fid)
+    from f_reward_code
+    where 1=1
+    <if test="fuid != null">
+    and fuid = #{fuid}
+    </if>
+    <if test="fcode != null">
+    and fcode = #{fcode}
+    </if>
+    <if test="fstate != null">
+    and fstate = #{fstate}
+    </if>
+  </select>
+  
+  <select id="countUseCodeByUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+  	select count(fid)
+  	from f_reward_code
+ 	where fuid= #{fuid} 
+ 	and fbatch = #{fbatch} 
+ 	and ftype= #{ftype}
+ 	and fstate=1 
+  </select>	
+ 
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.user.model.FRewardCodeDO" >
+    update f_reward_code
+    set 
+    	fuid = #{fuid,jdbcType=INTEGER},
+      	ftype = #{ftype,jdbcType=INTEGER},
+      	fcode = #{fcode,jdbcType=VARCHAR},
+      	famount = #{famount,jdbcType=DECIMAL},
+      	fstate = #{fstate,jdbcType=BIT},
+      	fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      	fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      	version = version + 1,
+      	fbatch = #{fbatch,jdbcType=INTEGER},
+      	fislimituser = #{fislimituser,jdbcType=BIT},
+      	fislimituse = #{fislimituse,jdbcType=BIT},
+      	fusenum = #{fusenum,jdbcType=INTEGER},
+      	fusedate = #{fusedate,jdbcType=TIMESTAMP}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="com.qkwl.service.user.model.FRewardCodeDO" parameterType="java.lang.Integer" >
+    select <include refid="CodeColumn" />
+    from f_reward_code
+    where 
+    	fid = #{fid,jdbcType=INTEGER}
+  </select>
+    
+</mapper>

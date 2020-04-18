@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.ValidatePlatformMapper" >
+
+  <sql id="platformColumn">id, name, domain, sign, sms_id, voice_sms_id, international_sms_id, email_id,
+    gmt_create, gmt_modified, version</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from validate_platform
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.qkwl.service.activity.model.ValidatePlatformDO" >
+    insert into validate_platform (id, name, domain, 
+      sign, sms_id, voice_sms_id, 
+      international_sms_id, email_id, gmt_create, 
+      gmt_modified, version)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{domain,jdbcType=VARCHAR}, 
+      #{sign,jdbcType=VARCHAR}, #{smsId,jdbcType=INTEGER}, #{voiceSmsId,jdbcType=INTEGER}, 
+      #{internationalSmsId,jdbcType=INTEGER}, #{emailId,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.activity.model.ValidatePlatformDO" >
+    update validate_platform
+    set name = #{name,jdbcType=VARCHAR},
+      domain = #{domain,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR},
+      sms_id = #{smsId,jdbcType=INTEGER},
+      voice_sms_id = #{voiceSmsId,jdbcType=INTEGER},
+      international_sms_id = #{internationalSmsId,jdbcType=INTEGER},
+      email_id = #{emailId,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="com.qkwl.service.activity.model.ValidatePlatformDO" parameterType="java.lang.Integer" >
+    select <include refid="platformColumn" />
+    from validate_platform
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultType="com.qkwl.service.activity.model.ValidatePlatformDO" >
+    select <include refid="platformColumn" />
+    from validate_platform
+  </select>
+
+  <select id="selectListByPage" resultType="com.qkwl.service.activity.model.ValidatePlatformDO" parameterType="java.util.Map">
+    select <include refid="platformColumn" />
+    from validate_platform
+    where 1 = 1
+    <if test="orderField != null">
+      order by ${orderField} ${orderDirection}
+    </if>
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countListByPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(id)
+    from validate_platform
+    where 1 = 1
+  </select>
+</mapper>

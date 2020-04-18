@@ -1,0 +1,125 @@
+<div class="layui-form" lay-href="admin/capitalInList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">关键词[会员UID、会员名称、银行帐户、金额、收款人]</label>
+            <div class="layui-input-inline">
+                <input name="limit" th:value="${limit }" type="hidden"/>
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">充值ID</label>
+            <div class="layui-input-inline">
+                <input name="capitalId" th:value="${capitalId }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select type="combox" name="ftype">
+                    <option th:each="v : ${ftypeMap}" th:value="${v.key}" th:text="${v.value}"
+                            th:selected="${v.key == ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-inline">
+                <input name="logDate" th:value="${logDate }" class="layui-input"
+                       onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+                       style="width:160px;"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-inline">
+                <input name="endDate" th:value="${endDate }" class="layui-input"
+                       onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+                       style="width:160px;"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: auto;">显示VIP6：</label>
+            <div class="layui-input-inline" style="width: auto;">
+                <input type="checkbox" name="isvip6" th:checked="${isvip6 }"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalInAudit.html"
+                    lay-href="admin/capitalInAudit.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要审核吗?">审核
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateCapitalAmount.html"
+                    lay-href="admin/goCapitaloperationJSP.html?url=capital/updateCapitalAmount" lay-checked="uid"
+                    lay-target="dialog" lay-height="380" lay-width="380">修改
+            </button>
+            <button class="layui-btn layui-btn-small"
+                    lay-href="admin/capitalInCancel.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要取消充值吗?">取消充值
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalInCancelAll.html"
+                    lay-href="admin/capitalInCancelAll.html" lay-checked="ids" lay-filter="allChoose" lay-target="ajax"
+                    lay-tips="确定要全部取消充值吗?">全部取消充值
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"/></th>
+                <th>UID</th>
+                <th>登录名</th>
+                <th>会员昵称</th>
+                <th>真实姓名</th>
+                <th>用户等级</th>
+                <th>类型</th>
+                <th>状态</th>
+                <th data-order-field="famount">金额</th>
+                <th data-order-field="ffees">手续费</th>
+                <th>汇款银行</th>
+                <th>汇款帐号</th>
+                <th>汇款人</th>
+                <th>汇款登录名</th>
+                <th>备注</th>
+                <th>订单来源</th>
+                <th>平台来源</th>
+                <th data-order-field="fcreatetime">创建时间</th>
+                <th data-order-field="fupdatetime">最后修改时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="capitaloperation : ${capitaloperationList.data}">
+                <td>
+                    <input type="checkbox" th:name="${capitaloperation.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${capitaloperation.fuid}"></td>
+                <td th:text="${capitaloperation.floginname}"></td>
+                <td th:text="${capitaloperation.fnickname}"></td>
+                <td th:text="${capitaloperation.frealname}"></td>
+                <td th:text="${'VIP'+capitaloperation.level}"></td>
+                <td th:text="${capitaloperation.ftype_s}"></td>
+                <td th:text="${capitaloperation.fstatus_s}"></td>
+                <td><span class="amount" th:text="${#decimal.format(capitaloperation.famount, 1, 10)}"></span></td>
+                <td th:text="${#decimal.format(capitaloperation.ffees, 1, 10)}"></td>
+                <td th:text="${capitaloperation.fbank}"></td>
+                <td th:text="${capitaloperation.faccount}"></td>
+                <td th:text="${capitaloperation.fpayee}"></td>
+                <td th:text="${capitaloperation.fphone}"></td>
+                <td th:text="${capitaloperation.fid}"></td>
+                <td th:text="${capitaloperation.fsource_s}"></td>
+                <td th:text="${capitaloperation.fplatform_s}"></td>
+                <td th:text="${capitaloperation.fcreatetime == null ? '':#dates.format(capitaloperation.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${capitaloperation.fupdatetime == null ? '':#dates.format(capitaloperation.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box"
+         th:attr="lay-pages=${capitaloperationList.totalPages}, lay-curr=${capitaloperationList.currentPage}"></div>
+</div>

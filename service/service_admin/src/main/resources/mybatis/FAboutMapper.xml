@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FAboutMapper" >
+
+  <resultMap id="BaseResultMap" type="FAbout" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="ftitle" property="ftitle" jdbcType="VARCHAR" />
+    <result column="fshortname" property="fshortname" jdbcType="VARCHAR" />
+    <result column="fabouttype" property="fabouttype" jdbcType="INTEGER" />
+    <result column="fsort" property="fsort" jdbcType="INTEGER" />
+    <result column="fcontent" property="fcontent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <sql id="aboutColumn">
+  		fid, ftitle, fshortname, fabouttype, fsort, fcontent, fshowid
+  </sql>
+
+  <update id="updateByPrimaryKey" parameterType="FAbout" >
+    update f_about set 
+      ftitle = #{ftitle,jdbcType=VARCHAR},
+      fshortname = #{fshortname,jdbcType=VARCHAR},
+      fabouttype = #{fabouttype,jdbcType=INTEGER},
+      fsort = #{fsort,jdbcType=INTEGER},
+      fcontent = #{fcontent,jdbcType=LONGVARCHAR},
+      fshowid = #{fshowid,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="FAbout" parameterType="java.lang.Integer" >
+    select <include refid="aboutColumn" /> from f_about where fid = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="getAboutPageList" resultType="FAbout" parameterType="java.util.Map" >
+    select 
+    	f_about.fid, 
+    	f_about.ftitle, 
+    	f_about.fshortname, 
+    	f_about.fabouttype, 
+    	f_about.fsort, 
+    	f_about.fcontent,
+        f_about.fshowid,
+    	f_about_type.ftitle as fabouttype_s
+    from f_about
+    left join f_about_type on f_about.fabouttype= f_about_type.fid
+    where 1=1
+    <if test="keyword != null">
+	   	and	( f_about.ftitle like concat('%',#{keyword,jdbcType=VARCHAR},'%') )
+	</if>
+	<if test="fagentid != null">
+	   	and	f_about_type.fagentid = #{fagentid,jdbcType=INTEGER} 
+	</if>
+	order by ${orderfield} ${orderdirection} limit #{offset},#{limit}
+  </select>
+  
+  <select id="countAboutByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(*) 
+    from f_about
+    left join f_about_type on f_about.fabouttype= f_about_type.fid
+    where 1=1
+    <if test="keyword != null">
+	   	and	( f_about.ftitle like concat('%',#{keyword,jdbcType=VARCHAR},'%') )
+	</if>
+	<if test="fagentid != null">
+	   	and	f_about_type.fagentid = #{fagentid,jdbcType=INTEGER} 
+	</if>
+  </select>
+  
+  <select id="selectByType" resultType="FAbout" parameterType="java.lang.Integer" >
+    select <include refid="aboutColumn" /> from f_about where fabouttype = #{ftype,jdbcType=INTEGER}
+  </select>
+</mapper>

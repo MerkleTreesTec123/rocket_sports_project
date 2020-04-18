@@ -1,0 +1,50 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form"
+     lay-href="/report/dayOperatList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">日期：</label>
+            <div class="layui-input-inline">
+                <input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({elem: this})" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>登录</th>
+                <th>注册</th>
+                <th>实名</th>
+                <th>VIP6</th>
+                <th>充值码</th>
+                <th>积分</th>
+                <th>提问</th>
+                <th>回答提问</th>
+                <th data-order-field="fupdatetime">最后更新时间</th>
+                <th data-order-field="fcreatetime">创建日期</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td th:text="${state.count}"></td>
+                <td th:text="${list.flogin}"></td>
+                <td th:text="${list.fregister}"></td>
+                <td th:text="${list.frealname}"></td>
+                <td th:text="${list.fvip6}"></td>
+                <td th:text="${list.fcode}"></td>
+                <td th:text="${list.fscore}"></td>
+                <td th:text="${list.fsubmitquestion}"></td>
+                <td th:text="${list.freplyquestion}"></td>
+                <td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

@@ -1,0 +1,149 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="admin/incomeCharts.html">
+    <div class="layui-form-item layui-search-box">
+        <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label">币种类型：</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<select name="coinId">-->
+                    <!--<option th:each="coin : ${coinMap}" th:value="${coin.key}" th:text="${coin.value}"-->
+                        <!--th:selected="${coin.key == coinId}"></option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-inline">
+            <label class="layui-form-label">周期类型：</label>
+            <div class="layui-input-inline">
+                <select name="cycleId">
+                    <option th:each="cycle : ${cycleMap}" th:value="${cycle.key}" th:text="${cycle.value}"
+                            th:selected="${cycle.key == cycleId}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">选择日期：</label>
+            <div class="layui-input-inline">
+                <input name="day" th:value="${day }" class="layui-input" onclick="layui.laydate({elem: this})" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+        <div class="incomecharts layui-hide">
+            <input type="hidden" id="cycleId" th:value="${cycleId }"/>
+            <input type="hidden" id="day" th:value="${day }"/>
+        </div>
+    </div>
+    <hr/>
+    <div id="incomeCharts" style="height:400px;">
+
+    </div>
+    <hr/>
+    <div th:if="${cycleId > 0}" >
+    <div>
+        收益统计数据
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>币种</th>
+                <th th:each="column : ${xaxis}" th:text="${column}"></th>
+            </tr>
+            </thead>
+            <tbody lay-height="300px">
+            <tr th:if="${data != null}" th:each="list : ${data}">
+                <td th:text="${list.coin}"></td>
+                <th:block th:each="i : ${#numbers.sequence(1, xaxis.length)}">
+                    <td  th:text="${#decimal.format(list[#strings.toString(i)], 1, 10)}"></td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+<div id="report2" class="layui-hide"></div>
+<script type="text/javascript" src="js/echarts/echarts.min.js"></script>
+<script type="application/javascript">
+    /*<![CDATA[*/
+    var $ = layui.jquery;
+    $("#report2").parents(".layui-tab-item").css("overflow-y", "auto").css("height", "100%");
+    // 基于准备好的dom，初始化echarts实例
+    var charts = echarts.init(document.getElementById('incomeCharts'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '收益统计'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            data:[]
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : []
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : []
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    charts.setOption(option);
+    var cycleId = $(".incomecharts #cycleId").val();
+    var day = $(".incomecharts #day").val();
+
+    if(cycleId > 0 && day != ""){
+        $.post("/charts/incomeReport.html", {"cycleId":cycleId, "day":day}, function(data){
+            var obj = data.data;
+            var xaxis = obj.xaxis;
+            var legend = [];
+            legend = obj.legend;
+            var coin = obj.coin;
+            var series = [];
+            series = obj.line;
+
+            // 填入数据
+            charts.setOption({
+                title: {
+                    text: '收益统计'
+                },
+                legend: {
+                    data:legend
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : xaxis
+                    }
+                ],
+                series: series
+            });
+        });
+    }
+
+
+    /*]]>*/
+//
+
+</script>

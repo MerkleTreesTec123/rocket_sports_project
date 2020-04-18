@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FRewardCodeMapper" >
+  <resultMap id="BaseResultMap" type="FRewardCodeDTO" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fuid" property="fuid" jdbcType="INTEGER" />
+    <result column="ftype" property="ftype" jdbcType="INTEGER" />
+    <result column="fcode" property="fcode" jdbcType="VARCHAR" />
+    <result column="famount" property="famount" jdbcType="DOUBLE" />
+    <result column="fstate" property="fstate" jdbcType="BIT" />
+    <result column="fcreatetime" property="fcreatetime" jdbcType="TIMESTAMP" />
+    <result column="fupdatetime" property="fupdatetime" jdbcType="TIMESTAMP" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="fbatch" property="fbatch" jdbcType="INTEGER" />
+    <result column="fislimituser" property="fislimituser" jdbcType="BIT" />
+    <result column="fislimituse" property="fislimituse" jdbcType="BIT" />
+    <result column="fusenum" property="fusenum" jdbcType="INTEGER" />
+    <result column="fusedate" property="fusedate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="CodeColumn">
+  	fid, fuid, ftype, fcode, famount, fstate, fcreatetime, fupdatetime, version, 
+    fbatch, fislimituser, fislimituse, fusenum, fusedate
+  </sql>
+ 	
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_reward_code
+    where 
+    	fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="FRewardCodeDTO" keyProperty="fid">
+    insert into f_reward_code (
+    	fuid, 
+    	ftype, 
+      	fcode, 
+      	famount, 
+      	fstate, 
+      	fcreatetime, 
+      	fupdatetime, 
+      	version, 
+      	fbatch, 
+      	fislimituser, 
+      	fislimituse, 
+      	fusenum, 
+      	fusedate)
+    values (
+    	#{fuid,jdbcType=INTEGER}, 
+    	#{ftype,jdbcType=INTEGER}, 
+      	#{fcode,jdbcType=VARCHAR}, 
+      	#{famount,jdbcType=DOUBLE}, 
+      	#{fstate,jdbcType=BIT}, 
+      	#{fcreatetime,jdbcType=TIMESTAMP}, 
+      	#{fupdatetime,jdbcType=TIMESTAMP}, 
+      	#{version,jdbcType=INTEGER}, 
+      	#{fbatch,jdbcType=INTEGER}, 
+      	#{fislimituser,jdbcType=BIT}, 
+      	#{fislimituse,jdbcType=BIT}, 
+      	#{fusenum,jdbcType=INTEGER}, 
+      	#{fusedate,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  
+  <insert id="insertList" parameterType="java.util.List" >
+    insert into f_reward_code (
+    	fuid, 
+    	ftype, 
+      	fcode, 
+      	famount, 
+      	fstate, 
+      	fcreatetime, 
+      	fupdatetime, 
+      	version, 
+      	fbatch, 
+      	fislimituser, 
+      	fislimituse, 
+      	fusenum, 
+      	fusedate)
+    values 
+    <foreach collection="list" item="item" index="index" separator="," >  
+    (
+    	#{item.fuid,jdbcType=INTEGER}, 
+    	#{item.ftype,jdbcType=INTEGER}, 
+      	#{item.fcode,jdbcType=VARCHAR}, 
+      	#{item.famount,jdbcType=DOUBLE}, 
+      	#{item.fstate,jdbcType=BIT}, 
+      	#{item.fcreatetime,jdbcType=TIMESTAMP}, 
+      	#{item.fupdatetime,jdbcType=TIMESTAMP}, 
+      	#{item.version,jdbcType=INTEGER}, 
+      	#{item.fbatch,jdbcType=INTEGER}, 
+      	#{item.fislimituser,jdbcType=BIT}, 
+      	#{item.fislimituse,jdbcType=BIT}, 
+      	#{item.fusenum,jdbcType=INTEGER}, 
+      	#{item.fusedate,jdbcType=TIMESTAMP}
+    )
+    </foreach>
+  </insert>
+  
+  
+  <select id="getRewardCodePageList" parameterType="java.util.Map" resultType="FRewardCodeDTO">
+  	select f_reward_code.*, f_user.floginname as floginname
+    from f_reward_code
+    left JOIN f_user on f_reward_code.fuid = f_user.fid
+    where 1=1
+    <if test="keyword != null">
+     and f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="ftype != null">
+    and f_reward_code.ftype = #{ftype}
+    </if>
+    <if test="fbatch != null">
+    and f_reward_code.fbatch = #{fbatch}
+    </if>
+    <if test="fstate != null">
+    and f_reward_code.fstate = #{fstate}
+    </if>
+    <if test="begindate != null">
+    <![CDATA[ 
+    and date_format(f_reward_code.fcreatetime, '%Y-%m-%d') >= date_format(#{begindate}, '%Y-%m-%d')
+    ]]>
+    </if>
+    <if test="enddate !=null ">
+    <![CDATA[ 
+    and date_format(f_reward_code.fcreatetime, '%Y-%m-%d') <= date_format(#{enddate}, '%Y-%m-%d')
+    ]]>
+    </if>
+    <if test="beginusedate != null">
+    <![CDATA[ 
+    and date_format(f_reward_code.fusedate, '%Y-%m-%d') >= date_format(#{beginusedate}, '%Y-%m-%d')
+    ]]>
+    </if>
+    <if test="endusedate !=null ">
+    <![CDATA[ 
+    and date_format(f_reward_code.fusedate, '%Y-%m-%d') <= date_format(#{endusedate}, '%Y-%m-%d')
+    ]]>
+    </if>
+  	order by f_reward_code.${orderField} ${orderDirection}
+  	limit #{offset},#{limit}
+  </select>
+  
+  <select id="countRewardCodePageList" parameterType="java.util.Map" resultType="java.lang.Integer">
+  	select count(f_reward_code.fid)
+    from f_reward_code
+    left JOIN f_user on f_reward_code.fuid = f_user.fid
+    where 1=1
+    <if test="keyword != null">
+     and f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="ftype != null">
+    and f_reward_code.ftype = #{ftype}
+    </if>
+    <if test="fbatch != null">
+    and f_reward_code.fbatch = #{fbatch}
+    </if>
+    <if test="fstate != null">
+    and f_reward_code.fstate = #{fstate}
+    </if>
+    <if test="begindate != null">
+    <![CDATA[ 
+    and date_format(f_reward_code.fcreatetime, '%Y-%m-%d') >= date_format(#{begindate}, '%Y-%m-%d')
+    ]]>
+    </if>
+    <if test="enddate !=null ">
+    <![CDATA[ 
+    and date_format(f_reward_code.fcreatetime, '%Y-%m-%d') <= date_format(#{enddate}, '%Y-%m-%d')
+    ]]>
+    </if>
+    <if test="beginusedate != null">
+    <![CDATA[ 
+    and date_format(f_reward_code.fusedate, '%Y-%m-%d') >= date_format(#{beginusedate}, '%Y-%m-%d')
+    ]]>
+    </if>
+    <if test="endusedate !=null ">
+    <![CDATA[ 
+    and date_format(f_reward_code.fusedate, '%Y-%m-%d') <= date_format(#{endusedate}, '%Y-%m-%d')
+    ]]>
+    </if>
+  </select>
+  
+  
+  <select id="getTotalAmount" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+		select ifnull(sum(famount), 0)
+	 	from 
+	 		f_reward_code
+	 	where fstate = 1
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="type != null">
+			and ftype = #{type}
+		</if>
+		<if test="start != null">
+   		<![CDATA[and fusedate >= #{start,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="end != null">
+   		<![CDATA[and fusedate <= #{end,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+  
+</mapper>

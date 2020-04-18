@@ -1,0 +1,54 @@
+<div class="layui-form" lay-href="admin/walletList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词[登录名、昵称、真实姓名]</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">会员UID[支持uid#uid]</label>
+			<div class="layui-input-inline">
+				<input name="fuids" th:value="${fuids }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>登录名</th>
+					<th>会员昵称</th>
+					<th>会员真实姓名</th>
+					<th>可用金额</th>
+					<th>冻结金额</th>
+					<th>借贷金额</th>
+					<th>最后修改时间</th>
+				</tr>
+			</thead>
+			<tbody th:if="${not #lists.isEmpty(wallet)}">
+				<tr th:each="w : ${wallet.data}">
+					<td>
+						<input type="checkbox" th:name="${w.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${w.floginname}"></td>
+					<td th:text="${w.fnickname}"></td>
+					<td th:text="${w.frealname}"></td>
+					<td><span class="total" th:text="${#decimal.format(w.ftotal, 1, 10)}"></span></td>
+					<td><span class="frozen" th:text="${#decimal.format(w.ffrozen, 1, 10)}"></span></td>
+					<td><span class="borrow" th:text="${#decimal.format(w.fborrow, 1, 10)}"></span></td>
+					<td th:text="${w.fupdatetime == null ? '':#dates.format(w.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:if="${not #lists.isEmpty(wallet)}" th:attr="lay-pages=${wallet.totalPages}, lay-curr=${wallet.currentPage}"></div>
+</div>

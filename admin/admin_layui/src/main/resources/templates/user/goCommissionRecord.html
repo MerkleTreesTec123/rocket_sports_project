@@ -1,0 +1,64 @@
+<div class="layui-form" lay-href="admin/goCommissionRecord.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">UID</label>
+            <div class="layui-input-inline">
+                <input name="uid" th:value="${uid}" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">推荐人UID</label>
+            <div class="layui-input-inline">
+                <input name="introuid" th:value="${introuid}" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" lay-href="/admin/submitCommissionUpdate.html" lay-checked="id" lay-target="ajax" lay-tips="你确定发放吗？">
+            发放
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="160%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>UID</th>
+                <th>推荐人UID</th>
+                <th>状态</th>
+                <th>佣金</th>
+                <th>币种名称</th>
+                <th>币种ID</th>
+                <th>备注</th>
+                <th data-order-field="fregisterTime">
+                    添加时间
+                </th>
+                <th data-order-field="flastlogintime">
+                    修改时间
+                </th>
+            </tr>
+            </thead>
+            <tbody th:if="${not #lists.isEmpty(records)}">
+            <tr th:each="record,recordStat : ${records}">
+                <td>
+                    <input type="checkbox" th:name="${record.id}" lay-skin="primary"/>
+                </td>
+                <td th:text="${record.uid}"></td>
+                <td th:text="${record.introuid}"></td>
+                <td th:text="${record.status_s}"></td>
+                <td th:text="${record.amount}"></td>
+                <td th:text="${record.coinname}"></td>
+                <td th:text="${record.coinid}"></td>
+                <td th:text="${record.remark}"></td>
+                <td th:text="${#dates.format(record.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${#dates.format(record.updatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

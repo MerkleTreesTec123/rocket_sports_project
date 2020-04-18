@@ -1,0 +1,68 @@
+<div class="layui-form" lay-href="admin/openApi.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">UID</label>
+            <div class="layui-input-inline">
+                <input name="uid" th:value="${uid }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">apiKey</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" lay-href="admin/goAddOpenApi.html" lay-target="dialog" >
+            新增
+        </button>
+        <button class="layui-btn layui-btn-small" lay-href="/admin/goUpdateOpenApi.html" lay-checked="fid" lay-target="dialog" >
+            修改
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="160%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>UID</th>
+                <th>显示ID</th>
+                <th>状态</th>
+                <th>apiKey</th>
+                <th>ApiSecret</th>
+                <th>是否自定义手续费</th>
+                <th>自定义的手续费</th>
+                <th data-order-field="fregisterTime">
+                    添加时间
+                </th>
+                <th data-order-field="flastlogintime">
+                    修改时间
+                </th>
+
+            </tr>
+            </thead>
+            <tbody th:if="${not #lists.isEmpty(openApi)}">
+            <tr th:each="api,apiStat : ${openApi}">
+                <td>
+                    <input type="checkbox" th:name="${api.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${api.fuid}"></td>
+                <td th:text="${api.fid}"></td>
+                <td th:text="${api.fstatus==1?'正常':'禁用'}"></td>
+                <td th:text="${api.fapikey}"></td>
+                <td th:text="${api.fsecretkey}"></td>
+                <td th:text="${api.fopenrate==1?'开启':'没有开启'}"></td>
+                <td th:text="${api.frate}"></td>
+                <td th:text="${#dates.format(api.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${#dates.format(api.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>rocket_parent</artifactId>
+        <groupId>com.rocket</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>service</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <skip_maven_deploy>true</skip_maven_deploy>
+    </properties>
+
+    <modules>
+        <module>service_common</module>
+        <module>service_user</module>
+        <module>service_entrust</module>
+        <module>service_match</module>
+        <module>service_activity</module>
+        <module>service_admin</module>
+        <module>service_market</module>
+        <module>service_coin</module>
+    </modules>
+</project>

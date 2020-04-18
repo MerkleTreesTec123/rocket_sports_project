@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FLogUserActionMapper" >
+
+  <sql id="logColumn">
+  	  fid,
+  	  fuid, 
+      ftype, 
+      fdatatype, 
+      fcapitaltype, 
+      fdata, 
+      ffees,
+      fcontent, 
+      fip, 
+      fupdatetime,
+      fcreatetime
+  </sql>
+
+  <insert id="insert" parameterType="FLogUserAction" keyProperty="fid">
+    insert into f_log_user_action (
+      fuid, 
+      ftype, 
+      fdatatype, 
+      fcapitaltype, 
+      fdata, 
+      ffees,
+      fcontent, 
+      fip, 
+      fupdatetime,
+      fcreatetime
+    ) values (
+      #{fuid,jdbcType=INTEGER}, 
+      #{ftype,jdbcType=INTEGER}, 
+      #{fdatatype,jdbcType=INTEGER}, 
+      #{fcapitaltype,jdbcType=INTEGER}, 
+      #{fdata,jdbcType=DECIMAL}, 
+      #{ffees,jdbcType=DECIMAL}, 
+      #{fcontent,jdbcType=VARCHAR}, 
+      #{fip,jdbcType=VARCHAR}, 
+      #{fupdatetime,jdbcType=TIMESTAMP}),
+      #{fcreatetime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="getPageList" resultType="FLogUserAction" parameterType="java.util.Map">
+    select <include refid="logColumn" />
+    from f_log_user_action
+    where 1=1
+    <if test="keyword != null">
+    and fuid = #{keyword,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null">
+    and ftype = #{type,jdbcType=VARCHAR}
+    </if>
+	<if test="beginDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d')]]>
+	</if>
+	<if test="endDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') < date_format(#{endDate},'%Y-%m-%d')]]>
+	</if>    
+	order by ${orderField} ${orderDirection}
+	limit #{offset},#{limit}
+  </select>
+  
+  <select id="countPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(fid)
+    from f_log_user_action
+    where 1=1
+    <if test="keyword != null">
+    and fuid = #{keyword,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null">
+      and ftype = #{type,jdbcType=VARCHAR}
+    </if>
+	<if test="beginDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') >= date_format(#{beginDate},'%Y-%m-%d')]]>
+	</if>
+	<if test="endDate != null">
+		<![CDATA[and date_format(fcreatetime,'%Y-%m-%d') < date_format(#{endDate},'%Y-%m-%d')]]>
+	</if>    
+  </select>
+  
+  <select id="selectVIP6ByUser" resultType="FLogUserAction" parameterType="java.util.Map">
+  	select <include refid="logColumn" /> 
+  	from f_log_user_action
+  	where ftype = #{ftype} and fuid = #{fuid}
+  </select>
+
+
+    <select id="getLoginIpPageList" resultType="FLogUserAction" parameterType="java.util.Map">
+        select v_temp.fip, v_temp.num FROM
+        (select fip, count(*) as num
+        from f_log_user_action where ftype = 2
+        <if test="keyword != null">
+            and fip = #{keyword}
+        </if>
+        <if test="beginDate != null">
+            <![CDATA[and fcreatetime >= #{beginDate} ]]>
+        </if>
+        <if test="endDate != null">
+            <![CDATA[and fcreatetime < #{endDate} ]]>
+        </if>
+        group by fip
+        ) v_temp
+        ORDER BY v_temp.num desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="countLoginIpPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) FROM
+        (select fip, count(*) as num
+        from f_log_user_action where ftype = 2
+        <if test="keyword != null">
+            and fip = #{keyword}
+        </if>
+        <if test="beginDate != null">
+            <![CDATA[and fcreatetime >= #{beginDate} ]]>
+        </if>
+        <if test="endDate != null">
+            <![CDATA[and fcreatetime < #{endDate} ]]>
+        </if>
+        group by fip
+        ) v_temp
+    </select>
+</mapper>

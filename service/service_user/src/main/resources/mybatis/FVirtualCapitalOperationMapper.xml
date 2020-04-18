@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.user.dao.FVirtualCapitalOperationMapper">
+    <resultMap id="BaseResultMap" type="com.qkwl.service.user.model.FVirtualCapitalOperationDO">
+        <id column="fid" jdbcType="INTEGER" property="fid"/>
+        <result column="fuid" jdbcType="INTEGER" property="fuid"/>
+        <result column="fcoinid" jdbcType="INTEGER" property="fcoinid"/>
+        <result column="fcreatetime" jdbcType="TIMESTAMP" property="fcreatetime"/>
+        <result column="famount" jdbcType="DECIMAL" property="famount"/>
+        <result column="ffees" jdbcType="DECIMAL" property="ffees"/>
+        <result column="fbtcfees" jdbcType="DECIMAL" property="fbtcfees"/>
+        <result column="ftype" jdbcType="INTEGER" property="ftype"/>
+        <result column="fstatus" jdbcType="INTEGER" property="fstatus"/>
+        <result column="fupdatetime" jdbcType="TIMESTAMP" property="fupdatetime"/>
+        <result column="fwithdrawaddress" jdbcType="VARCHAR" property="fwithdrawaddress"/>
+        <result column="frechargeaddress" jdbcType="VARCHAR" property="frechargeaddress"/>
+        <result column="funiquenumber" jdbcType="VARCHAR" property="funiquenumber"/>
+        <result column="fconfirmations" jdbcType="INTEGER" property="fconfirmations"/>
+        <result column="fhasowner" jdbcType="BIT" property="fhasowner"/>
+        <result column="fblocknumber" jdbcType="INTEGER" property="fblocknumber"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="fagentid" jdbcType="INTEGER" property="fagentid"/>
+        <result column="fplatform" jdbcType="INTEGER" property="fplatform"/>
+        <result column="memo" jdbcType="VARCHAR" property="memo"/>
+    </resultMap>
+
+    <sql id="operationColumn">fid, fuid, fcoinid, fcreatetime, famount, ffees, ftype, fstatus, fupdatetime,
+    fwithdrawaddress, frechargeaddress, funiquenumber, fconfirmations, fhasowner, fbtcfees, fagentid,
+    fblocknumber, version, fsource, fplatform, memo</sql>
+
+    <select id="getPageVirtualCapitalOperation" resultType="com.qkwl.service.user.model.FVirtualCapitalOperationDO" parameterType="java.util.Map">
+        select
+        <include refid="operationColumn"/>
+        from f_virtual_capital_operation
+        where
+        fuid = #{fuid,jdbcType=INTEGER} and
+        ftype = #{ftype,jdbcType=INTEGER} and
+        fcoinid = #{fcoinid,jdbcType=INTEGER}
+        <if test="begindate != null">
+            <![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") >= #{begindate,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="enddate != null">
+            <![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") <= #{enddate,jdbcType=VARCHAR}]]>
+        </if>
+        order by fcreatetime desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="countVirtualCapitalOperation" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(fid)
+        from f_virtual_capital_operation
+        where
+        fuid = #{fuid,jdbcType=INTEGER} and
+        ftype = #{ftype,jdbcType=INTEGER}
+        <if test="fcoinid != null">
+            and fcoinid = #{fcoinid,jdbcType=INTEGER}
+        </if>
+        <if test="begindate != null">
+            <![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") >= #{begindate,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="enddate != null">
+            <![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") <= #{enddate,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="fstatus != null">
+            and fstatus = #{fstatus,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="getVirtualWalletWithdrawTimes" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT
+            count(fid)
+        FROM f_virtual_capital_operation
+        WHERE
+            fuid = #{fuid,jdbcType=INTEGER} AND
+            ftype = 2 AND
+            DATE_FORMAT(fcreatetime, "%Y-%m-%d") = DATE_FORMAT(now(), "%Y-%m-%d")
+    </select>
+    <select id="getDayWithdrawCny" resultType="java.math.BigDecimal">
+        SELECT
+            IFNULL(sum(famount), 0)
+        FROM f_virtual_capital_operation
+        WHERE
+            fuid = #{fuid,jdbcType=INTEGER}
+            AND ftype = 2
+            AND DATE_FORMAT(fcreatetime, "%Y-%m-%d") = DATE_FORMAT(now(), "%Y-%m-%d")
+    </select>
+    <select id="selectByTxid" resultType="com.qkwl.service.user.model.FVirtualCapitalOperationDO">
+        select
+        <include refid="operationColumn"/>
+        from f_virtual_capital_operation where funiquenumber = #{funiquenumber}
+    </select>
+
+    <!-- Base -->
+
+    <insert id="insert" parameterType="com.qkwl.service.user.model.FVirtualCapitalOperationDO" keyProperty="fid">
+        INSERT INTO f_virtual_capital_operation (
+            fuid,
+            fcoinid,
+            fcreatetime,
+            famount,
+            ffees,
+            fbtcfees,
+            ftype,
+            fstatus,
+            fupdatetime,
+            fwithdrawaddress,
+            frechargeaddress,
+            funiquenumber,
+            fconfirmations,
+            fhasowner,
+            fblocknumber,
+            version,
+            fagentid,
+            fsource,
+            fplatform,
+            memo)
+        VALUES (
+            #{fuid,jdbcType=INTEGER},
+            #{fcoinid,jdbcType=INTEGER},
+            #{fcreatetime,jdbcType=TIMESTAMP},
+            #{famount,jdbcType=DECIMAL},
+            #{ffees,jdbcType=DECIMAL},
+            #{fbtcfees,jdbcType=DECIMAL},
+            #{ftype,jdbcType=INTEGER},
+            #{fstatus,jdbcType=INTEGER},
+            #{fupdatetime,jdbcType=TIMESTAMP},
+            #{fwithdrawaddress,jdbcType=VARCHAR},
+            #{frechargeaddress,jdbcType=VARCHAR},
+            #{funiquenumber,jdbcType=VARCHAR},
+            #{fconfirmations,jdbcType=INTEGER},
+            #{fhasowner,jdbcType=BIT},
+            #{fblocknumber,jdbcType=INTEGER},
+            #{version,jdbcType=INTEGER},
+            #{fagentid,jdbcType=INTEGER},
+            #{fsource,jdbcType=INTEGER},
+            #{fplatform,jdbcType=INTEGER},
+            #{memo,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.qkwl.service.user.model.FVirtualCapitalOperationDO">
+        UPDATE f_virtual_capital_operation
+        SET
+            fuid             = #{fuid,jdbcType=INTEGER},
+            fcoinid          = #{fcoinid,jdbcType=INTEGER},
+            fcreatetime      = #{fcreatetime,jdbcType=TIMESTAMP},
+            famount          = #{famount,jdbcType=DECIMAL},
+            ffees            = #{ffees,jdbcType=DECIMAL},
+            fbtcfees         = #{fbtcfees,jdbcType=DECIMAL},
+            ftype            = #{ftype,jdbcType=INTEGER},
+            fstatus          = #{fstatus,jdbcType=INTEGER},
+            fupdatetime      = #{fupdatetime,jdbcType=TIMESTAMP},
+            fwithdrawaddress = #{fwithdrawaddress,jdbcType=VARCHAR},
+            frechargeaddress = #{frechargeaddress,jdbcType=VARCHAR},
+            funiquenumber    = #{funiquenumber,jdbcType=VARCHAR},
+            fconfirmations   = #{fconfirmations,jdbcType=INTEGER},
+            fhasowner        = #{fhasowner,jdbcType=BIT},
+            fblocknumber     = #{fblocknumber,jdbcType=INTEGER},
+            version          = version + 1,
+            fagentid         = #{fagentid,jdbcType=INTEGER},
+            fsource          = #{fsource,jdbcType=INTEGER},
+            fplatform        = #{fplatform,jdbcType=INTEGER},
+            memo             = #{memo,jdbcType=VARCHAR}
+        WHERE
+            fid = #{fid,jdbcType=INTEGER} AND version = #{version,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="operationColumn"/>
+        from f_virtual_capital_operation
+        where
+        fid = #{fid,jdbcType=INTEGER}
+    </select>
+
+    <select id="getDayWithdrawCoin" resultType="java.math.BigDecimal">
+        SELECT
+            IFNULL(sum(famount), 0) + IFNULL(sum(ffees), 0) + IFNULL(sum(fbtcfees), 0)
+        FROM f_virtual_capital_operation
+        WHERE
+            fuid = #{fuid,jdbcType=INTEGER} AND fcoinid = #{fcoinid,jdbcType=INTEGER}
+            AND ftype = 2
+            AND DATE_FORMAT(fcreatetime, "%Y-%m-%d") = DATE_FORMAT(now(), "%Y-%m-%d")
+    </select>
+</mapper>

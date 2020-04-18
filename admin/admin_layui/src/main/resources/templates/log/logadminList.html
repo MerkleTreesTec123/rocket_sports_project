@@ -1,0 +1,66 @@
+<div class="layui-form" lay-href="/log/logadminList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">关键词[管理员UID,用户UID,操作模块]：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">创建时间：</label>
+            <div class="layui-input-inline">
+                <input name="beginDate" th:value="${beginDate }" class="layui-input" onclick="layui.laydate({elem: this,format: 'YYYY-MM-DD hh:mm:ss'})"
+                       style="width:160px;"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">至&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <div class="layui-input-inline">
+                <input name="endDate" th:value="${endDate }" class="layui-input" onclick="layui.laydate({elem: this,format: 'YYYY-MM-DD hh:mm:ss'})"
+                       style="width:160px;"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>管理员</th>
+                <th>会员UID</th>
+                <th>IP地址</th>
+                <th data-order-field="ftype">操作类型</th>
+                <th>数据类型</th>
+                <th>扩展类型</th>
+                <th>数据内容</th>
+                <th>描述</th>
+                <th data-order-field="fcreatetime">创建日期</th>
+                <th data-order-field="fupdatetime">更新日期</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log,iterStat : ${logadminList.data}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${log.fadmin_s}"></td>
+                <td th:text="${log.fuid}"></td>
+                <td th:text="${log.fip}"></td>
+                <td th:text="${log.ftype_s}"></td>
+                <td th:text="${log.fdatatype}"></td>
+                <td th:text="${log.fcapitaltype}"></td>
+                <td th:text="${log.fdata}"></td>
+                <td th:text="${log.fcontent}"></td>
+                <td th:text="${log.fcreatetime == null ? '':#dates.format(log.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${log.fupdatetime == null ? '':#dates.format(log.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${logadminList.totalPages}, lay-curr=${logadminList.currentPage}"></div>
+</div>

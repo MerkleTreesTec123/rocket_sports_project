@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.ValidateTemplateMapper" >
+
+  <sql id="templateColumn">id, send_type, business_type, platform, language, template, params, gmt_create,
+    gmt_modified, version</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from validate_template
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.qkwl.service.activity.model.ValidateTemplateDO" >
+    insert into validate_template (id, send_type, business_type, 
+      platform, language, template, params,
+      gmt_create, gmt_modified, version
+      )
+    values (#{id,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, #{businessType,jdbcType=VARCHAR},
+      #{platform,jdbcType=INTEGER}, #{language,jdbcType=INTEGER}, #{template,jdbcType=LONGVARCHAR}, #{params,jdbcType=VARCHAR},
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.activity.model.ValidateTemplateDO" >
+    update validate_template
+    set send_type = #{sendType,jdbcType=INTEGER},
+      business_type = #{businessType,jdbcType=VARCHAR},
+      platform = #{platform,jdbcType=INTEGER},
+      language = #{language,jdbcType=INTEGER},
+      template = #{template,jdbcType=LONGVARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="com.qkwl.service.activity.model.ValidateTemplateDO" parameterType="java.lang.Integer" >
+    select <include refid="templateColumn" />
+    from validate_template
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultType="com.qkwl.service.activity.model.ValidateTemplateDO" >
+    select <include refid="templateColumn" />
+    from validate_template
+  </select>
+
+  <select id="selectListByPage" resultType="com.qkwl.service.activity.model.ValidateTemplateDO" parameterType="java.util.Map">
+    select <include refid="templateColumn" />
+    from validate_template
+    where 1 = 1
+    <if test="orderField != null">
+      order by ${orderField} ${orderDirection}
+    </if>
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countListByPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(id)
+    from validate_template
+    where 1 = 1
+  </select>
+
+  <select id="selectTemplateByParams" resultType="com.qkwl.service.activity.model.ValidateTemplateDO" parameterType="java.util.Map" >
+    select <include refid="templateColumn" />
+    from validate_template
+    where 1=1
+    <if test="sendType != null">
+      and send_type = #{sendType,jdbcType=INTEGER}
+    </if>
+    <if test="platform != null">
+      and platform = #{platform,jdbcType=INTEGER}
+    </if>
+    <if test="businessType != null">
+      and business_type = #{businessType,jdbcType=VARCHAR}
+    </if>
+    <if test="language != null">
+      and language = #{language,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

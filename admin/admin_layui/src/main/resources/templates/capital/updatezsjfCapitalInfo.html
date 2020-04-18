@@ -1,0 +1,33 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="admin/updatezsjfCapitalBaseInfo.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">UID:</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="id" th:value="${capitalOperation.id}"/>
+            <input class="layui-input" name="userId" lay-verify="required number" th:disabled="${isUpdate}" th:value="${capitalOperation.uid}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号:</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="phone" th:disabled="${isUpdate}" th:value="${capitalOperation.phone}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱地址：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="email" th:disabled="${isUpdate}" th:value="${capitalOperation.email}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">充值金额：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" lay-verify="required" th:value="${capitalOperation.amount}" disabled="disabled"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">充值状态：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" lay-verify="required" th:value="${capitalOperation.status_s}" disabled="disabled"/>
+        </div>
+    </div>
+</div>

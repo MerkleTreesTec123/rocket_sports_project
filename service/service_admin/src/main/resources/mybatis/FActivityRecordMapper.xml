@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.admin.bc.dao.FActivityRecordMapper">
+
+	<sql id="activityRecordColumn">
+		fid, fuid,fcoinid, fstate,fintrouid, ftype, famount, frecharge, fremark, fcreatetime, version
+	</sql>
+
+	<insert id="insert" parameterType="FActivityRecord">
+		insert into f_activity_record (
+		fid, fuid,fcoinid, fstate, fintrouid, ftype,
+		famount, frecharge, fremark, fcreatetime,
+		version
+		) values (
+		#{fid,jdbcType=INTEGER}, #{fuid,jdbcType=INTEGER},#{fcoinid,jdbcType=INTEGER},#{fstate,jdbcType=INTEGER}, #{fintrouid,jdbcType=INTEGER}, #{ftype,jdbcType=INTEGER},
+		#{famount,jdbcType=DECIMAL}, #{frecharge,jdbcType=DECIMAL}, #{fremark,jdbcType=VARCHAR}, #{fcreatetime,jdbcType=TIMESTAMP},
+		#{version,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<select id="selectActivityRecordList" resultType="FActivityRecord" parameterType="java.util.Map">
+		select 
+			<include refid="activityRecordColumn" />
+		from f_activity_record
+		where 1=1
+		<if test="keyword != null">
+			and (f_activity_record.fuid = #{keyword} or f_activity_record.fintrouid = #{keyword})
+		</if>
+		<if test="ftype != null">
+			and f_activity_record.ftype = #{ftype}
+		</if>
+		order by ${orderField} ${orderDirection}
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="selectActivityRecordCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from f_activity_record
+		where 1=1
+		<if test="keyword != null">
+			and (f_activity_record.fuid = #{keyword} or f_activity_record.fintrouid = #{keyword})
+		</if>
+		<if test="ftype != null">
+			and f_activity_record.ftype = #{ftype}
+		</if>
+	</select>
+
+	<select id="selectByUserList" resultType="FActivityRecord" parameterType="java.util.Map">
+		select 
+			<include refid="activityRecordColumn" />
+		from f_activity_record
+		where 1=1
+			and f_activity_record.fuid = #{fuid}
+			and f_activity_record.ftype = #{ftype}
+	</select>
+	
+	<select id="selectByUserAmount" resultType="java.math.BigDecimal" parameterType="java.lang.Integer">
+		select IFNULL(sum(famount), 0)
+		from f_activity_record
+		where 1=1 and f_activity_record.fuid = #{fuid}
+			and f_activity_record.fstate = 2 and f_activity_record.fcoinid = #{fcoinid}
+	</select>
+
+</mapper>

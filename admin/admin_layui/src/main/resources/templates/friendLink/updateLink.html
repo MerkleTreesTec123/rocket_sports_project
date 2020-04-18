@@ -1,0 +1,35 @@
+<div class="layui-form layui-form-pane" lay-href="friendLink/updateLink.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${friendlink.fid}" />
+            <input class="layui-input" name="fname" lay-verify="required" th:value="${friendlink.fname}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型：</label>
+        <div class="layui-input-block">
+            <select type="combox" name="ftype" disabled="true">
+                <option th:each="v : ${linkTypeMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == friendlink.ftype}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">链接地址：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="furl" lay-verify="required" th:value="${friendlink.furl}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fdescription" lay-verify="required" th:value="${friendlink.fdescription}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">顺序：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="forder" lay-verify="required digits" th:value="${friendlink.forder}"/>
+        </div>
+    </div>
+</div>

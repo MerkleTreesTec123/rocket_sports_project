@@ -1,0 +1,46 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/createRewardcodebatch.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="ftype" lay-verify="required">
+				<option th:each="v : ${codetype}" th:value="${v.key }" th:text="${v.value}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">数量(金额)</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="famount" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">批次</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fbatch" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否限制使用</label>
+		<div class="layui-input-block">
+			<input type="checkbox" class="layui-input" name="fislimituse" th:checked="1" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">使用数</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fusenum" value="1" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">生成数量</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fgenerate" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">有效期至(不填表示永久有效)</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fusedate" onclick="layui.laydate({elem:this, istime:true, format:'YYYY-MM-DD hh:mm:ss'})"/>
+		</div>
+	</div>
+</div>

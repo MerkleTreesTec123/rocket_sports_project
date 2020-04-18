@@ -1,0 +1,38 @@
+<div class="layui-form" lay-href="admin/capitalOutList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+	<div class="layui-btn-box">
+
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th>商户订单号</th>
+					<th>收款行行号</th>
+					<th>收款人银行卡号</th>
+					<th>收款人姓名</th>
+					<th>金额</th>
+					<th>订单状态</th>
+					<th>订单创建时间</th>
+					<th>订单完成时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${queryItem != null}">
+					<td th:text="${queryItem.outOrderId}"></td>
+					<td th:text="${queryItem.payeeBankNum}"></td>
+					<td th:text="${queryItem.payeeBankCardNum}"></td>
+					<td th:text="${queryItem.payeeName}"></td>
+					<td th:text="${queryItem.amount}"></td>
+					<td th:text="${queryItem.orderStatus}"></td>
+					<td th:text="${queryItem.orderCreateAt}"></td>
+					<td th:text="${queryItem.orderFinishAt}"></td>
+				</tr>
+				<tr th:if="${queryItem == null}">
+					<td colspan="8">当前记录不支持在线状态查询！</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

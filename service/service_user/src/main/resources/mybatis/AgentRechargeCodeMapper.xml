@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.AgentRechargeCodeMapper" >
+
+  <sql id="codeColumn">id, uid, coin_id, code, amount, status, gmt_create, gmt_modified, gmt_expiry,
+    version,admin_id</sql>
+
+
+  <update id="updateByPrimaryKey" parameterType="AgentRechargeCode" >
+    update agent_recharge_code
+    set uid = #{uid,jdbcType=INTEGER},
+      coin_id = #{coinId,jdbcType=INTEGER},
+      code = #{code,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      gmt_expiry = #{gmtExpiry,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="AgentRechargeCode" parameterType="java.lang.Integer" >
+    select <include refid="codeColumn" />
+    from agent_recharge_code
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByCode" resultType="AgentRechargeCode" parameterType="java.lang.String" >
+    select <include refid="codeColumn" />
+    from agent_recharge_code
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPage" resultType="AgentRechargeCode" parameterType="java.util.Map">
+    select <include refid="codeColumn" />
+    from agent_recharge_code
+    where 1 = 1
+    <if test="uid != null">
+      and uid = #{uid}
+    </if>
+    <if test="coinId != null">
+      and coin_id = #{coinId}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="adminId != null">
+      and admin_id = #{adminId}
+    </if>
+    <if test="begindate != null">
+      <![CDATA[and DATE_FORMAT(gmt_modified,"%Y-%m-%d") >= #{begindate,jdbcType=VARCHAR}]]>
+    </if>
+    <if test="enddate != null">
+      <![CDATA[and DATE_FORMAT(gmt_modified,"%Y-%m-%d") <= #{enddate,jdbcType=VARCHAR}]]>
+    </if>
+    <if test="orderField != null">
+      order by ${orderField} ${orderDirection}
+    </if>
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countByPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(id)
+    from agent_recharge_code
+    where 1 = 1
+    <if test="uid != null">
+      and uid = #{uid}
+    </if>
+    <if test="coinId != null">
+      and coin_id = #{coinId}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="begindate != null">
+      <![CDATA[and DATE_FORMAT(gmt_modified,"%Y-%m-%d") >= #{begindate,jdbcType=VARCHAR}]]>
+    </if>
+    <if test="enddate != null">
+      <![CDATA[and DATE_FORMAT(gmt_modified,"%Y-%m-%d") <= #{enddate,jdbcType=VARCHAR}]]>
+    </if>
+    <if test="adminId != null">
+      and admin_id = #{adminId}
+    </if>
+  </select>
+
+</mapper>

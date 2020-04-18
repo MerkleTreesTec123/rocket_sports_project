@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.entrust.dao.FEntrustHistoryMapper">
+
+	<sql id="entrustHistoryColumns">
+		fid, fuid, ftradeid, fbuycoinid, fsellcoinid, fstatus, ftype, flast, fprize, fcount, famount,
+		fsuccessamount, fleftcount, fleftfees, ffees,
+		fmatchtype, fsource, fhuobientrustid, fhuobiaccountid, flastupdatTime,
+		fcreateTime, fagentid, fentrustid
+	</sql>
+
+	<select id="selectById" resultType="EntrustHistoryDO">
+		select
+		<include refid="entrustHistoryColumns" />
+		from f_entrust_history where fuid = #{fuid} and fid = #{fid}
+	</select>
+
+	<select id="selectByEntrustId" resultType="EntrustHistoryDO">
+		select
+		<include refid="entrustHistoryColumns" />
+		from f_entrust_history where fuid = #{fuid} and fentrustid = #{fentrustid}
+	</select>
+
+	<select id="selectPageList" resultType="EntrustHistoryDO" parameterType="java.util.Map">
+		select
+		<include refid="entrustHistoryColumns" />
+		from f_entrust_history
+		where 1=1
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="ftradeid != null">
+			and ftradeid = #{ftradeid}
+		</if>
+		<if test="fagentid != null">
+			and fagentid = #{fagentid}
+		</if>
+		<if test="stateList != null">
+			and fstatus in
+			<foreach collection="stateList" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="begindate != null">
+			<![CDATA[and fcreatetime >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+			<![CDATA[and fcreatetime <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+		order by ${orderField} desc
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="selectPageCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from f_entrust_history
+		where 1=1
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="ftradeid != null">
+			and ftradeid = #{ftradeid}
+		</if>
+		<if test="fagentid != null">
+			and fagentid = #{fagentid}
+		</if>
+		<if test="stateList != null">
+			and fstatus in
+			<foreach collection="stateList" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="begindate != null">
+			<![CDATA[and fcreatetime >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+			<![CDATA[and fcreatetime <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.coin.mapper.FVirtualCapitalOperationMapper">
+ 
+  <sql id="operationColumn">
+  	fid, fuid, fcoinid, fcreatetime, famount, ffees, ftype, fstatus, fupdatetime, 
+    fwithdrawaddress, frechargeaddress, funiquenumber, fconfirmations, fhasowner, fblocknumber, version, fagentid, fsource, tx_time
+  </sql>
+
+  <select id="countVirtualCapitalOperation" resultType="java.lang.Integer" parameterType="java.util.Map">
+  	select count(fid)
+	from f_virtual_capital_operation
+	where
+	fuid = #{fuid,jdbcType=INTEGER} and
+	ftype = #{ftype,jdbcType=INTEGER}
+	<if test="fcoinid != null">
+		and fcoinid = #{fcoinid,jdbcType=INTEGER}
+	</if>
+	<if test="fstatus != null">
+		and fstatus = #{fstatus,jdbcType=INTEGER}
+	</if>
+  </select>
+
+  <select id="selectByTxid" resultType="FVirtualCapitalOperationDTO" >
+   	select <include refid="operationColumn" /> from f_virtual_capital_operation where funiquenumber = #{funiquenumber}
+  </select>
+
+  <insert id="insert" parameterType="FVirtualCapitalOperationDTO" keyProperty="fid">
+    insert into f_virtual_capital_operation (
+    	fuid, 
+    	fcoinid, 
+      	fcreatetime, 
+      	famount, 
+      	ffees, 
+      	ftype, 
+      	fstatus, 
+      	fupdatetime, 
+      	fwithdrawaddress, 
+      	frechargeaddress, 
+      	funiquenumber, 
+      	fconfirmations, 
+      	fhasowner, 
+      	fblocknumber, 
+      	version,
+      	fagentid,
+      	fsource,
+      	tx_time
+    ) values (
+    	#{fuid,jdbcType=INTEGER}, 
+    	#{fcoinid,jdbcType=INTEGER}, 
+      	#{fcreatetime,jdbcType=TIMESTAMP}, 
+      	#{famount,jdbcType=DECIMAL}, 
+      	#{ffees,jdbcType=DECIMAL}, 
+      	#{ftype,jdbcType=INTEGER}, 
+      	#{fstatus,jdbcType=INTEGER}, 
+      	#{fupdatetime,jdbcType=TIMESTAMP}, 
+      	#{fwithdrawaddress,jdbcType=VARCHAR}, 
+      	#{frechargeaddress,jdbcType=VARCHAR}, 
+      	#{funiquenumber,jdbcType=VARCHAR}, 
+      	#{fconfirmations,jdbcType=INTEGER}, 
+      	#{fhasowner,jdbcType=BIT}, 
+      	#{fblocknumber,jdbcType=INTEGER}, 
+      	#{version,jdbcType=INTEGER},
+      	#{fagentid,jdbcType=INTEGER},
+      	#{fsource,jdbcType=INTEGER},
+      	#{txTime,jdbcType=TIMESTAMP} )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FVirtualCapitalOperationDTO">
+    update f_virtual_capital_operation set 
+    	fuid = #{fuid,jdbcType=INTEGER},
+      	fcoinid = #{fcoinid,jdbcType=INTEGER},
+      	fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      	famount = #{famount,jdbcType=DECIMAL},
+      	ffees = #{ffees,jdbcType=DECIMAL},
+      	ftype = #{ftype,jdbcType=INTEGER},
+      	fstatus = #{fstatus,jdbcType=INTEGER},
+      	fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      	fwithdrawaddress = #{fwithdrawaddress,jdbcType=VARCHAR},
+      	frechargeaddress = #{frechargeaddress,jdbcType=VARCHAR},
+      	funiquenumber = #{funiquenumber,jdbcType=VARCHAR},
+      	fconfirmations = #{fconfirmations,jdbcType=INTEGER},
+      	fhasowner = #{fhasowner,jdbcType=BIT},
+      	fblocknumber = #{fblocknumber,jdbcType=INTEGER},
+      	version = version + 1,
+      	fagentid = #{fagentid,jdbcType=INTEGER},
+      	fsource = #{fsource,jdbcType=INTEGER}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+
+	<select id="seletcGoing" resultType="FVirtualCapitalOperationDTO" >
+		select <include refid="operationColumn" /> from f_virtual_capital_operation where
+		<![CDATA[fhasowner = 1 and ftype = 1 and fcoinid = #{fcoinid} and fstatus != 3 and fconfirmations < #{fconfirmations}]]>
+	</select>
+  
+</mapper>

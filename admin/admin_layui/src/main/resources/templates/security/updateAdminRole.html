@@ -1,0 +1,18 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="admin/updateAdminRole.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">管理员名称：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${fadmin.fid}"/>
+            <input class="layui-input layui-disabled" th:value="${fadmin.fname}" disabled="disabled"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">管理员角色：</label>
+        <div class="layui-input-block">
+            <select name="froleid">
+                <option th:each="type : ${roleMap }" th:value="${type.key}" th:text="${type.value}"
+                        th:selected="${type.key == fadmin.froleid}"></option>
+            </select>
+        </div>
+    </div>
+</div>

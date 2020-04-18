@@ -1,0 +1,90 @@
+<div class="layui-form" lay-href="admin/tradeTypeList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline layui-hide">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="/admin/insertTradeType.html"
+				lay-href="/admin/goTradeTypeJSP.html?url=trade/insertTradeType"  lay-target="dialog" lay-height="600" lay-width="800">新增</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="/admin/updateTradeType.html"
+				lay-href="/admin/goTradeTypeJSP.html?url=trade/updateTradeType" lay-checked="tradeId" lay-target="dialog" lay-height="600" lay-width="800">修改</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="/admin/updateTradeStop.html"
+				lay-href="/admin/goTradeTypeJSP.html?url=trade/updateTradeStop"  lay-checked="tradeId" lay-target="dialog" lay-height="300" lay-width="800">启用</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="/admin/updateTradeStatus.html&amp;status=1"
+				lay-href="/admin/updateTradeStatus.html?status=1" lay-checked="tradeId" lay-target="ajax" lay-tips="确定要禁用吗?">禁用</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="/admin/updateTradeStatus.html&amp;status=2"
+				lay-href="/admin/updateTradeStatus.html?status=2" lay-checked="tradeId" lay-target="ajax" lay-tips="确定要停盘吗?">停盘</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="/admin/updateTradeStatus.html&amp;status=3"
+				lay-href="/admin/updateTradeStatus.html?status=3" lay-checked="tradeId" lay-target="ajax" lay-tips="确定要开盘吗?">开盘</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>主键ID</th>
+					<th>交易板块</th>
+					<th>交易类型</th>
+					<th>排序</th>
+					<th>状态</th>
+					<th>买方币种</th>
+					<th>卖方币种</th>
+					<th>是否交易</th>
+					<th>是否停盘</th>
+					<th>开盘时间</th>
+					<th>停盘时间</th>
+					<th>买手续费</th>
+					<th>卖手续费</th>
+					<th>涨跌停</th>
+					<th>涨跌幅</th>
+					<th>最小下单</th>
+					<th>最大下单</th>
+					<th>最小价格</th>
+					<th>最大价格</th>
+					<th>最小下单金额</th>
+					<th>数量偏移量</th>
+					<th>价格偏移量</th>
+					<th>交易小数位</th>
+					<th>开盘价格</th>
+					<th data-order-field="gmt_modified">更新时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="list : ${page.data}">
+					<td>
+						<input type="checkbox" th:name="${list.id}" lay-skin="primary" />
+					</td>
+					<td th:text="${list.id}"></td>
+					<td th:text="${list.blockName}"></td>
+					<td th:text="${list.typeName}"></td>
+					<td th:text="${list.sortId}"></td>
+					<td th:text="${statusMap[list.status]}"></td>
+					<td th:text="${coinTypeMap[list.buyCoinId]}"></td>
+					<td th:text="${coinTypeMap[list.sellCoinId]}"></td>
+					<td th:text="${list.isShare?'是':'否'}"></td>
+					<td th:text="${list.isStop?'是':'否'}"></td>
+					<td th:text="${list.openTime == null ? '':#dates.format(list.openTime,'HH:mm:ss')}"></td>
+					<td th:text="${list.stopTime == null ? '':#dates.format(list.stopTime,'HH:mm:ss')}"></td>
+					<td th:text="${#decimal.format(list.buyFee, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.sellFee, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.priceWave, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.priceRange, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.minCount, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.maxCount, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.minPrice, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.maxPrice, 1, 10)}"></td>
+					<td th:text="${#decimal.format(list.orderAmount, 1, 10)}"></td>
+					<td th:text="${list.amountOffset}"></td>
+					<td th:text="${list.priceOffset}"></td>
+					<td th:text="${list.digit}"></td>
+					<td th:text="${#decimal.format(list.openPrice, 1, 10)}"></td>
+					<td th:text="${list.gmtModified == null ? '':#dates.format(list.gmtModified, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.match.dao.FEntrustMapper" >
+  
+  <sql id="entrustColumns">
+  	 fid, fuid, ftradeid, fbuycoinid, fsellcoinid, fstatus, ftype, flast, flastamount, flastcount, fprize, fcount, famount, fsuccessamount, fleftcount, fleftfees, ffees,
+  	 fmatchtype, fsource, fhuobientrustid, fhuobiaccountid, flastupdatTime, fcreateTime, fagentid
+  </sql>
+  
+  <delete id="deleteByfId" parameterType="java.math.BigInteger" >
+    delete from f_entrust where fid = #{fid}
+  </delete>
+  
+  <update id="updateEntrust" parameterType="FEntrust" >
+    update f_entrust set 
+      	fstatus = #{fstatus},
+      	flast = #{flast},
+      	flastamount = #{flastamount},
+      	flastcount = #{flastcount},
+      	fsuccessamount = #{fsuccessamount},
+      	fleftcount = #{fleftcount},
+      	ffees = #{ffees},
+      	fhuobientrustid = #{fhuobientrustid},
+      	fhuobiaccountid = #{fhuobiaccountid},
+      	flastupdatTime = #{flastupdattime}
+    where fid = #{fid}
+  </update>
+  
+  <select id="selectEntrust" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where fid = #{fid} for update
+  </select>
+  
+  <select id="selectGoingBuyEntrust" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where ftradeid = #{ftradeid} and ftype = 0 and (fstatus = 1 or fstatus = 2) order by fprize desc limit 0,#{max}
+  </select>
+
+    <select id="selectGoingBuyEntrustByApi" resultType = "FEntrust">
+        select <include refid="entrustColumns"/> from f_entrust where fuid = 10687 and fsource = 3 and ftradeid = #{ftradeid} and ftype = 0 and (fstatus = 1 or fstatus = 2) order by fprize desc limit 0,#{max}
+    </select>
+  
+  <select id="selectGoingSellEntrust" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where ftradeid = #{ftradeid} and ftype = 1 and (fstatus = 1 or fstatus = 2) order by fprize asc limit 0,#{max}
+  </select>
+
+    <select id="selectGoingSellEntrustByApi" resultType = "FEntrust">
+      select <include refid="entrustColumns"/> from f_entrust where fuid = 10719 and fsource = 3 and ftradeid = #{ftradeid} and ftype = 1 and (fstatus = 1 or fstatus = 2) order by fprize asc limit 0,#{max}
+    </select>
+  
+  <select id="selectWaitCancelEntrust" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where ftradeid = #{ftradeid} and fstatus = 4 limit 0,#{max}
+  </select>
+  
+  <select id="selectHistoryEntrust" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where ftradeid = #{ftradeid} and (fstatus = 3 or fstatus = 5) limit 0,#{max}
+  </select>
+</mapper>

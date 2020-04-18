@@ -1,0 +1,213 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+     lay-href="admin/usercapital.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">会员UID：</label>
+            <div class="layui-input-inline">
+                <input name="keyword" th:value="${keyword }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <div class="layui-btn-box" th:if="${not #lists.isEmpty(keyword)}">
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateUserCapital.html"
+                th:attr="lay-href='capital/goCapitalPage.html?url=query/updateUserCapital&amp;uid='+${keyword }" lay-target="dialog" lay-width="600"
+                lay-height="400">修改平衡
+        </button>
+    </div>
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: auto;">显示充提统计：</label>
+            <div class="layui-input-inline" style="width: auto;">
+                <input type="checkbox" name="showRW" th:checked="${showRW}"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: auto;">显示交易统计：</label>
+            <div class="layui-input-inline" style="width: auto;">
+                <input type="checkbox" name="showTrade" th:checked="${showTrade}"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: auto;">显示资产平衡统计：</label>
+            <div class="layui-input-inline" style="width: auto;">
+                <input type="checkbox" name="showBalance" th:checked="${showBalance}"/>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div style="display: inline-block;">
+        <div>用户库存统计</div>
+        <div class="layui-conten-box" style="display: inline-block;">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>币种</th>
+                    <th>可用量</th>
+                    <th>冻结量</th>
+                </tr>
+                </thead>
+                <tbody lay-height="260px">
+                <tr th:if="${vwalletList != null}" th:each="list : ${vwalletList}">
+                    <td th:text="${list.coinName}"></td>
+                    <td th:text="${list.total == null ? '':#decimal.format(list.total, 1, 10)}"></td>
+                    <td th:text="${list.frozen == null ? '':#decimal.format(list.frozen, 1, 10)}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="display: inline-block;">
+        <div>用户充提统计</div>
+        <div class="layui-conten-box" style="display: inline-block;">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>币种</th>
+                    <th>充值</th>
+                    <th>提现</th>
+                </tr>
+                </thead>
+                <tbody lay-height="260px">
+                <tr th:if="${rwList != null}" th:each="list : ${rwList}">
+                    <td th:text="${list.type}"></td>
+                    <td th:text="${list.recharge == null ? '':#decimal.format(list.recharge, 1, 10)}"></td>
+                    <td th:text="${list.withdraw == null ? '':#decimal.format(list.withdraw, 1, 10)}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="display: inline-block;">
+        <div>用户交易统计</div>
+        <div class="layui-conten-box" style="display: inline-block;">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>币种</th>
+                    <th>买入金额</th>
+                    <th>卖出金额</th>
+                    <th>买入数量</th>
+                    <th>卖出数量</th>
+                </tr>
+                </thead>
+                <tbody lay-height="260px">
+                <tr th:if="${tradeList != null}" th:each="list : ${tradeList}">
+                    <td th:text="${list.type}"></td>
+                    <td th:text="${list.buyamount == null ? '':#decimal.format(list.buyamount, 1, 10)}"></td>
+                    <td th:text="${list.sellamount == null ? '':#decimal.format(list.sellamount, 1, 10)}"></td>
+                    <td th:text="${list.buycount == null ? '':#decimal.format(list.buycount, 1, 10)}"></td>
+                    <td th:text="${list.sellcount == null ? '':#decimal.format(list.sellcount, 1, 10)}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <div>用户虚拟币冻结平衡统计(计算结果 = 提现冻结 + 手工冻结数量 + 交易冻结 + PUSH冻结)
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th width="70">币种</th>
+                <th>提现冻结</th>
+                <th>手工冻结数量</th>
+                <th>交易冻结</th>
+                <th>币币交易冻结</th>
+                <th>PUSH冻结</th>
+                <th>理财冻结</th>
+                <th>计算结果</th>
+                <th>剩余冻结</th>
+                <th>是否平衡</th>
+            </tr>
+            </thead>
+            <tbody lay-height="280px">
+            <tr th:if="${balanceFrozen != null}" th:each="list : ${balanceFrozen}">
+                <td th:text="${list.type}"></td>
+                <td th:text="${list.frozenCoin == null ? '':#decimal.format(list.frozenCoin, 1, 10)}"></td>
+                <td th:text="${list.frozenWork == null ? '':#decimal.format(list.frozenWork, 1, 10)}"></td>
+                <td th:text="${list.frozenTrade == null ? '':#decimal.format(list.frozenTrade, 1, 10)}"></td>
+                <td th:text="${list.frozenTradeCoin == null ? '':#decimal.format(list.frozenTradeCoin, 1, 10)}"></td>
+                <td th:text="${list.pushfrozen == null ? '':#decimal.format(list.pushfrozen, 1, 10)}"></td>
+                <td th:text="${list.frozenFinances == null ? '':#decimal.format(list.frozenFinances, 1, 10)}"></td>
+                <td th:text="${list.frozenplan == null ? '':#decimal.format(list.frozenplan, 1, 10)}"></td>
+                <td th:text="${list.frozen == null ? '':#decimal.format(list.frozen, 1, 10)}"></td>
+                <td th:text="${list.isFrozenBalance ? '平衡':'未平'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr/>
+    <div>用户虚拟币可用平衡统计(计算结果 = 充值数量 + 手工充值数量 + 手工冻结数量 + 兑换码数量 - 提现数量 [( - 买入金额 + 卖出金额) OR ( + 买入数量 - 卖出数量)] - ICO支付 + ICO获得 -
+        交易手续费 + PUSH转入 -
+        PUSH转出 + 理财冻结 + 理财收益 + 活动赠送)
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th width="70">币种</th>
+                <th>充值数量</th>
+                <th>手工充值数量</th>
+                <th>兑换码数量</th>
+                <th>提现数量</th>
+                <th>买入(数量/金额)</th>
+                <th>卖出(数量/金额)</th>
+                <th>交易手续费</th>
+                <th>币币交易花费</th>
+                <th>币币交易收入</th>
+                <th>手续费(币币交易)</th>
+                <th>VIP6</th>
+                <th>PUSH转入</th>
+                <th>PUSH转出</th>
+                <th>理财收益</th>
+                <th>提现冻结</th>
+                <th>交易冻结</th>
+                <th>币币交易冻结</th>
+                <th>PUSH冻结</th>
+                <th>理财冻结</th>
+                <th>计算结果</th>
+                <th>剩余数量</th>
+                <th>是否平衡</th>
+            </tr>
+            </thead>
+            <tbody lay-height="280px">
+            <tr th:if="${balanceCoin != null}" th:each="list : ${balanceCoin}">
+                <td th:text="${list.type}"></td>
+                <td th:text="${list.recharge == null ? '':#decimal.format(list.recharge, 1, 10)}"></td>
+                <td th:text="${list.rechargeWork == null ? '':#decimal.format(list.rechargeWork, 1, 10)}"></td>
+                <td th:text="${list.rewardCoin == null ? '':#decimal.format(list.rewardCoin, 1, 10)}"></td>
+                <td th:text="${list.withdraw == null ? '':#decimal.format(list.withdraw, 1, 10)}"></td>
+                <td th:text="${list.buy == null ? '':#decimal.format(list.buy, 1, 10)}"></td>
+                <td th:text="${list.sell == null ? '':#decimal.format(list.sell, 1, 10)}"></td>
+                <td th:text="${list.fees == null ? '':#decimal.format(list.fees, 1, 10)}"></td>
+                <td th:text="${list.coinTradeBuy == null ? '':#decimal.format(list.coinTradeBuy, 1, 10)}"></td>
+                <td th:text="${list.coinTradeSell == null ? '':#decimal.format(list.coinTradeSell, 1, 10)}"></td>
+                <td th:text="${list.coinTradeFee == null ? '':#decimal.format(list.coinTradeFee, 1, 10)}"></td>
+                <td th:text="${list.vip6 == null ? '':#decimal.format(list.vip6, 1, 10)}"></td>
+                <td th:text="${list.pushin == null ? '':#decimal.format(list.pushin, 1, 10)}"></td>
+                <td th:text="${list.pushout == null ? '':#decimal.format(list.pushout, 1, 10)}"></td>
+                <td th:text="${list.financesCountSend == null ? '':#decimal.format(list.financesCountSend, 1, 10)}"></td>
+                <td th:text="${list.frozenCoin == null ? '':#decimal.format(list.frozenCoin, 1, 10)}"></td>
+                <td th:text="${list.frozenTrade == null ? '':#decimal.format(list.frozenTrade, 1, 10)}"></td>
+                <td th:text="${list.frozencountCoin == null ? '':#decimal.format(list.frozencountCoin, 1, 10)}"></td>
+                <td th:text="${list.pushfrozen == null ? '':#decimal.format(list.pushfrozen, 1, 10)}"></td>
+                <td th:text="${list.frozenFinances == null ? '':#decimal.format(list.frozenFinances, 1, 10)}"></td>
+                <td th:text="${list.freeplan == null ? '':#decimal.format(list.freeplan, 1, 10)}"></td>
+                <td th:text="${list.free == null ? '':#decimal.format(list.free, 1, 10)}"></td>
+                <td th:text="${list.isFreeBalance ? '平衡':'未平'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="usercaptial" class="layui-hide"></div>
+<script type="application/javascript">
+    var $ = layui.jquery;
+    $(function () {
+        $("#usercaptial").parents(".layui-tab-item").css("overflow-y", "auto").css("height", "100%");
+    });
+</script>

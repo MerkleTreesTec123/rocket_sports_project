@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FEntrustHistoryMapper" >
+  
+  <resultMap id="allInfo" type="java.util.Map">
+	<result column="buyCount" property="buyCount" jdbcType="INTEGER" />
+	<result column="sellCount" property="sellCount" jdbcType="INTEGER" />
+	<result column="sumBuy" property="sumBuy" jdbcType="DECIMAL" />
+	<result column="sumSell" property="sumSell" jdbcType="DECIMAL" />
+	<result column="feesBuy" property="feesBuy" jdbcType="DECIMAL" />
+	<result column="feesSell" property="feesSell" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <resultMap id="personAllInfo" type="java.util.Map">
+	<result column="buyCount" property="buyCount" jdbcType="INTEGER" />
+	<result column="sellCount" property="sellCount" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="entrustHistoryColumns">
+  	 fid, fuid, ftradeid, fbuycoinid, fsellcoinid, fstatus, ftype, flast, fprize, fcount, famount, fsuccessamount, fleftcount, fleftfees, ffees,
+  	 fmatchtype, fsource, fhuobientrustid, fhuobiaccountid, flastupdattime, fcreatetime, fislever
+  </sql>
+  
+  <select id="selectTotal" resultMap="allInfo">
+  	select 
+	sum(case when ftype = 0 then 1 else 0 end ) as buyCount , 
+	sum(case when ftype = 1 then 1 else 0 end ) as sellCount, 
+	sum(case when ftype = 0 then fcount - fleftcount else 0 end ) as sumBuy , 
+	sum(case when ftype = 1 then fcount - fleftcount else 0 end ) as sumSell, 
+	sum(case when ftype = 0 then ffees else 0 end ) as feesBuy , 
+	sum(case when ftype = 1 then ffees else 0 end ) as feesSell
+	from f_entrust_history where ftradeId = #{ftradeId} and date_format(fcreatetime, "%Y-%m-%d") = #{fcreatetime} ;
+  </select>
+  
+  <select id="selectPerson" resultMap="personAllInfo">
+  	select 
+	sum(case when ftype = 0 then 1 else 0 end ) as buyCount , 
+	sum(case when ftype = 1 then 1 else 0 end ) as sellCount
+	from (select fuid, ftype from f_entrust_history where ftradeId = #{ftradeId} and date_format(fcreatetime, "%Y-%m-%d") = #{fcreatetime} group by fuid, ftype) as fen;
+  </select>
+
+
+	<select id="selectReport" resultType="ReportTrade" parameterType="java.util.Map">
+		<![CDATA[
+		SELECT
+			sum(trade_amount) AS trade_amount,
+			sum(trade_count) AS trade_count,
+			sum(trade_fee) AS trade_fee
+		FROM
+		(SELECT
+			ifnull(sum(fsuccessamount),0) as trade_amount,
+			ifnull(sum(fcount-fleftcount),0) as trade_count,
+  			ifnull(sum(ffees),0) as trade_fee
+		FROM
+			f_entrust_history
+		WHERE ftradeid = #{tradeId, jdbcType=INTEGER}
+		AND (fstatus = 3 or (fstatus = 5 and famount > 0))
+		AND ftype = #{type, jdbcType=INTEGER}
+		AND flastupdattime >= #{begin, jdbcType=VARCHAR}
+		AND flastupdattime < #{end, jdbcType=VARCHAR}
+		UNION ALL
+		SELECT
+			ifnull(sum(fsuccessamount),0) as trade_amount,
+			ifnull(sum(fcount-fleftcount),0) as trade_count,
+  			ifnull(sum(ffees),0) as trade_fee
+		FROM
+			f_entrust
+		WHERE ftradeid = #{tradeId, jdbcType=INTEGER}
+		AND (fstatus = 3 or fstatus = 2)
+		AND ftype = #{type, jdbcType=INTEGER}
+		AND flastupdattime >= #{begin, jdbcType=VARCHAR}
+		AND flastupdattime < #{end, jdbcType=VARCHAR}) v_temp
+		]]>
+	</select>
+</mapper>

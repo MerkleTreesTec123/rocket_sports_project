@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.validate.dao.ValidatePlatformMapper">
+
+    <sql id="platformColumn">id, name, domain, sign, sms_id, voice_sms_id, international_sms_id, email_id,
+    gmt_create, gmt_modified, version</sql>
+
+    <insert id="insert" parameterType="ValidatePlatformDO">
+    insert into validate_platform (name, domain,
+      sign, sms_id, voice_sms_id, 
+      international_sms_id, email_id, gmt_create, 
+      gmt_modified, version)
+    values (#{name,jdbcType=VARCHAR}, #{domain,jdbcType=VARCHAR},
+      #{sign,jdbcType=VARCHAR}, #{smsId,jdbcType=INTEGER}, #{voiceSmsId,jdbcType=INTEGER}, 
+      #{internationalSmsId,jdbcType=INTEGER}, #{emailId,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+
+    <update id="update" parameterType="ValidatePlatformDO">
+    update validate_platform
+    set name = #{name,jdbcType=VARCHAR},
+      domain = #{domain,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR},
+      sms_id = #{smsId,jdbcType=INTEGER},
+      voice_sms_id = #{voiceSmsId,jdbcType=INTEGER},
+      international_sms_id = #{internationalSmsId,jdbcType=INTEGER},
+      email_id = #{emailId,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+    <select id="select" resultType="ValidatePlatformDO" parameterType="java.lang.Integer">
+        select
+        <include refid="platformColumn"/>
+        from validate_platform
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAll" resultType="ValidatePlatformDO" >
+        select <include refid="platformColumn" />
+        from validate_platform
+    </select>
+
+    <select id="listPage" resultType="ValidatePlatformDO" parameterType="java.util.Map">
+        select
+        <include refid="platformColumn"/>
+        from validate_platform
+        where 1 = 1
+        <if test="orderField != null and orderDirection != null">
+            order by ${orderField} ${orderDirection}
+        </if>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="countPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*)
+    from validate_platform
+    where 1 = 1
+  </select>
+</mapper>

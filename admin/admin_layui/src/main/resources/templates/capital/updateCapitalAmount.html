@@ -1,0 +1,17 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/updateCapitalAmount.html">
+	<input type="hidden" name="capitaloperation.fid" th:value="${capitaloperation.fid}"/>
+	<div class="layui-form-item">
+		<label class="layui-form-label">类型：</label>
+		<div class="layui-input-block">
+			<select name="capitaloperation.ftype">
+				<option th:each="v : ${rechargeMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == capitaloperation.ftype}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">汇款金额：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="capitaloperation.famount" lay-verify="required" th:value="${capitaloperation.famount }"/>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,61 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="admin/virtualFinancesList.html">
+    <div class="layui-form-item layui-search-box layui-hide">
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addVirtualFinances.html"
+                    lay-href="admin/goVirtualFinancesJsp.html?url=activity/addVirtualFinances" lay-target="dialog"  lay-height="360" lay-width="600">新增
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateVirtualFinances.html"
+                    lay-href="admin/goVirtualFinancesJsp.html?url=activity/updateVirtualFinances" lay-checked="fid" lay-target="dialog" lay-height="360" lay-width="600">修改
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteVirtualFinances.html"
+                    lay-href="admin/deleteVirtualFinances.html" lay-checked="fid" lay-target="ajax" lay-tips="确定要删除吗?">删除
+            </button>
+        </div>
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/stateVirtualFinances.html?fstate=2"
+                    lay-href="admin/stateVirtualFinances.html?fstate=2" lay-checked="fid" lay-target="ajax" lay-tips="确定要禁用吗?">禁用
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/stateVirtualFinances.html?fstate=1"
+                    lay-href="admin/stateVirtualFinances.html?fstate=1" lay-checked="fid" lay-target="ajax" lay-tips="确定要启用吗?">启用
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>序号</th>
+                <th>币种</th>
+                <th>理财类型</th>
+                <th>冻结天数</th>
+                <th>年化利率</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${financesList}">
+                <td>
+                    <input type="checkbox" th:name="${list.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${state.count}"></td>
+                <td th:text="${coinMap[list.fcoinid]}"></td>
+                <td th:text="${list.fname}"></td>
+                <td th:text="${list.fdays}"></td>
+                <td th:text="${#decimal.format(list.frate,1,10)}"></td>
+                <td th:text="${list.fstate == 2 ? '禁用':'启用'}"></td>
+                <td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

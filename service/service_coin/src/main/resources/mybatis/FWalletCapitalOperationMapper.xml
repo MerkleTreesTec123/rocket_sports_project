@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.coin.mapper.FWalletCapitalOperationMapper">
+
+
+	<select id="countWalletCapitalOperation" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(fid)
+		from f_wallet_capital_operation
+		where
+		fuid = #{fuid,jdbcType=INTEGER} 
+		<if test="finouttype != null">
+			and finouttype = #{finouttype,jdbcType=INTEGER}
+		</if>
+		<if test="fstatus != null">
+			and fstatus = #{fstatus,jdbcType=INTEGER}
+		</if>		
+		<if test="begindate != null">
+   		<![CDATA[and fupdatetime >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+   		<![CDATA[and fupdatetime <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.ValidateSmsMapper" >
+
+  <insert id="insert" parameterType="com.qkwl.service.activity.model.ValidateSmsDO" >
+    insert into validate_sms (id, uid, phone, 
+      send_type, platform, template_id, 
+      status, gmt_create, gmt_send, 
+      version, content)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, 
+      #{sendType,jdbcType=INTEGER}, #{platform,jdbcType=INTEGER}, #{templateId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtSend,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.activity.model.ValidateSmsDO" >
+    update validate_sms
+    set uid = #{uid,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      send_type = #{sendType,jdbcType=INTEGER},
+      platform = #{platform,jdbcType=INTEGER},
+      template_id = #{templateId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_send = #{gmtSend,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="com.qkwl.service.activity.model.ValidateSmsDO" parameterType="java.lang.Integer" >
+    select id, uid, phone, send_type, platform, template_id, status, gmt_create, gmt_send, 
+    version, content
+    from validate_sms
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectBlackList" resultType="com.qkwl.service.activity.model.ValidateSmsDO" parameterType="java.lang.Integer" >
+    select v_temp.phone, v_temp.times from
+    (select phone, count(id) as times
+    from validate_sms
+    where DATE_FORMAT(gmt_create, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+          and template_id=1 and uid is null
+    group by phone) v_temp
+    where v_temp.times > #{times}
+  </select>
+
+</mapper>

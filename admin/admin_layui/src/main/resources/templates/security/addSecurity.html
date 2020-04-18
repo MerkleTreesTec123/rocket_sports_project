@@ -1,0 +1,23 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane"
+     lay-href="admin/saveSecurity.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限名称：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fparentid" th:value="${security.fid}"/>
+            <input type="hidden" name="fpriority" th:value="${(security.fpriority+1)}"/>
+            <input name="fname" class="layui-input" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">访问地址：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="furl" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fdescription"/>
+        </div>
+    </div>
+</div>

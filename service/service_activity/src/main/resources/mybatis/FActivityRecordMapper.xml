@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.activity.dao.FActivityRecordMapper">
+
+	<sql id="activityRecordColumn">
+		fid, fuid,fcoinid, fstate,fintrouid, ftype, famount, frecharge, fremark, fcreatetime, version
+	</sql>
+
+	<select id="selectActivityRecordList" resultType="FActivityRecord" parameterType="java.util.Map">
+		select 
+			<include refid="activityRecordColumn" />
+		from f_activity_record
+		where 1=1
+		<if test="fuid != null">
+			and (f_activity_record.fuid = #{fuid} or f_activity_record.fintrouid = #{fuid})
+		</if>
+		<if test="fstate != null">
+			and f_activity_record.fstate = #{fstate}
+		</if>
+		order by ${orderField} ${orderDirection}
+	</select>
+
+	<update id="updateStatusByPrimaryKey" parameterType="FActivityRecord">
+		UPDATE f_activity_record SET fstate = #{fstate,jdbcType=DECIMAL},
+			version = version +1
+		  where fid = #{fid,jdbcType=DECIMAL} and version = #{version,jdbcType=DECIMAL}
+	</update>
+
+</mapper>

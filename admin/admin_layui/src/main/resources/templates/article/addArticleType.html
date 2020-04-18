@@ -1,0 +1,38 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/saveArticleType.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">类型名称：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fname" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">类型ID：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="ftypeid" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">语言：</label>
+		<div class="layui-inline">
+			<input type="hidden" name="languageTypeLookup.id" lay-lookup="id" />
+			<input class="layui-input" lay-verify="required" name="languageTypeLookup.languageType" lay-lookup="languageType"
+				   readonly="readonly" />
+		</div>
+		<div class="layui-inline">
+			<i class="layui-icon layui-lookup" lay-href="admin/lookLanguageTypeList.html" onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">关键词：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fkeywords" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">描述：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fdescription" lay-verify="required"/>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.user.dao.UserCoinWalletMapper">
+
+  <sql id="userCoinWalletColumn">id, uid, coin_id, total, frozen, borrow, ico, gmt_create, gmt_modified</sql>
+  
+ 
+  <insert id="insert" parameterType="UserCoinWallet">
+    insert into user_coin_wallet (uid, coin_id,
+      total, frozen, borrow, ico,
+      gmt_create,gmt_modified)
+    values (#{uid,jdbcType=INTEGER}, #{coinId,jdbcType=INTEGER},
+      #{total,jdbcType=DECIMAL}, #{frozen,jdbcType=DECIMAL}, #{borrow,jdbcType=DECIMAL}, #{ico,jdbcType=DECIMAL},
+      #{gmtCreate,jdbcType=TIMESTAMP},#{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="UserCoinWallet">
+    update user_coin_wallet
+    set uid = #{uid,jdbcType=INTEGER},
+      coin_id = #{coinId,jdbcType=INTEGER},
+      total = #{total,jdbcType=DECIMAL},
+      frozen = #{frozen,jdbcType=DECIMAL},
+      borrow = #{borrow,jdbcType=DECIMAL},
+      ico = #{ico,jdbcType=DECIMAL},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByUidAndCoin" resultType="UserCoinWallet">
+    select <include refid="userCoinWalletColumn" />
+    from user_coin_wallet
+    where uid = #{uid} and coin_id = #{coinId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUidAndCoinLock" resultType="UserCoinWallet">
+    select <include refid="userCoinWalletColumn" />
+    from user_coin_wallet
+    where uid = #{uid} and coin_id = #{coinId} for update
+  </select>
+  
+  <select id="selectByUid" resultType="UserCoinWallet">
+    select wallet.*,coin.name as coinName,coin.short_name as shortName,coin.app_logo as logo
+    from user_coin_wallet wallet
+	LEFT JOIN system_coin_type coin on wallet.coin_id = coin.id
+    where uid = #{uid} and coin.status != 2 order by coin.sort_id
+  </select>
+
+  <select id="selectIeoBuyLog" resultType="UserCoinWallet">
+    SELECT SUM(`lock_amount`) AS total FROM `e_ieo_buy_log` WHERE uid = #{uid} AND `get_coin_id` = #{coinId}
+  </select>
+  
+  <select id="selectIeoInviteReward" resultType="UserCoinWallet">
+    SELECT SUM(`frozen`) as total FROM `e_ieo_invite_reward` WHERE uid = #{uid} AND `coin_id` = #{coinId}
+  </select>
+</mapper>

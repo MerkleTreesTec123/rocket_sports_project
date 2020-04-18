@@ -1,0 +1,41 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="admin/monthDataList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">统计日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="month" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD'})" th:value="${month }"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>充值</th>
+                <th>提现</th>
+                <th>买入</th>
+                <th>卖出</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="monthDate : ${monthDataList}">
+                    <td th:text="${monthDateStat.index + 1}"></td>
+                    <td th:text="${monthDate.name}"></td>
+                    <td th:text="${monthDate.recharge == null ? '':#decimal.format(monthDate.recharge, 1, 10)}"></td>
+                    <td th:text="${monthDate.withdraw == null ? '':#decimal.format(monthDate.withdraw, 1, 10)}"></td>
+                    <td th:text="${monthDate.buy == null ? '':#decimal.format(monthDate.buy, 1, 10)}"></td>
+                    <td th:text="${monthDate.sell == null ? '':#decimal.format(monthDate.sell, 1, 10)}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

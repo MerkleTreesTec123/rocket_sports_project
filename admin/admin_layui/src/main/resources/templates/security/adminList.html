@@ -1,0 +1,62 @@
+<div class="layui-form" lay-href="admin/adminList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">管理员名称：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addAdmin.html"
+                lay-href="admin/goAdmin.html?url=security/addAdmin" lay-target="dialog" lay-height="300" lay-width="400">新增
+        </button>
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/forbbinAdmin.html?status=2"
+                lay-href="admin/forbbinAdmin.html?status=2" lay-checked="uid" lay-target="ajax" lay-tips="确定要禁用吗?">禁用
+        </button>
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/forbbinAdmin.html?status=1"
+                lay-href="admin/forbbinAdmin.html?status=1" lay-checked="uid" lay-target="ajax" lay-tips="确定要解除禁用吗?">解除禁用
+        </button>
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateAdminPassword.html"
+                lay-href="admin/goAdmin.html?url=security/updateAdmin" lay-checked="uid" lay-target="dialog" lay-height="300" lay-width="400">修改密码
+        </button>
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateAdminRole.html"
+                lay-href="admin/goAdmin.html?url=security/updateAdminRole" lay-checked="uid" lay-target="dialog" lay-height="300" lay-width="400">修改角色
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>管理员Id</th>
+                <th>管理员名</th>
+                <th>状态</th>
+                <th>角色</th>
+                <th>券商</th>
+                <th>创建日期</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,listStart : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${list.fid}" lay-skin="primary" />
+                </td>
+                <td th:text="${list.fid}"></td>
+                <td th:text="${list.fname}"></td>
+                <td th:text="${list.fstatus_s}"></td>
+                <td th:text="${list.rolename}"></td>
+                <td th:text="${list.fagentid}"></td>
+                <td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

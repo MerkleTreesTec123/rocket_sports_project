@@ -1,0 +1,69 @@
+<div class="layui-form" lay-href="admin/findFuserByAddress.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">用户虚拟币地址</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">用户id</label>
+			<div class="layui-input-inline">
+				<input name="fuid" th:value="${fuid }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">虚拟币类型</label>
+			<div class="layui-input-inline">
+				<select name="ftype">
+					<option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+						th:selected="${type.key == ftype}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="160%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>用户id</th>
+					<th>地址类型</th>
+					<th>虚拟币类型</th>
+					<th>地址</th>
+					<th data-order-field="fcreatetime">创建时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="viraddress : ${vaddress}">
+					<td>
+						<input type="checkbox" th:name="${viraddress.fuid}" lay-skin="primary" />
+					</td>
+					<td th:text="${viraddress.fuid}"></td>
+					<td>充值地址</td>
+					<td th:text="${typeMap[viraddress.fcoinid]}"></td>
+					<td th:text="${viraddress.fadderess }"></td>
+					<td th:text="${viraddress.fcreatetime == null ? '':#dates.format(viraddress.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+				<tr th:each="viraddress : ${vwaddress}">
+					<td>
+						<input type="checkbox" th:name="${viraddress.fuid}" lay-skin="primary" />
+					</td>
+					<td th:text="${viraddress.fuid}"></td>
+					<td>提现地址</td>
+					<td th:text="${typeMap[viraddress.fcoinid]}"></td>
+					<td th:text="${viraddress.fadderess }"></td>
+					<td th:text="${viraddress.fcreatetime == null ? '':#dates.format(viraddress.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!--<div class="layui-laypage-box" th:attr="lay-pages=${userList.totalPages}, lay-curr=${userList.currentPage}"></div>-->
+</div>

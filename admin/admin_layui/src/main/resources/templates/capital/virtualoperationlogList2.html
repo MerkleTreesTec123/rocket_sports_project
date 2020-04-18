@@ -1,0 +1,115 @@
+<div class="layui-form" lay-href="admin/virtualoperationlogList2.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词[会员信息]</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">充值类型</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="ftype">
+					<option th:each="v:${typeMap}" th:text="${v.value}" th:value="${v.key}" th:selected="${ftype == v.key}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">币种类型</label>
+			<div class="layui-input-inline">
+				<select name="coinId">
+					<option th:each="v:${coinMap}" th:text="${v.value}" th:value="${v.key}" th:selected="${coinId == v.key}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<select name="status">
+					<option th:each="v:${statusMap}" th:text="${v.value}" th:value="${v.key}" th:selected="${status == v.key}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">开始时间</label>
+			<div class="layui-input-inline">
+				<input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">结束时间</label>
+			<div class="layui-input-inline">
+				<input name="endDate" th:value="${endDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addVirtualOperationLog"
+					lay-href="admin/goVirtualOperationLogJSP.html?isCNY=1&amp;url=capital/addVirtualOperationLog" lay-target="dialog" lay-height="450" lay-width="800">新增</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteVirtualOperationLog.html"
+					lay-href="admin/deleteVirtualOperationLog.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要删除吗?">删除</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/auditVirtualOperationLog.html"
+					lay-href="admin/auditVirtualOperationLog.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要审核吗?">审核</button>
+		</div>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/auditVirtualOperationLog.html"
+				lay-href="admin/sendVirtualOperationLog.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要发放冻结吗?">发放冻结</button>
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/auditVirtualOperationLog.html"
+					lay-href="admin/auditVirtualOperationLogAll.html" lay-checked="ids"  lay-filter="allChoose" lay-target="ajax" lay-tips="确定要审核吗?">批量审核</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/auditVirtualOperationLog.html"
+					lay-href="admin/sendVirtualOperationLogAll.html" lay-checked="ids"  lay-filter="allChoose" lay-target="ajax" lay-tips="确定要发放冻结吗?">批量发放</button>
+		</div>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/bindActivityRecord.html"
+				lay-href="admin/goVirtualOperationLogJSP.html?url=capital/bindActivityRecord" lay-target="dialog" lay-height="280"
+				lay-width="400">历史活动数据关联</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th><input type="checkbox" lay-skin="primary" lay-filter="allChoose" /></th>
+					<th>UID</th>
+					<th>登录名</th>
+					<th>是否关联活动</th>
+					<th>会员昵称</th>
+					<th>真实姓名</th>
+					<th>虚拟币类型</th>
+					<th>充值类型</th>
+					<th>状态</th>
+					<th data-order-field="famount">数量</th>
+					<th>备注</th>
+					<th>审核人</th>
+					<th data-order-field="fcreatetime">审核时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="list : ${virtualoperationlogList.data}">
+					<td>
+						<input type="checkbox" th:name="${list.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${list.fuid}"></td>
+					<td th:text="${list.floginname}"></td>
+					<td th:text="${list.activityId == null ? '未关联':'已关联'}"></td>
+					<td th:text="${list.fnickname}"></td>
+					<td th:text="${list.frealname}"></td>
+					<td th:text="${list.fcoinname}"></td>
+					<td th:text="${typeMap[list.ftype]}"></td>
+					<td th:text="${list.fstatus_s}"></td>
+					<td><span class="amount" th:text="${#decimal.format(list.famount, 1, 10)}"></span></td>
+					<td th:text="${list.finfo}"></td>
+					<td th:text="${list.fadminname}"></td>
+					<td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${virtualoperationlogList.totalPages}, lay-curr=${virtualoperationlogList.currentPage}"></div>
+</div>

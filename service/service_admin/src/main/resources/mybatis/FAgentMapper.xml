@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FAgentMapper" >
+
+  <sql id="agentColumn">fid, fname, fphone, fdomain, fremark, fcreatetime</sql>
+  
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from f_agent
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="FAgent" >
+    insert into f_agent (fname, fphone, 
+      fdomain, fremark, fcreatetime
+      )
+    values (#{fname,jdbcType=VARCHAR}, #{fphone,jdbcType=VARCHAR}, 
+      #{fdomain,jdbcType=VARCHAR}, #{fremark,jdbcType=VARCHAR}, #{fcreatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <update id="update" parameterType="FAgent" >
+    update f_agent
+    set fname = #{fname,jdbcType=VARCHAR},
+      fphone = #{fphone,jdbcType=VARCHAR},
+      fdomain = #{fdomain,jdbcType=VARCHAR},
+      fremark = #{fremark,jdbcType=VARCHAR},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectAll" resultType="FAgent" >
+    select <include refid="agentColumn" />
+    from f_agent
+  </select>
+  
+  <select id="getPageList" resultType="FAgent" parameterType="java.util.Map" >
+    select <include refid="agentColumn" />
+    from f_agent
+    where 1=1
+    <if test="keyword != null">
+   	and fname like concat('%',#{keyword},'%')
+    </if>
+    order by fcreatetime desc
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*)
+    from f_agent
+    where 1=1
+    <if test="keyword != null">
+   	and fname like concat('%',#{keyword},'%')
+    </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultType="FAgent" parameterType="java.lang.Integer" >
+    select <include refid="agentColumn" />
+    from f_agent
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

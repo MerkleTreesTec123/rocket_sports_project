@@ -1,0 +1,20 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" >
+	<div class="layui-form-item">
+		<label class="layui-form-label">总金额：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${userWallet.total }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">冻结金额：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${userWallet.frozen }" readonly="readonly"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">修改时间：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" th:value="${userWallet.gmtModified == null ? '':#dates.format(userWallet.gmtModified, 'yyyy-MM-dd HH:mm:ss') }" readonly="readonly"/>
+		</div>
+	</div>
+</div>

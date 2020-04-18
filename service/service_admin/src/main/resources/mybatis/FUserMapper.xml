@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FUserMapper">
+
+    <sql id="userColumns">fid, floginname, fnickname, floginpassword, ftradepassword, ftelephone,
+    femail, frealname, fidentityno, fidentitytype, fgoogleauthenticator, fgoogleurl, 
+    fstatus, fhasrealvalidate, fhasrealvalidatetime, fistelephonebind, fismailbind, fgooglebind, 
+    fupdatetime, ftradepwdtime, fareacode, version, fintrouid, finvalidateintrocount, fiscny,
+    fiscoin, fbirth, flastlogintime, fregistertime, fleverlock, fqqopenid, funionid, fagentid, fshowid,
+    folduid, fplatform, is_video, video_time
+  </sql>
+
+    <select id="getUserListByParam" resultType="FUser" parameterType="FUser">
+        select
+        <include refid="userColumns"/>
+        from f_user where 1=1
+        <if test="floginname != null">
+            and floginname = #{floginname}
+        </if>
+        <if test="floginpassword != null">
+            and floginpassword = #{floginpassword}
+        </if>
+        <if test="ftelephone != null">
+            and ftelephone = #{ftelephone}
+        </if>
+        <if test="femail != null">
+            and femail = #{femail}
+        </if>
+        <if test="fidentityno != null">
+            and fidentityNo = #{fidentityno}
+        </if>
+        <if test="fqqopenid != null">
+            and fqqopenid = #{fqqopenid}
+        </if>
+        <if test="funionid != null">
+            and funionid = #{funionid}
+        </if>
+    </select>
+
+    <select id="getUserPageList" resultType="FUser" parameterType="java.util.Map">
+        select
+        f_user.fid,
+        f_user.floginname,
+        f_user.fnickname,
+        f_user.floginpassword,
+        f_user.ftradepassword,
+        f_user.ftelephone,
+        f_user.femail,
+        f_user.frealname,
+        f_user.fidentityno,
+        f_user.fidentitytype,
+        f_user.fgoogleauthenticator,
+        f_user.fgoogleurl,
+        f_user.fstatus,
+        f_user.fhasrealvalidate,
+        f_user.fhasrealvalidatetime,
+        f_user.fistelephonebind,
+        f_user.fismailbind,
+        f_user.fgooglebind,
+        f_user.fupdatetime,
+        f_user.ftradepwdtime,
+        f_user.fareacode,
+        f_user.version,
+        f_user.fintrouid,
+        f_user.finvalidateintrocount,
+        f_user.fiscny,
+        f_user.fiscoin,
+        f_user.fbirth,
+        f_user.flastlogintime,
+        f_user.fregistertime,
+        f_user.fleverlock,
+        f_user.fqqopenid,
+        f_user.funionid,
+        f_user.fagentid,
+        f_user.fshowid,
+        f_user.folduid,
+        f_user.fplatform,
+        f_user.is_video,
+        f_user.video_time,
+        f_user_score.fscore score,
+        f_user_score.flevel level
+        from f_user left join
+        f_user_score on f_user.fid = f_user_score.fuid where 1=1
+        <if test="keyword != null">
+            and (
+            f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.fidentityno like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.fid = #{keyword,jdbcType=VARCHAR} or
+            f_user.folduid = #{keyword,jdbcType=VARCHAR}
+            )
+        </if>
+        <if test="fuid != null">
+            and (f_user.fid = #{fuid} or f_user.fshowid = #{fuid})
+        </if>
+        <if test="fstatus != null">
+            and f_user.fstatus = #{fstatus}
+        </if>
+        <if test="fintrouid != null">
+            and f_user.fintrouid = #{fintrouid}
+        </if>
+        <if test="fagentid != null">
+            and f_user.fagentid = #{fagentid}
+        </if>
+        <if test="fregistertime != null">
+            and date_format(f_user.fregistertime,'%Y-%m-%d') = date_format(#{fregistertime},'%Y-%m-%d')
+        </if>
+        <if test="beginDate != null">
+            <![CDATA[
+			and f_user.fregistertime >= #{beginDate}
+		]]>
+        </if>
+        <if test="endDate != null">
+            <![CDATA[
+			and f_user.fregistertime <= #{endDate}
+		]]>
+        </if>
+        <if test="flastlogintime != null">
+            and date_format(f_user.flastlogintime,'%Y-%m-%d') = date_format(#{flastlogintime},'%Y-%m-%d')
+        </if>
+        <if test="fbirth != null">
+            and date_format(f_user.fbirth,'%m-%d') = date_format(#{fbirth},'%m-%d')
+        </if>
+        <if test="orderField != null">
+            order by f_user.${orderField} ${orderDirection}
+        </if>
+        limit #{offset},#{limit}
+    </select>
+
+
+    <select id="countUserListByParam" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(fid)
+        from f_user where 1=1
+        <if test="keyword != null">
+            and (
+            f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.ftelephone like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.femail like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.fidentityno like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            f_user.fid = #{keyword,jdbcType=VARCHAR}) or
+            f_user.folduid = #{keyword,jdbcType=VARCHAR}
+        </if>
+        <if test="fuid != null">
+            and (f_user.fid = #{fuid} or f_user.fshowid = #{fuid})
+        </if>
+        <if test="fstatus != null">
+            and fstatus = #{fstatus}
+        </if>
+        <if test="fintrouid != null">
+            and fintrouid = #{fintrouid}
+        </if>
+        <if test="fagentid != null">
+            and fagentid = #{fagentid}
+        </if>
+        <if test="fregistertime != null">
+            and date_format(f_user.fregistertime,'%Y-%m-%d') = date_format(#{fregistertime},'%Y-%m-%d')
+        </if>
+        <if test="beginDate != null">
+            <![CDATA[
+			and f_user.fregistertime >= #{beginDate}
+		]]>
+        </if>
+        <if test="endDate != null">
+            <![CDATA[
+			and f_user.fregistertime <= #{endDate}
+		]]>
+        </if>
+        <if test="flastlogintime != null">
+            and date_format(f_user.flastlogintime,'%Y-%m-%d') = date_format(#{flastlogintime},'%Y-%m-%d')
+        </if>
+        <if test="fbirth != null">
+            and date_format(f_user.fbirth,'%m-%d') = date_format(#{fbirth},'%m-%d')
+        </if>
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="FUser">
+    update f_user
+    set 
+      	floginname = #{floginname,jdbcType=VARCHAR},
+      	fnickname = #{fnickname,jdbcType=VARCHAR},
+      	floginpassword = #{floginpassword,jdbcType=VARCHAR},
+      	ftradepassword = #{ftradepassword,jdbcType=VARCHAR},
+      	ftelephone = #{ftelephone,jdbcType=VARCHAR},
+      	femail = #{femail,jdbcType=VARCHAR},
+      	frealname = #{frealname,jdbcType=VARCHAR},
+      	fidentityno = #{fidentityno,jdbcType=VARCHAR},
+      	fidentitytype = #{fidentitytype,jdbcType=INTEGER},
+      	fgoogleauthenticator = #{fgoogleauthenticator,jdbcType=VARCHAR},
+      	fgoogleurl = #{fgoogleurl,jdbcType=VARCHAR},
+      	fstatus = #{fstatus,jdbcType=INTEGER},
+      	fhasrealvalidate = #{fhasrealvalidate,jdbcType=BIT},
+      	fhasrealvalidatetime = #{fhasrealvalidatetime,jdbcType=TIMESTAMP},
+      	fistelephonebind = #{fistelephonebind,jdbcType=BIT},
+      	fismailbind = #{fismailbind,jdbcType=BIT},
+      	fgooglebind = #{fgooglebind,jdbcType=BIT},
+      	fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      	ftradepwdtime = #{ftradepwdtime,jdbcType=TIMESTAMP},
+      	fareacode = #{fareacode,jdbcType=VARCHAR},
+      	version = version + 1,
+      	fintrouid = #{fintrouid,jdbcType=INTEGER},
+      	finvalidateintrocount = #{finvalidateintrocount,jdbcType=INTEGER},
+      	fiscny = #{fiscny,jdbcType=BIT},
+      	fiscoin = #{fiscoin,jdbcType=BIT},
+      	fbirth = #{fbirth,jdbcType=DATE},
+      	flastlogintime = #{flastlogintime,jdbcType=TIMESTAMP},
+      	fregistertime = #{fregistertime,jdbcType=TIMESTAMP},
+      	fleverlock = #{fleverlock,jdbcType=INTEGER},
+      	fqqopenid = #{fqqopenid,jdbcType=VARCHAR},
+      	funionid = #{funionid,jdbcType=VARCHAR},
+      	fagentid = #{fagentid,jdbcType=INTEGER},
+        is_video = #{isVideo,jdbcType=BIT},
+        video_time = #{videoTime,jdbcType=DATE},
+      	fshowid = #{fshowid,jdbcType=INTEGER}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="FUser">
+        select
+        <include refid="userColumns"/>
+        from f_user
+        where
+        fid = #{fid,jdbcType=INTEGER}
+    </select>
+
+    <select id="countUserRegister" resultType="java.lang.Integer">
+    select count(fid)
+    from f_user
+    where 
+    <![CDATA[fregistertime < now()
+        ]]>
+    </select>
+
+    <select id="selectFuserByFshowid" resultType="java.lang.Integer">
+    select count(fid)
+    from f_user
+    where fshowid = #{fshowid,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectAll" resultType="FUser">
+        select fid from f_user
+    </select>
+</mapper>

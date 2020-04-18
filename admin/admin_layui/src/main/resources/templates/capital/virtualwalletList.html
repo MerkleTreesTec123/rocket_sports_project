@@ -1,0 +1,66 @@
+<div class="layui-form" lay-href="admin/virtualwalletList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:decimal="http://thymeleafexamples">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词[登录名、昵称、真实姓名]</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">会员UID[支持uid#uid]</label>
+			<div class="layui-input-inline">
+				<input name="fuids" th:value="${fuids }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">虚拟币类型</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="type">
+					<option th:each="v : ${typeMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == type}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" lay-href="admin/virtualwalletExport.html"
+				lay-target="export" lay-tips="确实要导出这些记录吗?">导出</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>会员UID</th>
+					<th>登录名</th>
+					<th>会员昵称</th>
+					<th>会员真实姓名</th>
+					<th>虚拟币类型</th>
+					<th data-order-field="total">可用数量</th>
+					<th data-order-field="frozen">冻结数量</th>
+					<th data-order-field="gmt_modified">最后修改时间</th>
+				</tr>
+			</thead>
+			<tbody th:if="${not #lists.isEmpty(virtualwalletList)}">
+				<tr th:each="virtualwallet : ${virtualwalletList.data}">
+					<td>
+						<input type="checkbox" th:name="${virtualwallet.id}" lay-skin="primary" />
+					</td>
+					<td th:text="${virtualwallet.uid}"></td>
+					<td th:text="${virtualwallet.loginName}"></td>
+					<td th:text="${virtualwallet.nickName}"></td>
+					<td th:text="${virtualwallet.realName}"></td>
+					<td th:text="${virtualwallet.coinName}"></td>
+					<td th:text="${#decimal.format(virtualwallet.total, 1, 10)}"></td>
+					<td th:text="${#decimal.format(virtualwallet.frozen)}"></td>
+					<td th:text="${virtualwallet.gmtModified == null ? '':#dates.format(virtualwallet.gmtModified, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:if="${not #lists.isEmpty(virtualwalletList)}" th:attr="lay-pages=${virtualwalletList.totalPages}, lay-curr=${virtualwalletList.currentPage}"></div>
+</div>

@@ -1,0 +1,82 @@
+<div class="layui-form layui-form-pane" lay-href="validate/templateedit.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">发送类型：</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="id" th:value="${template.id}"/>
+                <select name="sendType" >
+                    <option th:each="v : ${sendMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == template.sendType}"></option>
+                </select>
+                <!--<input class="layui-input layui-disabled" disabled="disabled" th:value="${template.sendType_s}"/>-->
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">平台类型：</label>
+            <div class="layui-input-inline">
+                <select name="platform" >
+                    <option th:each="v : ${platformMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == template.platform}"></option>
+                </select>
+                <!--<input class="layui-input layui-disabled" disabled="disabled" th:value="${template.platformName}"/>-->
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">语言类型：</label>
+            <div class="layui-input-inline">
+                <select name="language" >
+                    <option th:each="v : ${languageMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == template.language}"></option>
+                </select>
+                <!--<input class="layui-input layui-disabled" disabled="disabled" th:value="${template.languageName}"/>-->
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+            <label class="layui-form-label">业务类型：</label>
+            <div class="layui-input-block">
+                <input type="checkbox" th:each="v : ${business}" th:name="${'business['+v.code+']'}" lay-skin="primary"
+                       th:title="${v.value}" th:checked="${#strings.contains('#'+template.businessType+'#','#'+v.code+'#')}"/>
+                <!--<input class="layui-input layui-disabled" disabled="disabled" th:value="${template.businessType_s}"/>-->
+            </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">模板内容：</label>
+        <div class="layui-input-block">
+            <textarea id="template" rows="10" name="template" class="layui-textarea"
+                      th:text="${template.template}"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">替换变量：</label>
+        <div class="layui-input-block" style="padding: 0 10px;">
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-small" lay-filter="params" th:each="v:${params}" th:id="${v.code}"
+                        th:text="${v.str}" th:alt="${v.value}" style="margin-bottom: 5px;"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /*<![CDATA[*/
+    layui.use(['jquery'], function () {
+        var $ = layui.jquery;
+        $('.layui-btn[lay-filter="params"]').on("click", function () {
+            var $filed = $("#template")
+                , obj = $filed.get(0)
+                , str = $(this).attr("alt");
+            if (document.selection) {
+                $filed.focus();
+                var sel = document.selection.createRange();
+                sel.text = str;
+            } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
+                var startPos = obj.selectionStart;
+                var endPos = obj.selectionEnd;
+                var tmpStr = obj.value;
+                obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+            } else {
+                obj.value += str;
+            }
+        });
+    });
+    /*]]>*/
+</script>

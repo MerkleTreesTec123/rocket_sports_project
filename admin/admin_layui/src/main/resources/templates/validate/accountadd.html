@@ -1,0 +1,34 @@
+<div class="layui-form layui-form-pane" lay-href="validate/accountadd.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">发送类型：</label>
+        <div class="layui-input-block">
+            <select name="type">
+                <option th:each="v:${typeMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号名称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="name" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="accessKey" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="secretKey" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">URL：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="url" lay-verify="required"/>
+        </div>
+    </div>
+</div>

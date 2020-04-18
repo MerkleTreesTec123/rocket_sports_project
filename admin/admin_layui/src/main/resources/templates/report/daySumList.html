@@ -1,0 +1,54 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+     lay-href="/report/daySumList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">虚拟币类型：</label>
+            <div class="layui-input-inline">
+                <select name="ftype">
+                    <option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">日期：</label>
+            <div class="layui-input-inline">
+                <input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({elem: this})"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateDaySum.html"
+                lay-href="report/updateDaySum.html" lay-target="ajax" lay-tips="确定手动生成统计吗?">手动统计(请勿重复点击)
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>币种</th>
+                <th data-order-field="ftotle">可用量</th>
+                <th data-order-field="frozen">冻结量</th>
+                <th>总量</th>
+                <th data-order-field="fcreatetime">记录时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td th:text="${state.count}"></td>
+                <td th:text="${list.fcoinname}"></td>
+                <td th:text="${#decimal.format(list.ftotle,1,10)}"></td>
+                <td th:text="${#decimal.format(list.frozen,1,10)}"></td>
+                <td th:text="${#decimal.format(list.ftotle+list.frozen,1,10)}"></td>
+                <td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

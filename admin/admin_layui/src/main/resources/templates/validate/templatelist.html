@@ -1,0 +1,51 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="/validate/templatelist.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline layui-hide">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="validate/templateedit.html"
+                    lay-href="/validate/gotemplate?url=validate/templateedit" lay-checked="id"
+                    lay-target="dialog" lay-height="680" lay-width="830">修改</button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>发送类型</th>
+                <th width="300">业务类型</th>
+                <th>平台类型</th>
+                <th>语言类型</th>
+                <th width="*">模板内容</th>
+                <th data-order-field="gmt_create">
+                    创建时间
+                </th>
+                <th data-order-field="gmt_modified">
+                    修改时间
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${list.id}" lay-skin="primary"/>
+                </td>
+                <td th:text="${list.sendType_s}"></td>
+                <td th:text="${list.businessType_s}"></td>
+                <td th:text="${list.platformName}"></td>
+                <td th:text="${list.languageName}"></td>
+                <td th:text="${list.template}"></td>
+                <td th:text="${#dates.format(list.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${#dates.format(list.gmtModified, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

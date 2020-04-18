@@ -1,0 +1,23 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="admin/updateSubmitUserCapital.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">UID:</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="uid" lay-verify="required number" disabled="disabled" th:value="${uid}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">币种类型:</label>
+        <div class="layui-input-block">
+            <select type="combox" name="fcoinid">
+                <option th:each="v : ${coinMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == fcoinid}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">修改金额：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="amount" lay-verify="required" />
+            修改值大于0，可用加，冻结减，小于0，可用减，冻结加
+        </div>
+    </div>
+</div>

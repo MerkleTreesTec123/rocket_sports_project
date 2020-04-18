@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.ValidateAccountMapper" >
+
+  <sql id="accountColumn">id, type, access_key, secret_key, url, gmt_create, gmt_modified, version</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from validate_account
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.qkwl.service.activity.model.ValidateAccountDO" >
+    insert into validate_account (id, type, access_key, 
+      secret_key, url, gmt_create, 
+      gmt_modified, version)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{accessKey,jdbcType=VARCHAR}, 
+      #{secretKey,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.activity.model.ValidateAccountDO" >
+    update validate_account
+    set type = #{type,jdbcType=INTEGER},
+      access_key = #{accessKey,jdbcType=VARCHAR},
+      secret_key = #{secretKey,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="com.qkwl.service.activity.model.ValidateAccountDO" parameterType="java.lang.Integer" >
+    select <include refid="accountColumn" />
+    from validate_account
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultType="com.qkwl.service.activity.model.ValidateAccountDO" >
+    select <include refid="accountColumn" />
+    from validate_account
+  </select>
+
+  <select id="selectListByPage" resultType="com.qkwl.service.activity.model.ValidateAccountDO" parameterType="java.util.Map">
+    select <include refid="accountColumn" />
+    from validate_account
+    where 1 = 1
+    <if test="orderField != null">
+      order by ${orderField} ${orderDirection}
+    </if>
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countListByPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(id)
+    from validate_account
+    where 1 = 1
+  </select>
+</mapper>

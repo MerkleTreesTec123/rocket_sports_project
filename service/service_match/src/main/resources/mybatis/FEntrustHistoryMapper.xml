@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.match.dao.FEntrustHistoryMapper" >
+  
+  <sql id="entrustHistoryColumns">
+  	 fid, fuid, ftradeid, fbuycoinid, fsellcoinid, fstatus, ftype, flast, fprize, fcount, famount, fsuccessamount, fleftcount, fleftfees, ffees,
+  	 fmatchtype, fsource, fhuobientrustid, fhuobiaccountid, flastupdattime, fcreatetime, fagentid, fentrustid
+  </sql>
+  
+  <insert id="insert" parameterType="FEntrustHistory" useGeneratedKeys="true" keyProperty="fid">
+    insert into f_entrust_history (
+      fuid, 
+      ftradeid,
+      fbuycoinid,
+      fsellcoinid,
+      fstatus, 
+      ftype, 
+      fmatchtype, 
+      flast, 
+      fprize, 
+      fcount, 
+      famount, 
+      fsuccessamount, 
+      fleftcount, 
+      fleftfees, 
+      ffees, 
+      fsource, 
+      fhuobientrustid, 
+      fhuobiaccountid, 
+      flastupdattime, 
+      fcreatetime,
+      fagentid,
+      fentrustid
+    ) values (
+      #{fuid,jdbcType=INTEGER},
+      #{ftradeid,jdbcType=INTEGER},
+      #{fbuycoinid,jdbcType=INTEGER},
+      #{fsellcoinid,jdbcType=INTEGER},
+      #{fstatus,jdbcType=INTEGER}, 
+      #{ftype,jdbcType=INTEGER}, 
+      #{fmatchtype,jdbcType=INTEGER}, 
+      #{flast,jdbcType=DECIMAL}, 
+      #{fprize,jdbcType=DECIMAL}, 
+      #{fcount,jdbcType=DECIMAL}, 
+      #{famount,jdbcType=DECIMAL}, 
+      #{fsuccessamount,jdbcType=DECIMAL}, 
+      #{fleftcount,jdbcType=DECIMAL}, 
+      #{fleftfees,jdbcType=DECIMAL}, 
+      #{ffees,jdbcType=DECIMAL}, 
+      #{fsource,jdbcType=INTEGER}, 
+      #{fhuobientrustid,jdbcType=BIGINT}, 
+      #{fhuobiaccountid,jdbcType=INTEGER}, 
+      #{flastupdattime,jdbcType=TIMESTAMP}, 
+      #{fcreatetime,jdbcType=TIMESTAMP},
+      #{fagentid,jdbcType=INTEGER},
+      #{fentrustid,jdbcType=BIGINT}
+     )
+  </insert>
+</mapper>

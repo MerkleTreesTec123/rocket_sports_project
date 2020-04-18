@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>登陆管理平台</title>
+<link rel="stylesheet" th:href="@{/js/layui/css/layui.css}"></link>
+<link rel="stylesheet" th:href="@{/css/main.css}"></link>
+</head>
+<body class="login-body">
+	<div class="login-box">
+		<div class="login-bg"></div>
+		<form class="login-con" action="/admin/submitlogin.html" method="post" autocomplete="off">
+			<span class="login-title">
+				<span>交易管理平台</span>
+			</span>
+			<div class="login-from">
+				<i class="login-ipt-bg"></i>
+				<input class="login-ipt" id="name" name="name" type="text" placeholder="用户名" />
+			</div>
+			<div class="login-from">
+				<i class="login-ipt-bg"></i>
+				<input class="login-ipt" id="password" name="password" type="password" placeholder="密码" />
+			</div>
+			<div class="login-from">
+				<i class="login-ipt-bg"></i>
+				<input class="login-ipt" id="googlecode" name="googlecode" type="text" placeholder="谷歌验证码" />
+			</div>
+			<div class="login-from">
+				<div id="captcha">
+					<p id="wait" class="show">正在加载验证码......</p>
+				</div>
+			</div>
+			<div class="login-from">
+				<input type="submit" id="submit" class="login-btn" value="登录" />
+			</div>
+		</form>
+	</div>
+	<div id="error" th:if="${error != null}" th:text="${error}">error</div>
+</body>
+</html>
+<script src="/js/plugin/jquery.min.js"></script>
+<script src="https://static.geetest.com/static/tools/gt.js"></script>
+<script type="text/javascript">
+    var handler = function (captchaObj) {
+        $("#submit").click(function (e) {
+            var result = captchaObj.getValidate();
+            if (!result){
+                alert("请先完成验证");
+            	e.preventDefault();
+            }
+        });
+        // 将验证码加到id为captcha的元素里，同时会有三个input的值用于表单提交
+        captchaObj.appendTo("#captcha");
+        captchaObj.onReady(function () {
+            $("#wait").hide();
+        });
+        // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+    };
+    $.ajax({
+        url: "/admin/startCaptcha.html?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "post",
+        dataType: "json",
+        success: function (data) {
+            if(data.code == 200){
+                // 调用 initGeetest 初始化参数
+                // 参数1：配置参数
+                // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+				var json = eval("("+data.msg+")");
+                initGeetest({
+                    gt: json.gt,
+                    challenge: json.challenge,
+                    new_captcha: json.new_captcha, // 用于宕机时表示是新验证码的宕机
+                    offline: !json.success, // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                    product: "float", // 产品形式，包括：float，popup
+                    width: "100%"
+                    // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
+                }, handler);
+			}else{
+                alert("验证加载失败！");
+			}
+        }
+    });
+    if (document.getElementById("error") != null) {
+        alert(document.getElementById("error").innerHTML);
+    }
+</script>

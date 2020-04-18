@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:hsf="http://www.taobao.com/hsf" xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+ 		http://www.taobao.com/hsf
+ 		http://www.taobao.com/hsf/hsf.xsd" default-autowire="byName">
+
+	<hsf:provider id="userServiceProvider" interface="com.qkwl.common.rpc.user.IUserService"
+				  ref="userService" version="1.0" group="user">
+	</hsf:provider>
+
+	<hsf:provider id="questionServiceProvider" interface="com.qkwl.common.rpc.user.IQuestionService"
+				  ref="questionService" version="1.0" group="user">
+	</hsf:provider>
+
+	<hsf:provider id="userIdentityServiceProvider" interface="com.qkwl.common.rpc.user.IUserIdentityService"
+				  ref="userIdentityService" version="1.0" group="user">
+	</hsf:provider>
+
+	<hsf:provider id="userApiServiceProvider" interface="com.qkwl.common.rpc.user.IUserApiService"
+				  ref="userApiService" version="1.0" group="user">
+	</hsf:provider>
+
+	<hsf:provider id="userSecurityServiceProvider" interface="com.qkwl.common.rpc.user.IUserSecurityService"
+				  ref="userSecurityService" version="1.0" group="user">
+	</hsf:provider>
+
+	<!--整合了 service-capital-->
+
+	<hsf:provider id="userWalletServiceProvider" interface="com.qkwl.common.rpc.capital.IUserWalletService"
+				  ref="userWalletService" version="1.0" group="capital">
+	</hsf:provider>
+
+	<hsf:provider id="userFinancesServiceProvider" interface="com.qkwl.common.rpc.capital.IUserFinancesService"
+				  ref="userFinancesService" version="1.0" group="capital">
+	</hsf:provider>
+
+	<hsf:provider id="userBandAddressServiceProvider" interface="com.qkwl.common.rpc.capital.IUserCapitalAccountService"
+				  ref="userBandAddressService" version="1.0" group="capital">
+	</hsf:provider>
+
+	<hsf:provider id="userPushServiceProvider" interface="com.qkwl.common.rpc.capital.IUserPushService"
+				  ref="userPushService" version="1.0" group="capital">
+	</hsf:provider>
+
+	<hsf:provider id="userCapitalServiceProvider" interface="com.qkwl.common.rpc.capital.IUserCapitalService"
+				  ref="userCapitalService" version="1.0" group="capital">
+	</hsf:provider>
+
+	<hsf:provider id="userVipServiceProvider" interface="com.qkwl.common.rpc.capital.IUserVipService"
+				  ref="userVipService" version="1.0" group="capital">
+	</hsf:provider>
+
+	<hsf:provider id="userRewardCodeServiceProvider" interface="com.qkwl.common.rpc.capital.IUserRewardCodeService"
+				  ref="userRewardCodeService" version="1.0" group="capital">
+	</hsf:provider>
+
+</beans>

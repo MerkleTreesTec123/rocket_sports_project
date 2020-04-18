@@ -1,0 +1,27 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="agent/updateAgent.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${agent.fid }" />
+            <input class="layui-input" name="fname" lay-verify="required" th:value="${agent.fname }"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fphone" th:value="${agent.fphone }"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">域名：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fdomain" th:value="${agent.fdomain }"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fremark" th:value="${agent.fremark }"/>
+        </div>
+    </div>
+</div>

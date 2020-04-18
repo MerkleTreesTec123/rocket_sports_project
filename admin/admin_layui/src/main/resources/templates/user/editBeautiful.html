@@ -1,0 +1,15 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/updateBeautiful.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">靓号ID：</label>
+		<div class="layui-input-block">
+			<input type="hidden" name="fid" th:value="${beautiful.fid }"/>
+			<input class="layui-input" name="fbid" lay-verify="required" th:value="${beautiful.fbid}" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">替换ID：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="fuid" th:value="${beautiful.fuid}" />
+		</div>
+	</div>
+</div>

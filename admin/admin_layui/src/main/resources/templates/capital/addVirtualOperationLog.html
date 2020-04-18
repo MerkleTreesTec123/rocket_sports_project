@@ -1,0 +1,78 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/saveVirtualOperationLog.html">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">会员：</label>
+			<div class="layui-input-block">
+				<input type="hidden" name="userLookup.id" lay-lookup="id"/>
+				<input class="layui-input" lay-verify="required" readonly="readonly" lay-lookup="name"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<i class="layui-icon layui-lookup" lay-href="user/userLookup.html" onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">虚拟币类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="vid">
+				<option th:each="v:${allType}" th:text="${v.value}" th:value="${v.key}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">充值类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="ftype" id="type" lay-filter="type">
+				<option th:each="v:${typeMap}" th:text="${v.value}" th:value="${v.key}" th:selected="${ftype == v.key}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item" id="activity_box">
+		<div class="layui-inline">
+			<label class="layui-form-label">所属活动：</label>
+			<div class="layui-input-block">
+				<input type="hidden" name="activityId" lay-lookup="id"/>
+				<input class="layui-input" lay-lookup="name" readonly="readonly" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<i class="layui-icon layui-lookup" lay-href="activity/lookActivityList.html" onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">数量：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="famount" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">备注：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="finfo" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否发送消息：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" type="checkbox" name="fisSendMsg" checked="1"/>
+		</div>
+	</div>
+	<script type="text/javascript">
+        var $ = layui.jquery, form = layui.form();
+
+        function chooseType(type){
+            if(type == 3){
+                $("#activity_box").removeClass("layui-hide");
+            }else{
+                $("#activity_box").addClass("layui-hide");
+            }
+            form.render();
+        }
+
+        var type = $('#type option:selected').val();
+        chooseType(type);
+        form.on("select(type)", function(data){
+            chooseType(data.value);
+        });
+	</script>
+</div>

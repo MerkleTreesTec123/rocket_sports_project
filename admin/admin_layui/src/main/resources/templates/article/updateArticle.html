@@ -1,0 +1,120 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="article/updateArticle.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${farticle.fid}"/>
+            <input class="layui-input" name="ftitle" lay-verify="required" th:value="${farticle.ftitle}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">关键字</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fKeyword" lay-verify="required" th:value="${farticle.fkeyword}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">显示客户端</label>
+            <div class="layui-input-inline">
+                <select name="ftype">
+                    <option th:each="type : ${appMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == farticle.ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">顶部滚动</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" th:checked="${farticle.fistop}" name="fisTop" lay-skin="switch" lay-text="是|否"/>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">图片URL</label>
+            <div class="layui-input-inline">
+                <input class="layui-hide" name="findexImg" id="findexImg" th:value="${farticle.findeximg}"/>
+                <input class="layui-upload-file" type="file" name="file"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-inline">
+                <input type="hidden" name="articleTypeId" lay-lookup="id" th:value="${farticle.farticletype}"/>
+                <input class="layui-input layui-disabled" lay-verify="required" lay-lookup="name" disabled="disabled"
+                       th:value="${farticle.farticletype_s}"/>
+            </div>
+            <div class="layui-inline">
+                <i class="layui-icon layui-lookup" lay-href="article/articleTypeLookup.html"
+                   onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-hide" name="fcontent" lay-verify="content" id="editor"
+                      th:text="${farticle.fcontent == null ? '':farticle.fcontent}"></textarea>
+            <div id="umeditor"></div>
+        </div>
+    </div>
+    <script>
+        var $ = layui.jquery, jQuery = layui.jquery;
+    </script>
+    <script th:inline="javascript">
+        // uedit
+        //如果存在就先销毁掉
+        if (typeof window.um != 'undefined') {
+            window.um.destroy();
+        }
+
+        window.um = UM.getEditor('umeditor', {
+            /* 传入配置参数,可配参数列表看umeditor.config.js */
+            UMEDITOR_HOME_URL: "js/uedit/",
+            autoHeightEnabled: false,
+            imageUrl: "/article/upload.html?type=1",
+            imagePath: "",
+            imageFieldName: "file",
+            initialFrameWidth:650,
+            initialFrameHeight:400,
+            initialContent:[[${farticle.fcontent == null ? '':farticle.fcontent}]]
+        });
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form()
+                , $ = layui.jquery
+                , layer = layui.layer;
+            //自定义验证规则
+            form.verify({
+                            content: function () {
+                                $("#editor").html(window.um.getContent());
+                            }
+                        });
+            // 图片上传
+            var msgIndex = 0;
+            layui.upload({
+                             url: '/article/upload.html?type=1',
+                             type: "jpg|png",
+                             before: function () {
+                                 msgIndex = layer.msg('上传中······', {
+                                     icon: 16
+                                     , shade: 0.01
+                                     , time: 0
+                                 });
+                             },
+                             success: function (res) {
+                                 layer.close(msgIndex);
+                                 if (res.state === "SUCCESS") {
+                                     $("#findexImg").val(res.url);
+                                     console.log(res.url);
+                                 } else {
+                                     layer.msg(res.state, {
+                                         icon: 2
+                                         , shift: 6
+                                     });
+                                 }
+                             }
+                         });
+        });
+    </script>
+</div>

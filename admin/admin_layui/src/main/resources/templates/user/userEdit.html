@@ -1,0 +1,83 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="user/userEdit.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">登录名：</label>
+		<div class="layui-input-inline">
+			<input type="hidden" name="fid" th:value="${fuser.fid}" />
+			<input id="floginname" class="layui-input" name="floginname" th:value="${fuser.floginname}" />
+		</div>
+		<input class="layui-btn layui-btn-small" type="button" value="重置" onclick="layui.userEdit.resetLoginName()" style="margin-top: 4px;"/>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">昵称：</label>
+		<div class="layui-input-inline">
+			<input id="fnickName" class="layui-input" name="fnickName" th:value="${fuser.fnickname}" />
+		</div>
+		<input class="layui-btn layui-btn-small" type="button" value="重置" onclick="layui.userEdit.resetNickName()" style="margin-top: 4px;"/>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">区号：</label>
+		<div class="layui-input-inline">
+			<input id="fareacode" class="layui-input" name="fareacode" th:value="${fuser.fareacode}" />
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">邮箱：</label>
+		<div class="layui-input-inline">
+			<input class="layui-input" id="femail" name="femail" th:value="${fuser.femail}" />
+		</div>
+		<input type="hidden" id="fismailbind" name="fismailbind" th:value="${fuser.fismailbind}" />
+		<input class="layui-btn layui-btn-small" type="button" value="重置" onclick="layui.userEdit.resetEmail()" style="margin-top: 4px;"/>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">手机号：</label>
+		<div class="layui-input-inline">
+			<input class="layui-input" id="ftelephone" name="ftelephone" th:value="${fuser.ftelephone}" />
+		</div>
+		<input type="hidden" id="fistelephonebind" name="fistelephonebind" th:value="${fuser.fistelephonebind}" />
+		<input class="layui-btn layui-btn-small" type="button" value="重置" onclick="layui.userEdit.resetPhone()" style="margin-top: 4px;"/>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">真实姓名：</label>
+		<div class="layui-input-inline">
+			<input class="layui-input" id="frealName" name="frealName" th:value="${fuser.frealname}" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">证件号码：</label>
+		<div class="layui-input-inline">
+			<input class="layui-input" id="fidentityNo" name="fidentityNo" th:value="${fuser.fidentityno}" />
+		</div>
+		<input type="hidden" id="fhasrealvalidate" name="fhasrealvalidate" th:value="${fuser.fhasrealvalidate}" />
+		<input class="layui-btn layui-btn-small" type="button" value="重置" onclick="layui.userEdit.resetReal()" style="margin-top: 4px;"/>
+	</div>
+	<script type="text/javascript">
+	layui.define(function (exports) {
+		var $ = layui.jquery;
+		var userEdit = {
+            resetLoginName:function () {
+                $("#floginname").val("");
+            },
+            resetNickName:function () {
+                $("#fnickName").val("");
+            },
+            resetPhone:function () {
+                $("#fareacode").val("");
+                $("#ftelephone").val("");
+                $("#fistelephonebind").val("0");
+            },
+			resetEmail:function () {
+				$("#femail").val("");
+				$("#fismailbind").val("0");
+			},
+			resetReal:function () {
+				$("#frealName").val("");
+				$("#fidentityNo").val("");
+				$("#fhasrealvalidate").val("0");
+			}
+		};		
+		exports("userEdit", userEdit);
+	});
+		
+	</script>
+</div>

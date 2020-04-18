@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FDayOperatMapper" >
+  
+  <sql id="dayOperatColumns">
+  	 fid, flogin, fregister, frealname, fsms, fmail, fvip6, fcode, fscore, fsubmitquestion, freplyquestion, fupdatetime, fcreatetime, fagentid
+  </sql>
+  
+  <insert id="insert" parameterType="FDayOperat" keyProperty="fid">
+    insert into f_day_operat (
+      flogin, 
+      fregister, 
+      frealname, 
+      fsms, 
+      fmail, 
+      fvip6, 
+      fcode, 
+      fscore, 
+      fsubmitquestion, 
+      freplyquestion, 
+      fupdatetime, 
+      fcreatetime,
+      fagentid
+    ) values (
+      #{flogin,jdbcType=INTEGER},
+      #{fregister,jdbcType=INTEGER},
+      #{frealname,jdbcType=INTEGER},
+      #{fsms,jdbcType=INTEGER}, 
+      #{fmail,jdbcType=INTEGER}, 
+      #{fvip6,jdbcType=INTEGER}, 
+      #{fcode,jdbcType=INTEGER}, 
+      #{fscore,jdbcType=INTEGER}, 
+      #{fsubmitquestion,jdbcType=INTEGER}, 
+      #{freplyquestion,jdbcType=INTEGER},  
+      #{fupdatetime,jdbcType=TIMESTAMP},
+      #{fcreatetime,jdbcType=TIMESTAMP}, 
+      #{fagentid,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateByModel" parameterType="FDayOperat" >
+    update f_day_operat set 
+      flogin = #{flogin,jdbcType=INTEGER},
+      fregister = #{fregister,jdbcType=INTEGER},
+      frealname = #{frealname,jdbcType=INTEGER},
+      fsms = #{fsms,jdbcType=INTEGER},
+      fmail = #{fmail,jdbcType=INTEGER},
+      fvip6 = #{fvip6,jdbcType=INTEGER},
+      fcode = #{fcode,jdbcType=INTEGER},
+      fscore = #{fscore,jdbcType=INTEGER},
+      fsubmitquestion = #{fsubmitquestion,jdbcType=INTEGER},
+      freplyquestion = #{freplyquestion,jdbcType=INTEGER},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fagentid = #{fagentid,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByDate" resultType="FDayOperat">
+    select <include refid="dayOperatColumns"/> from f_day_operat 
+    where date_format(fcreatetime, "%Y-%m-%d") = date_format(#{time}, "%Y-%m-%d") and fagentid = #{fagentid}
+  </select>
+  
+  <select id="selectAll" resultType="FDayOperat" >
+    select <include refid="dayOperatColumns"/> from f_day_operat
+  </select>
+</mapper>

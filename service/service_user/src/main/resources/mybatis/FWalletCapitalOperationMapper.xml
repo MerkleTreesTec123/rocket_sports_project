@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.user.dao.FWalletCapitalOperationMapper">
+
+	<sql id="operationColumn">
+		fid, fsysbankid, fcoinid, fuid, fcreatetime, famount, finouttype, ftype, fstatus,fremittancetype,
+		fremark, fbank, faccount, fpayee, fbank_code, fphone, fupdatetime, fadminid, ffees,version
+		,fischarge, faddress, fagentid, fsource, fplatform,fserialno
+	</sql>
+
+	<select id="getPageWalletCapitalOperation" resultType="com.qkwl.service.user.model.FWalletCapitalOperationDO" parameterType="java.util.Map">
+		select
+			<include refid="operationColumn" />
+		from f_wallet_capital_operation
+		where 1=1
+		<if test="fuid != null">
+		 	and fuid = #{fuid,jdbcType=INTEGER}
+		 </if>
+		<if test="faccount != null">
+			and faccount = #{faccount,jdbcType=VARCHAR}
+		</if>
+		<if test="fstatus != null">
+			and fstatus = #{fstatus,jdbcType=INTEGER}
+		</if>
+		<if test="finouttype != null">
+			and finouttype = #{finouttype,jdbcType=INTEGER}
+		</if>
+		<if test="begindate != null">
+   			<![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+   			<![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="ftype != null">
+			and ftype = #{ftype,jdbcType=INTEGER}
+		</if>
+		<if test="fagentid != null">
+			and fagentid = #{fagentid,jdbcType=INTEGER}
+		</if>
+
+		order by fcreatetime desc
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="countWalletCapitalOperation" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(fid)
+		from f_wallet_capital_operation
+		where 1=1
+		<if test="fuid != null">
+		 	and fuid = #{fuid,jdbcType=INTEGER}
+		 </if>
+		<if test="faccount != null">
+			and faccount = #{faccount,jdbcType=VARCHAR}
+		</if>
+		<if test="fstatus != null">
+			and fstatus = #{fstatus,jdbcType=INTEGER}
+		</if>
+		<if test="finouttype != null">
+			and finouttype = #{finouttype,jdbcType=INTEGER}
+		</if>
+		<if test="begindate != null">
+   			<![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+   			<![CDATA[and DATE_FORMAT(fcreatetime,"%Y-%m-%d") <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="ftype != null">
+			and ftype = #{ftype,jdbcType=INTEGER}
+		</if>
+		<if test="fagentid != null">
+			and fagentid = #{fagentid,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="getWalletWithdrawTimes" resultType="java.lang.Integer"
+		parameterType="java.lang.Integer">
+		select count(fid)
+		from f_wallet_capital_operation
+		where
+		fuid = #{fuid,jdbcType=INTEGER} 
+		and	finouttype = 2 
+		and DATE_FORMAT(fcreatetime,"%Y-%m-%d") = DATE_FORMAT(now(),"%Y-%m-%d")
+	</select>
+
+	<select id="getDayWithdrawCny" resultType="java.math.BigDecimal">
+		SELECT IFNULL(sum(famount),0) + IFNULL(sum(ffees),0) from f_wallet_capital_operation
+		where
+			fuid = #{fuid,jdbcType=INTEGER} 
+			and finouttype = 2 
+			and DATE_FORMAT(fcreatetime,"%Y-%m-%d") = DATE_FORMAT(now(),"%Y-%m-%d")
+	</select>
+
+	<!-- Base -->
+
+	<insert id="insert" parameterType="com.qkwl.service.user.model.FWalletCapitalOperationDO" keyProperty="fid">
+		insert into f_wallet_capital_operation (
+			fsysbankid,
+			fcoinid,
+			fuid,
+			fcreatetime,
+			famount,
+			finouttype,
+			ftype,
+			fstatus,
+			fremittancetype,
+			fremark,
+			fbank,
+			faccount,
+			fpayee,
+			fbank_code,
+			fphone,
+			fupdatetime,
+			fadminid,
+			ffees,
+			version,
+			fischarge,
+			faddress,
+			fagentid,
+			fsource,
+			fplatform,
+			fserialno)
+		values (
+			#{fsysbankid,jdbcType=INTEGER},
+			#{fcoinid,jdbcType=INTEGER},
+			#{fuid,jdbcType=INTEGER},
+			#{fcreatetime,jdbcType=TIMESTAMP},
+			#{famount,jdbcType=DECIMAL},
+			#{finouttype,jdbcType=INTEGER},
+			#{ftype,jdbcType=INTEGER},
+			#{fstatus,jdbcType=INTEGER},
+			#{fremittancetype,jdbcType=INTEGER},
+			#{fremark,jdbcType=VARCHAR},
+			#{fbank,jdbcType=VARCHAR},
+			#{faccount,jdbcType=VARCHAR},
+			#{fpayee,jdbcType=VARCHAR},
+			#{fbankCode,jdbcType=VARCHAR},
+			#{fphone,jdbcType=VARCHAR},
+			#{fupdatetime,jdbcType=TIMESTAMP},
+			#{fadminid,jdbcType=INTEGER},
+			#{ffees,jdbcType=DECIMAL},
+			#{version,jdbcType=INTEGER},
+			#{fischarge,jdbcType=TINYINT},
+			#{faddress,jdbcType=VARCHAR},
+			#{fagentid,jdbcType=INTEGER},
+			#{fsource,jdbcType=INTEGER},
+			#{fplatform,jdbcType=INTEGER},
+			#{fserialno,jdbcType=VARCHAR}
+
+		)
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="com.qkwl.service.user.model.FWalletCapitalOperationDO">
+		update f_wallet_capital_operation
+		set
+			fsysbankid = #{fsysbankid,jdbcType=INTEGER},
+			fcoinid = #{fcoinid,jdbcType=INTEGER},
+			fuid = #{fuid,jdbcType=INTEGER},
+			fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+			famount = #{famount,jdbcType=DECIMAL},
+			finouttype = #{finouttype,jdbcType=INTEGER},
+			ftype = #{ftype,jdbcType=INTEGER},
+			fstatus = #{fstatus,jdbcType=INTEGER},
+			fremittancetype = #{fremittancetype,jdbcType=INTEGER},
+			fremark = #{fremark,jdbcType=VARCHAR},
+			fbank = #{fbank,jdbcType=VARCHAR},
+			faccount = #{faccount,jdbcType=VARCHAR},
+			fpayee = #{fpayee,jdbcType=VARCHAR},
+			fbank_code = #{fbankCode,jdbcType=VARCHAR},
+			fphone = #{fphone,jdbcType=VARCHAR},
+			fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+			fadminid = #{fadminid,jdbcType=INTEGER},
+			ffees = #{ffees,jdbcType=DECIMAL},
+			version = version + 1,
+			fischarge = #{fischarge,jdbcType=TINYINT},
+			faddress = #{faddress,jdbcType=VARCHAR},
+			fagentid = #{fagentid,jdbcType=INTEGER},
+			fsource = #{fsource,jdbcType=INTEGER},
+			fplatform = #{fplatform,jdbcType=INTEGER},
+			fserialno = #{fserialno,jdbcType=VARCHAR}
+		where
+			fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateStatusByPrimaryKey" parameterType="com.qkwl.service.user.model.FWalletCapitalOperationDO">
+		update f_wallet_capital_operation
+		set
+		fstatus = #{fstatus,jdbcType=INTEGER},
+		fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+		fremark = #{fremark,jdbcType=VARCHAR},
+		version = version + 1
+		where
+		fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.qkwl.service.user.model.FWalletCapitalOperationDO">
+		select
+			<include refid="operationColumn" />
+		from f_wallet_capital_operation
+		where
+		fid = #{fid,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectBySerialNumber" parameterType="java.lang.String" resultType="com.qkwl.service.user.model.FWalletCapitalOperationDO">
+		select
+		<include refid="operationColumn" />
+		from f_wallet_capital_operation
+		where
+		fserialno = #{fserialno,jdbcType=VARCHAR}
+	</select>
+
+</mapper>

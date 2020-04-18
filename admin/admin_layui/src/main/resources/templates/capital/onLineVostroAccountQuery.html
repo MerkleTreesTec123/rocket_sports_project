@@ -1,0 +1,55 @@
+<div class="layui-form" lay-href="admin/onLineVostroAccountQuery.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">银行卡号</label>
+			<div class="layui-input-inline">
+				<input name="payerBankCardNum" th:value="${payerBankCardNum }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">开始时间</label>
+			<div class="layui-input-inline">
+				<input name="vostroAccountStartAt" th:value="${vostroAccountStartAt }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">结束时间</label>
+			<div class="layui-input-inline">
+				<input name="vostroAccountEndAt" th:value="${vostroAccountEndAt }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th>来账流水号</th>
+					<th>付款人姓名</th>
+					<th>付款行行名</th>
+					<th>付款人银行卡号</th>
+					<th>金额</th>
+					<th>附言</th>
+					<th>来账时间</th>
+				</tr>
+			</thead>
+			<tbody th:if="${not #lists.isEmpty(queryItem)}">
+				<tr th:each="item : ${queryItem}">
+					<td th:text="${item.vostroAccountSeqNum}"></td>
+					<td th:text="${item.payerName}"></td>
+					<td th:text="${item.payerBankName}"></td>
+					<td th:text="${item.payerBankCardNum}"></td>
+					<td th:text="${#decimal.format(item.recAmount, 1, 10)}"></td>
+					<td th:text="${item.postscript}"></td>
+					<td th:text="${item.vostroAccountAt}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

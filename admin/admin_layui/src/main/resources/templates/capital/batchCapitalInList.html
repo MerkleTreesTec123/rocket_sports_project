@@ -1,0 +1,242 @@
+<div class="layui-form" lay-href="admin/batchCapitalInList.html">
+    <div class="layui-btn-box">
+        <input type="file" name="file" lay-ext="csv" lay-type="file" lay-title="上传个人支付宝明细"
+               class="layui-upload-file" data-type="1" value="上传个人支付宝明细"/>
+        <input type="file" name="file" lay-ext="csv" lay-type="file" lay-title="上传企业支付宝明细"
+               class="layui-upload-file" data-type="2" value="上传企业支付宝明细"/>
+    </div>
+    <br/>
+    <hr/>
+    <div id="batchCapitalInList" class="layui-conten-box">
+    </div>
+    <div class="layui-laypage-box" style="height:100px;"></div>
+</div>
+
+<script>
+    layui.use(['upload', 'grid'], function () {
+        var $ = layui.jquery
+            , grid = layui.grid
+            , layer = layui.layer;
+        // 图片上传
+        var msgIndex = 0;
+        var matchtype = 0;
+        layui.upload({
+             url: '',
+             type: "csv",
+             before: function (input) {
+                 matchtype = $(input).data().type;
+                 $(input).parent().attr("action", '/admin/uploadRechargeExcel.html?type=' + matchtype)
+                 msgIndex = layer.msg('上传中······', {
+                     icon: 16
+                     , shade: 0.01
+                     , time: 0
+                 });
+             },
+             success: function (res, input) {
+                 layer.close(msgIndex);
+                 /*<![CDATA[*/
+
+                 if (res.code === 200) {
+
+                     if(matchtype == 1){
+
+                         var table =
+                             "<table class=\"layui-table\" width=\"100%\">" +
+                             "<thead>" +
+                             "<tr>" +
+                                 "<th></th>" +
+                                 "<th style=\"border-right-color:#FF5722;text-align: center;\" colspan=\"6\">支付宝信息</th>" +
+                                 "<th colspan=\"10\" style=\"text-align: center;\">充值信息</th>" +
+                             "</tr>" +
+                             "<tr>" +
+                                 "<th></th>" +
+                                 "<th>流水号</th>" +
+                                 "<th>UID</th>" +
+                                 "<th>支付金额</th>" +
+                                 "<th>支付时间</th>" +
+                                 "<th>支付状态</th>" +
+                                 "<th style=\"border-right-color:#FF5722\">支付来源</th>" ;
+                         }else if(matchtype == 2){
+                             var table =
+                             "<table class=\"layui-table\" width=\"100%\">" +
+                             "<thead>" +
+                             "<tr>" +
+                                 "<th></th>" +
+                                 "<th style=\"border-right-color:#FF5722;text-align: center;\" colspan=\"6\">支付宝信息</th>" +
+                                 "<th colspan=\"10\" style=\"text-align: center;\">充值信息</th>" +
+                                 "</tr>" +
+                                 "<tr>" +
+                                 "<th></th>" +
+                                 "<th>流水号</th>" +
+                                 "<th>支付宝账号</th>" +
+                                 "<th>支付宝名称</th>" +
+                                 "<th>支付金额</th>" +
+                                 "<th>支付时间</th>" +
+                                 "<th style=\"border-right-color:#FF5722\">支付状态</th>";
+                         }
+
+                         table +=
+                                 "<th>UID</th>" +
+                                 "<th>登录名</th>" +
+                                 "<th>会员昵称</th>" +
+                                 "<th>真实姓名</th>" +
+                                 "<th>充值方式</th>" +
+                                 "<th>充值账号</th>" +
+                                 "<th>充值姓名</th>" +
+                                 "<th>充值金额</th>" +
+                                 "<th>状态</th>" +
+                                 "<th>创建时间</th>" +
+                             "</tr>" +
+                             "</thead>" +
+                             "<tbody>" +
+                             "<tr>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                                 "<td style='padding:0;border: none;'></td>" +
+                             "</tr>";
+                     $.each(res.data, function (idx, obj) {
+                         if (obj.operation == null) {
+                             table += "<tr>" +
+                                 "<td></td>";
+
+                             if(matchtype == 1){
+                                 table += "<td>" + obj.serialNo + "</td>" +
+                                     "<td>" + obj.uid + "</td>" +
+                                     "<td><span class='amount'>" + obj.amount + "</span></td>" +
+                                     "<td>" + obj.timestamp + "</td>" +
+                                     "<td>" + obj.status + "</td>" +
+                                     "<td style=\"border-right-color:#FF5722\">" + obj.source + "</td>";
+                             } else if(matchtype == 2){
+                                 table += "<td>" + obj.serialNo + "</td>" +
+                                     "<td>" + obj.account + "</td>" +
+                                     "<td>" + obj.name + "</td>" +
+                                     "<td><span class='amount'>" + obj.amount + "</span></td>" +
+                                     "<td>" + obj.timestamp + "</td>" +
+                                     "<td  style=\"border-right-color:#FF5722\">" + obj.status + "</td>";
+                             }
+
+                             table +=
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "<td></td>" +
+                                 "</tr>";
+                         } else {
+                             table += "<tr><td>";
+
+                             if (matchtype == 1){
+                                 if (obj.uid != null && obj.operation != null
+                                     && obj.operation.fstatus == 2) {
+                                     table += "<input type=\"button\" lay-id=\"" + obj.operation.fid +
+                                         "\"  lay-serial=\"" + obj.serialNo+ "\" class=\"layui-btn layui-btn-small layui-check\" value=\"审核\"" +
+                                         "lay-tips=\"你确认审核要这条充值记录吗?\"/>";
+                                 }
+                             } else if(matchtype == 2){
+                                 if (obj.operation != null && obj.operation.fstatus == 2) {
+                                     table += "<input type=\"button\" lay-id=\"" + obj.operation.fid +
+                                         "\"  lay-serial=\"" + obj.serialNo+ "\" class=\"layui-btn layui-btn-small layui-check\" value=\"审核\"" +
+                                         "lay-tips=\"你确认审核要这条充值记录吗?\"/>";
+                                 }
+                             }
+
+
+                             table += "</td>";
+
+                             if(matchtype == 1){
+                                 table += "<td>" + obj.serialNo + "</td>" +
+                                     "<td>" + obj.uid + "</td>" +
+                                     "<td><span class='amount'>" + obj.amount + "</span></td>" +
+                                     "<td>" + obj.timestamp + "</td>" +
+                                     "<td>" + obj.status + "</td>" +
+                                     "<td style=\"border-right-color:#FF5722\">" + obj.source + "</td>";
+                             } else if(matchtype == 2){
+                                 table += "<td>" + obj.serialNo + "</td>" +
+                                     "<td>" + obj.account + "</td>" +
+                                     "<td>" + obj.name + "</td>" +
+                                     "<td><span class='amount'>" + obj.amount + "</span></td>" +
+                                     "<td>" + obj.timestamp + "</td>" +
+                                     "<td  style=\"border-right-color:#FF5722\">" + obj.status + "</td>";
+                             }
+
+                             table +=
+                                 "<td>" + obj.operation.fuid + "</td>" +
+                                 "<td>" + obj.operation.floginname + "</td>" +
+                                 "<td>" + obj.operation.fnickname + "</td>" +
+                                 "<td>" + obj.operation.frealname + "</td>" +
+                                 "<td>" + obj.operation.fbank + "</td>" +
+                                 "<td>" + obj.operation.faccount + "</td>" +
+                                 "<td>" + obj.operation.fpayee + "</td>" +
+                                 "<td><span class='amount'>" + obj.operation.famount + "</span></td>" +
+                                 "<td>" + obj.operation.fstatus_s + "</td>" +
+                                 "<td>" + obj.createtime_s + "</td>" +
+                                 "</tr>";
+                         }
+                     });
+
+                     table += "</tbody></table>";
+                     /*]]>*/
+                     $(".layui-conten-box").html(table);
+                     grid.table().render($("#batchCapitalInList"));
+                     grid.onEvent().scroller($("#batchCapitalInList"));
+                     grid.resize($("#batchCapitalInList").parents(".layui-tab-item").attr("lay-id"));
+
+                     $(".layui-check").on("click", function () {
+                         var that = this;
+                         var id = $(that).attr("lay-id");
+                         var serial = $(that).attr("lay-serial");
+                         var lay_tips = $(that).attr("lay-tips");
+                         layer.confirm(lay_tips, {
+                             icon: 3,
+                             title: '提示'
+                         }, function (index) {
+                             $.post("admin/capitalInAudit.html", {"uid": id, "serialno":serial}, function (result) {
+                                 layer.close(index);
+                                 if (result.code === 200) {
+                                     layer.alert(result.msg, {
+                                         title: "成功",
+                                         icon: 1
+                                     }, function (index) {
+                                         layer.close(index);
+                                         $(that).parents("tr").remove();
+                                         //$(that).parents("tr").find("td").css({"height":0,"overflow":"hidden","min-height":"inherit","line-height":0});
+                                     });
+                                 } else {
+                                     layer.alert(result.msg, {
+                                         title: "错误",
+                                         icon: 2
+                                     });
+                                 }
+                             });
+                         });
+                     });
+                 } else {
+                     layer.alert(res.msg, {
+                         title: "解析异常",
+                         icon: 2
+                     });
+                 }
+             }
+         });
+
+    });
+</script>

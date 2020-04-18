@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FQuestionMapper" >
+
+  <sql id="questionColumn">
+  	fid, ftype, ftelephone, fuid, fstatus, fcreatetime, fupdatetime, faid, fname, 
+    version, fcid, fisanswer, fdesc, fanswer
+  </sql>
+  
+  <update id="updateByPrimaryKey" parameterType="FQuestion" >
+    update f_question
+    set 
+    	ftype = #{ftype,jdbcType=INTEGER},
+      	ftelephone = #{ftelephone,jdbcType=VARCHAR},
+      	fuid = #{fuid,jdbcType=INTEGER},
+      	fstatus = #{fstatus,jdbcType=INTEGER},
+      	fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      	fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      	faid = #{faid,jdbcType=INTEGER},
+      	fname = #{fname,jdbcType=VARCHAR},
+      	version = version + 1,
+      	fcid = #{fcid,jdbcType=INTEGER},
+      	fisanswer = #{fisanswer,jdbcType=INTEGER},
+      	fdesc = #{fdesc,jdbcType=LONGVARCHAR},
+      	fanswer = #{fanswer,jdbcType=LONGVARCHAR}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="FQuestion" parameterType="java.lang.Integer">
+    select <include refid="questionColumn" />
+    from f_question
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+   
+  <select id="getQuestionPageList" resultType="FQuestion" parameterType="java.util.Map">
+   	select 
+		f_question.fid, f_question.ftype, f_question.ftelephone, f_question.fuid, f_question.fstatus, f_question.fcreatetime, f_question.fupdatetime, f_question.faid, f_question.fname, 
+	    f_question.version, f_question.fcid, f_question.fisanswer, f_question.fdesc, f_question.fanswer,f_admin.fname as fadmin
+    from f_question left join f_admin on f_question.faid = f_admin.fid 
+    where 1=1
+    <if test="keyword != null">
+    	and f_question.fname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="fstatus != null">
+   	 	and f_question.fstatus = #{fstatus,jdbcType=INTEGER}
+    </if>
+    order by ${orderField} ${orderDirection}
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countQuestionPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+   	select count(f_question.fid)
+    	from f_question left join f_admin on f_question.faid = f_admin.fid 
+    where 1=1
+    <if test="keyword != null">
+    	and f_question.fname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="fstatus != null">
+   	 	and f_question.fstatus = #{fstatus,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  <update id="answerQuestion" parameterType="FQuestion">
+  	update f_question
+  	set fanswer = #{fanswer},
+  	fstatus = #{fstatus},
+  	fupdatetime = now(),
+  	faid = #{faid},
+  	version = version + 1
+  	where fid = #{fid} and version = #{version}
+  </update>
+  
+  
+</mapper>

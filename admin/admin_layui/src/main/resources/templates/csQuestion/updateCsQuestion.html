@@ -1,0 +1,42 @@
+<div class="layui-form layui-form-pane" lay-href="/csQuestion/updateCsQuestion.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户id：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fuid" lay-verify="required" th:value="${question.fuid }" disabled="disabled"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发起人：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${question.fid }"/>
+            <input class="layui-input" name="fquestion" lay-verify="required" th:value="${question.fquestion }" disabled="disabled"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">处理：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="foperation" lay-verify="required" th:value="${question.foperation }"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">问题详情:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-textarea-fixed" name="fdetail" lay-verify="required" th:text="${question.fdetail }" disabled="disabled"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">问题详情:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-textarea-fixed" name="fresult" lay-verify="required" th:text="${question.fresult }"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-block">
+            <select type="combox" name="fstatus">
+                <option value="0" >未处理</option>
+                <option value="1" >已处理</option>
+            </select>
+        </div>
+    </div>
+</div>

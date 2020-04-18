@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.mapper.FLogUserScoreMapper">
+
+	<sql id="logUserScoreColumns">
+		fid, fuid, fscore, ftype, fremark, fcreatetime
+	</sql>
+
+	<insert id="insert" parameterType="FLogUserScore">
+		insert into f_log_user_score (
+			fid, 
+			fuid, 
+			fscore,
+			ftype, 
+			fremark, 
+			fcreatetime
+		) values (
+			#{fid,jdbcType=INTEGER}, 
+			#{fuid,jdbcType=INTEGER},
+			#{fscore,jdbcType=INTEGER},
+			#{ftype,jdbcType=INTEGER},
+			#{fremark,jdbcType=VARCHAR}, 
+			#{fcreatetime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+</mapper>

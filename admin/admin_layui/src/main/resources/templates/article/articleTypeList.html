@@ -1,0 +1,50 @@
+<div class="layui-form" lay-href="admin/articleTypeList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateArticleType.html"
+			lay-href="admin/goArticleTypeJSP.html?url=article/updateArticleType" lay-checked="uid" lay-target="dialog" lay-height="500" lay-width="800">修改</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>类型名称</th>
+					<th>类型ID</th>
+					<th>关键词</th>
+					<th>描述</th>
+					<th>语言</th>
+					<th data-order-field="fcreatetime">创建时间</th>
+					<th data-order-field="fupdatetime">修改时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="articleType : ${articleTypeList.data}">
+					<td>
+						<input type="checkbox" th:name="${articleType.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${articleType.fname}"></td>
+					<td th:text="${articleType.ftypeid}"></td>
+					<td th:text="${articleType.fkeywords}"></td>
+					<td th:text="${articleType.fdescription}"></td>
+					<td th:text="${articleType.flanguagename}"></td>
+					<td th:text="${articleType.fcreatetime == null ? '':#dates.format(articleType.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${articleType.fupdatetime == null ? '':#dates.format(articleType.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${articleTypeList.totalPages}, lay-curr=${articleTypeList.currentPage}"></div>
+</div>

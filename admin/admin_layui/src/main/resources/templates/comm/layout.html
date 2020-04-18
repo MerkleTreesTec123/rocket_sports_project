@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<body>
+	<div th:fragment="left_menu">
+		<ul class="layui-nav layui-nav-tree" lay-filter="left_menu">
+			<li class="layui-nav-item" shiro:hasPermission="user">
+				<a href="javascript:;">用户管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/userList.html">
+						<a href="/admin/userList.html">用户信息</a>
+					</dd>
+					<dd shiro:hasPermission="admin/identityList.html">
+						<a href="/admin/userIdentityList.html">会员实名审核</a>
+					</dd>
+					<dd shiro:hasPermission="admin/identityList.html">
+						<a href="/admin/identityList.html">会员实名修改</a>
+					</dd>
+					<dd>
+						<a href="/admin/findFuserByAddress.html">用户地址查询</a>
+					</dd>
+					<dd>
+						<a href="/admin/openApi.html">开放api</a>
+					</dd>
+					<dd shiro:hasPermission="/admin/goCommissionRecord.html">
+						<a href="/admin/goCommissionRecord.html">佣金记录</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="article">
+				<a href="javascript:;">新闻管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/articleList.html">
+						<a href="/article/articleList.html">新闻列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/articleTypeList.html">
+						<a href="/admin/articleTypeList.html">新闻类型</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="virtualCoin">
+				<a href="javascript:;">币种管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="/admin/tradeTypeList.html">
+						<a href="admin/tradeTypeList.html">交易列表</a>
+					</dd>
+					<dd shiro:hasPermission="/admin/coinTypeList.html">
+						<a href="admin/coinTypeList.html">币种列表</a>
+					</dd>
+					<dd shiro:hasPermission="/admin/coinInfoList.html">
+						<a href="admin/coinInfoList.html">币种信息列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/walletAddressList.html">
+						<a href="admin/walletAddressList.html">地址余量</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="capital">
+				<a href="javascript:;">充提管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/capitalInList.html?limit=0">
+						<a href="admin/capitalInList.html?limit=0">待审核小额美元充值</a>
+					</dd>
+					<dd shiro:hasPermission="admin/capitalInList.html?limit=1">
+						<a href="admin/capitalInList.html?limit=1">待审核大额美元充值</a>
+					</dd>
+					<dd shiro:hasPermission="admin/capitalOutList.html">
+						<a href="admin/capitalOutList.html">待审核美元提现</a>
+					</dd>
+					<dd shiro:hasPermission="admin/virtualCapitalOutList.html">
+						<a href="admin/virtualCapitalOutList.html">待审核虚拟币提现</a>
+					</dd>
+					<dd shiro:hasPermission="admin/capitaloperationList.html">
+						<a href="admin/capitaloperationList.html?type=1">美元充值列表</a>
+						<a href="admin/capitaloperationList.html?type=2">美元提现列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/virtualCaptualoperationList.html">
+						<a href="admin/virtualCapitaloperationList.html?type=1">虚拟币充值列表</a>
+						<a href="admin/virtualCapitaloperationList.html?type=2">虚拟币提现列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/virtualoperationlogList.html">
+						<a href="admin/virtualoperationlogList.html">手工充值列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/virtualoperationlogList2.html">
+						<a href="admin/virtualoperationlogList2.html">人民币手工充值列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/virtualwalletList.html">
+						<a href="admin/virtualwalletList.html">会员虚拟币列表</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="entrust">
+				<a href="javascript:;">委单管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/entrustList.html">
+						<a href="entrust/entrustList.html">当前委单列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/entrustHistoryList.html">
+						<a href="entrust/entrustHistoryList.html">历史委单列表</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="question">
+				<a href="javascript:;">问答管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="question/questionForAnswerList.html">
+						<a href="question/questionForAnswerList.html">待解决列表</a>
+					</dd>
+					<dd shiro:hasPermission="question/questionList.html">
+						<a href="question/questionList.html">已解决列表</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="activity">
+				<a href="javascript:;">活动管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/rewardcodeList.html">
+						<a href="admin/rewardcodeList.html">激活码列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/virtualFinancesList.html">
+						<a href="/admin/virtualFinancesList.html">理财设置</a>
+					</dd>
+					<dd shiro:hasPermission="/admin/userFinances.html">
+						<a href="admin/userFinances.html">理财记录</a>
+					</dd>
+
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="customerService">
+				<a href="javascript:;">工单管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/csQuestionList.html">
+						<a href="csQuestion/csQuestionList.html">客服问题列表</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="logItem">
+				<a href="javascript:;">日志管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/logList.html">
+						<a href="log/logList.html">会员操作日志</a>
+					</dd>
+					<dd shiro:hasPermission="admin/logscoreList.html">
+						<a href="log/logscoreList.html">会员积分日志</a>
+					</dd>
+					<dd shiro:hasPermission="admin/logadminList.htm">
+						<a href="log/logadminList.html">管理员操作日志</a>
+					</dd>
+					<dd shiro:hasPermission="admin/ipLoginList.html">
+						<a href="log/ipLoginList.html">IP登录次数查询</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="highSearch">
+				<a href="javascript:;">高级查询</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/usercapital.html">
+						<a href="admin/usercapital.html">资产平衡</a>
+					</dd>
+					<dd shiro:hasPermission="admin/monthDataList.html">
+						<a href="admin/monthDataList.html">月充提买卖</a>
+					</dd>
+					<dd shiro:hasPermission="admin/capitalStorage.html">
+						<a href="admin/capitalStorage.html">用户币存量</a>
+					</dd>
+					<dd shiro:hasPermission="admin/userRegSort.html">
+						<a href="admin/userRegSort.html">用户注册列表</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="report">
+				<a href="javascript:;">平台报表</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/dayCapitalCoinList.html">
+						<a href="report/dayCapitalCoinList.html">虚拟币日流水</a>
+					</dd>
+					<dd shiro:hasPermission="admin/dayOperatList.html">
+						<a href="report/dayOperatList.html">运营日统计</a>
+					</dd>
+					<dd shiro:hasPermission="admin/dayTradeCoinList.html">
+						<a href="report/dayTradeCoinList.html">交易日统计</a>
+					</dd>
+					<dd shiro:hasPermission="admin/daySumList.html">
+						<a href="report/daySumList.html">存量统计</a>
+					</dd>
+					<dd shiro:hasPermission="/admin/userfinancestotle.html">
+						<a href="/report/userfinancestotle.html">理财统计</a>
+					</dd>
+					<dd shiro:hasPermission="admin/dayCharts.html">
+						<a href="report/dayCharts.html">统计总表</a>
+					</dd>
+					<dd shiro:hasPermission="charts/operationData.html">
+						<a href="charts/operationData.html">平台数据查询</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="charts">
+				<a href="javascript:;">统计图表</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/tradeCharts.html">
+						<a href="admin/tradeCharts.html">交易统计</a>
+					</dd>
+					<dd shiro:hasPermission="admin/capitalCharts.html">
+						<a href="admin/capitalCharts.html">充提统计</a>
+					</dd>
+					<dd shiro:hasPermission="admin/incomeCharts.html">
+						<a href="admin/incomeCharts.html">收益统计</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="masterStation">
+				<a href="javascript:;">主站管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/linkList.html">
+						<a href="friendLink/linkList.html">友情链接列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/aboutList.html">
+						<a href="about/aboutList.html">关于我们</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="system">
+				<a href="javascript:;">系统管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/systemArgsList.html">
+						<a href="systemArgs/systemArgsList.html">参数列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/beautifulList.html">
+						<a href="/admin/beautifulList.html">靓号列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/systemBankList.html">
+						<a href="admin/systemBankList.html">银行帐户列表</a>
+					</dd>
+					<dd shiro:hasPermission="/validate/accountlist.html">
+						<a href="/validate/accountlist.html">验证账号设置</a>
+					</dd>
+					<dd shiro:hasPermission="/validate/accountlist.html">
+						<a href="/validate/platformlist.html">验证平台设置</a>
+					</dd>
+					<dd shiro:hasPermission="/validate/templatelist.html">
+						<a href="/validate/templatelist.html">验证模板设置</a>
+					</dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item" shiro:hasPermission="administrator">
+				<a href="javascript:;">管理员管理</a>
+				<dl class="layui-nav-child">
+					<dd shiro:hasPermission="admin/securityList.html">
+						<a href="admin/goSecurityJSP.html?url=security/securityTreeList&amp;treeId=1">权限管理</a>
+					</dd>
+					<dd shiro:hasPermission="admin/roleList.html">
+						<a href="admin/roleList.html">角色列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/adminList.html">
+						<a href="admin/adminList.html">管理员列表</a>
+					</dd>
+					<dd shiro:hasPermission="admin/countLimitList.html">
+						<a href="admin/limitList.html">限制管理列表</a>
+					</dd>
+				</dl>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

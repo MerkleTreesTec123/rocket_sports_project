@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FSystemBankinfoRechargeMapper" >
+
+  <resultMap id="BaseResultMap" type="FSystemBankinfoRecharge" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fbankname" property="fbankname" jdbcType="VARCHAR" />
+    <result column="fownername" property="fownername" jdbcType="VARCHAR" />
+    <result column="fbankaddress" property="fbankaddress" jdbcType="VARCHAR" />
+    <result column="fbanknumber" property="fbanknumber" jdbcType="VARCHAR" />
+    <result column="fcreatetime" property="fcreatetime" jdbcType="TIMESTAMP" />
+    <result column="fstatus" property="fstatus" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="fbanktype" property="fbanktype" jdbcType="INTEGER" />
+    <result column="fsortid" property="fsortid" jdbcType="INTEGER" />
+    <result column="fusetype" property="fusetype" jdbcType="INTEGER" />
+    <result column="fbankcode" property="fbankcode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="bankinfoRechargeColumn">
+      fid, fbankname, fownername, fbankaddress, fbanknumber, fcreatetime, fstatus, version, fbanktype, fsortid, fusetype, fbankcode
+  </sql>
+  
+  <select id="selectByType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  	select <include refid="bankinfoRechargeColumn" /> from f_system_bankinfo_recharge where fbanktype = #{fbanktype} and fstatus = 1
+  </select>
+  
+  <insert id="insert" parameterType="FSystemBankinfoRecharge" keyProperty="fid">
+    insert into f_system_bankinfo_recharge (
+      fbankname, 
+      fownername, 
+      fbankaddress, 
+      fbanknumber, 
+      fcreatetime, 
+      fstatus, 
+      version, 
+      fbanktype, 
+      fsortid, 
+      fusetype, 
+      fbankcode
+    ) values (
+      #{fbankname,jdbcType=VARCHAR}, 
+      #{fownername,jdbcType=VARCHAR}, 
+      #{fbankaddress,jdbcType=VARCHAR}, 
+      #{fbanknumber,jdbcType=VARCHAR}, 
+      #{fcreatetime,jdbcType=TIMESTAMP}, 
+      #{fstatus,jdbcType=INTEGER}, 
+      #{version,jdbcType=INTEGER}, 
+      #{fbanktype,jdbcType=INTEGER}, 
+      #{fsortid,jdbcType=INTEGER}, 
+      #{fusetype,jdbcType=INTEGER}, 
+      #{fbankcode,jdbcType=VARCHAR} )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="FSystemBankinfoRecharge" >
+    update f_system_bankinfo_recharge set 
+      fbankname = #{fbankname,jdbcType=VARCHAR},
+      fownername = #{fownername,jdbcType=VARCHAR},
+      fbankaddress = #{fbankaddress,jdbcType=VARCHAR},
+      fbanknumber = #{fbanknumber,jdbcType=VARCHAR},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fstatus = #{fstatus,jdbcType=INTEGER},
+      version = version + 1,
+      fbanktype = #{fbanktype,jdbcType=INTEGER},
+      fsortid = #{fsortid,jdbcType=INTEGER},
+      fusetype = #{fusetype,jdbcType=INTEGER},
+      fbankcode = #{fbankcode,jdbcType=VARCHAR}
+    where fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="FSystemBankinfoRecharge" parameterType="java.lang.Integer" >
+    select <include refid="bankinfoRechargeColumn" /> from f_system_bankinfo_recharge where fid = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllByStatus" resultType="FSystemBankinfoRecharge" parameterType="java.lang.Integer">
+    select <include refid="bankinfoRechargeColumn" /> from f_system_bankinfo_recharge where fstatus =#{fstatus,jdbcType=INTEGER} order by fsortid
+  </select>
+  
+  <!-- Admin -->
+  <select id="getBankPageList" resultType="FSystemBankinfoRecharge" parameterType="java.util.Map" >
+    select fid, fbankname, fownername, fbankaddress, fbanknumber, fcreatetime, fstatus, 
+    version, fbanktype, fsortid, fusetype, fbankcode
+    from f_system_bankinfo_recharge
+    where 1=1
+    <if test="keyword != null">
+	   	and	( 
+	   		fbankname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or  
+	   		fownername like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+	   	)
+	</if>
+	order by ${orderfield} ${orderdirection}
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countBankByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(fid)
+    from f_system_bankinfo_recharge
+    where 1=1
+    <if test="keyword != null">
+	   	and	( 
+	   		fbankname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or  
+	   		fownername like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+	   	)
+	</if>
+  </select>
+</mapper>

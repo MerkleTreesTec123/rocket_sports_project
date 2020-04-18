@@ -1,0 +1,49 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="admin/updateAbout.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${fabout.fid}"/>
+            <input class="layui-input layui-disabled" name="ftitle" disabled="disabled" th:value="${fabout.ftitle}"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">内容：</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-hide" name="fcontent" lay-verify="content" id="editor"
+                      th:text="${fabout.fcontent == null ? '':fabout.fcontent}"></textarea>
+            <div id="umeditor"></div>
+        </div>
+    </div>
+    <script>
+        var $ = layui.jquery, jQuery = layui.jquery;
+    </script>
+    <script th:inline="javascript">
+        // uedit
+        //如果存在就先销毁掉
+        if (typeof window.um != 'undefined') {
+            window.um.destroy();
+        }
+        window.um = UM.getEditor('umeditor', {
+            /* 传入配置参数,可配参数列表看umeditor.config.js */
+            UMEDITOR_HOME_URL: "js/uedit/",
+            autoHeightEnabled: false,
+            imageUrl: "/article/upload.html?type=2",
+            imagePath: "",
+            imageFieldName: "file",
+            initialFrameWidth: 650,
+            initialFrameHeight: 400,
+            initialContent: [[${fabout.fcontent == null ? '':fabout.fcontent}]]
+        });
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form()
+                , $ = layui.jquery;
+            //自定义验证规则
+            form.verify({
+                            content: function () {
+                                $("#editor").html(window.um.getContent());
+                            }
+                        });
+
+        });
+    </script>
+</div>

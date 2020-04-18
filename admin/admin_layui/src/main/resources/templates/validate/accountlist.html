@@ -1,0 +1,56 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="/validate/accountlist.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline layui-hide">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="validate/accountadd.html"
+                    lay-href="/validate/goaccount?url=validate/accountadd"
+                    lay-target="dialog" lay-height="380" lay-width="530">新增
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="validate/accountedit.html"
+                    lay-href="/validate/goaccount?url=validate/accountedit" lay-checked="id"
+                    lay-target="dialog" lay-height="380" lay-width="530">修改
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>发送类型</th>
+                <th>账号名称</th>
+                <th>账号</th>
+                <th>密码</th>
+                <th>URL</th>
+                <th data-order-field="gmt_create">
+                    创建时间
+                </th>
+                <th data-order-field="gmt_modified">
+                    修改时间
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${list.id}" lay-skin="primary"/>
+                </td>
+                <td th:text="${list.type_s}"></td>
+                <td th:text="${list.name}"></td>
+                <td th:text="${list.accessKey}"></td>
+                <td th:text="${list.secretKey}"></td>
+                <td th:text="${list.url}"></td>
+                <td th:text="${#dates.format(list.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${#dates.format(list.gmtModified, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

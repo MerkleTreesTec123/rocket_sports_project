@@ -1,0 +1,73 @@
+<div class="layui-form" lay-href="admin/coinInfoList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">语言</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="lanName">
+					<option th:each="v : ${localeMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == lanName}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">钱包类型：</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="coinId">
+					<option th:each="v : ${coinMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == coinId}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/saveCoinInfo.html"
+				lay-href="/admin/goCoinInfoJSP.html?url=coin/saveCoinInfo" lay-target="dialog">新增</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateCoinInfo.html"
+				lay-href="/admin/goCoinInfoJSP.html?url=coin/updateCoinInfo" lay-checked="id" lay-target="dialog">修改</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteCoinInfo.html"
+				lay-href="/admin/deleteCoinInfo.html" lay-checked="id" lay-target="ajax" lay-tips="确定要删除吗?">删除</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>主键ID</th>
+					<th>名称</th>
+					<th>英文名称</th>
+					<th>简称</th>
+					<th>发行总量</th>
+					<th>发行价格</th>
+					<th>流通量</th>
+					<th>官方网站</th>
+					<th>区块查询</th>
+					<th>币种描述</th>
+					<th>白皮书地址</th>
+					<th>发行时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="list : ${page}">
+					<td>
+						<input type="checkbox" th:name="${list.id}" lay-skin="primary" />
+					</td>
+					<td th:text="${list.id}"></td>
+					<td th:text="${list.nameZh}"></td>
+					<td th:text="${list.nameEn}"></td>
+					<td th:text="${list.nameShort}"></td>
+					<td th:text="${list.total}"></td>
+					<td th:text="${list.price}"></td>
+					<td th:text="${list.circulation}"></td>
+					<td th:text="${list.linkWebsite}"></td>
+					<td th:text="${list.linkBlock}"></td>
+					<td	th:text="${list.info}"></td>
+					<td th:text="${list.linkWhitepaper}"></td>
+					<td th:text="${list.gmtRelease}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

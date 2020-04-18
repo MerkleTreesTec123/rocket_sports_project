@@ -1,0 +1,56 @@
+spring:
+  datasource:
+    name: mydb
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://rm-t23ie6r9bqsh97b23.mysql.singapore.rds.aliyuncs.com/rock2et123?useUnicode=true&characterEncoding=utf-8
+    username: rocRedbke2t
+    password: 6peveh2317ww0@fxSCr2RLVDH23Amu
+    driver-class-name: com.mysql.jdbc.Driver
+    initialSize: 10
+    minIdle: 10
+    maxActive: 50
+    defaultAutoCommit: false
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+
+redis:
+  host: r-tdsdf22i23jybg4r7i.redis.singapore.rds.aliyuncs.com
+  port: 6379
+  password: ChC9@cJhjB237zfIm231AvjlmDREI2
+  timeout: 5000
+  pool:
+    minIdle: 50
+    maxIdle: 50
+    maxTotal: 200
+    maxWaitMillis: 5000
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: true
+
+aliyun:
+  mq:
+    accessKey: OL234wnqcP3a21
+    secretKey: rdGiT321ssbDiSjb2Wz12BE343ptot
+    onsAddr: http://MQ_INST_1202966359367106_BbRExkcU.ap-southeast-1.mq-internal.aliyuncs.com:8080
+    topic:
+      entrust_state: SG_ROCKET_ENTRUST_STATE
+      user_action: SG_ROCKET_USER_ACTION
+      admin_action: SG_ROCKET_ADMIN_ACTION
+      validate: SG_ROCKET_VALIDATE
+      score: SG_ROCKET_SCORE
+    pid:
+      entrustState: GID_SG_ROCKET_ENTRUST_STATE 
+      validate: GID_SG_ROCKET_VALIDATE
+      score: GID_SG_ROCKET_SCORE
+      userAction: GID_SG_ROCKET_USER_ACTION
+      adminAction: GID_SG_ROCKET_ADMIN_ACTION
+    cid:
+      entrustState: GID_SG_ROCKET_ENTRUST_STATE
+      validate: GID_SG_ROCKET_VALIDATE
+      score: GID_SG_ROCKET_SCORE
+      userAction: GID_SG_ROCKET_USER_ACTION
+      adminAction: GID_SG_ROCKET_ADMIN_ACTION

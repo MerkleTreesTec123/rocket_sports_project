@@ -1,0 +1,60 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+     class="layui-form" lay-href="admin/goSecurityJSP.html" style="float: left;width: 100%;">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">权限名称：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"
+                       style="width:200px"/>
+                <input type="hidden" name="treeId" th:value="${treeId}"/>
+                <input type="hidden" name="url" value="security/securityTreeList"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small"
+                shiro:hasPermission="admin/addSecurity.html"
+                th:attr="lay-href=${'admin/goSecurityJSP.html?url=security/addSecurity&amp;status=add&amp;treeId1='+ treeId }"
+                lay-target="dialog">
+            新增
+        </button>
+        <button class="layui-btn layui-btn-small"
+                shiro:hasPermission="admin/deleteSecurity.html"
+                lay-href="admin/deleteSecurity.html" lay-checked="uid" lay-target="ajax"
+                lay-tips="确定要删除吗?">删除
+        </button>
+        <button class="layui-btn layui-btn-small"
+                shiro:hasPermission="admin/updateSecurity.html"
+                th:attr="lay-href=${'admin/goSecurityJSP.html?url=security/updateSecurity&amp;status=update&amp;treeId1='+ treeId }"
+                lay-checked="uid" lay-target="dialog">修改
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>权限名称</th>
+                <th>访问地址</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="security : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${security.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${security.fname}">security.fname</td>
+                <td th:text="${security.furl}">security.furl</td>
+                <td th:text="${security.fdescription}">security.fdescription</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box"
+         th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

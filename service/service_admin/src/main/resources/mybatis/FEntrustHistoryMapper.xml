@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FEntrustHistoryMapper">
+
+	<sql id="entrustHistoryColumns">
+		f_entrust_history.fid, f_entrust_history.fuid, f_entrust_history.ftradeid, f_entrust_history.fbuycoinid, f_entrust_history.fsellcoinid,
+		f_entrust_history.fstatus, f_entrust_history.ftype, f_entrust_history.flast, f_entrust_history.fprize, f_entrust_history.fcount, f_entrust_history.famount,
+		f_entrust_history.fsuccessamount, f_entrust_history.fleftcount, f_entrust_history.fleftfees, f_entrust_history.ffees,
+		f_entrust_history.fmatchtype, f_entrust_history.fsource, f_entrust_history.fhuobientrustid, f_entrust_history.fhuobiaccountid, f_entrust_history.flastupdatTime,
+		f_entrust_history.fcreateTime, f_entrust_history.fagentid, f_entrust_history.fentrustid
+	</sql>
+
+	<!-- Admin -->
+	<select id="getAdminPageList" resultType="FEntrustHistory" parameterType="java.util.Map">
+		select
+		<include refid="entrustHistoryColumns" />
+		,f_user.floginname
+		,f_user.fnickname
+		,f_user.frealname
+		from (
+		select
+		<include refid="entrustHistoryColumns" />
+		from f_entrust_history
+		where 1=1
+		<if test="keyword != null">
+			and f_entrust_history.fuid = ${keyword}
+		</if>
+		<if test="fstatus != null">
+			and f_entrust_history.fstatus = ${fstatus}
+		</if>
+		<if test="ftype != null">
+			and f_entrust_history.ftype = ${ftype}
+		</if>
+		<if test="ftradeid != null">
+			and f_entrust_history.ftradeid = ${ftradeid}
+		</if>
+		<if test="fprize != null">
+			and f_entrust_history.fprize = ${fprize}
+		</if>
+		<if test="fagentid != null">
+			and f_entrust_history.fagentid = ${fagentid}
+		</if>
+		<if test="start != null and start == end">
+			<![CDATA[and DATE_FORMAT(f_entrust_history.fcreatetime,"%Y-%m-%d") = DATE_FORMAT(#{start},"%Y-%m-%d")]]>
+		</if>
+		<if test="start != null and start != end">
+			<![CDATA[and DATE_FORMAT(f_entrust_history.fcreatetime,"%Y-%m-%d") >= DATE_FORMAT(#{start},"%Y-%m-%d")]]>
+		</if>
+		<if test="end != null and start != end">
+			<![CDATA[and DATE_FORMAT(f_entrust_history.fcreatetime,"%Y-%m-%d") <= DATE_FORMAT(#{end},"%Y-%m-%d")]]>
+		</if>
+		<if test="orderField != null">
+			order by f_entrust_history.${orderField} ${orderDirection}
+		</if>
+		limit #{offset},#{limit}
+		) f_entrust_history left join
+		f_user on f_user.fid = f_entrust_history.fuid
+
+	</select>
+
+	<select id="countAdminPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select
+		count(*)
+		from
+		f_entrust_history
+		where 1=1
+		<if test="keyword != null">
+			and f_entrust_history.fuid = ${keyword}
+		</if>
+		<if test="fstatus != null">
+			and f_entrust_history.fstatus = ${fstatus}
+		</if>
+		<if test="ftype != null">
+			and f_entrust_history.ftype = ${ftype}
+		</if>
+		<if test="ftradeid != null">
+			and f_entrust_history.ftradeid = ${ftradeid}
+		</if>
+		<if test="fprize != null">
+			and f_entrust_history.fprize = ${fprize}
+		</if>
+		<if test="fagentid != null">
+			and f_entrust_history.fagentid = ${fagentid}
+		</if>
+		<if test="fcreatetime != null">
+			and DATE_FORMAT(f_entrust_history.fcreatetime,"%Y-%m-%d") = DATE_FORMAT(#{fcreatetime},"%Y-%m-%d")
+		</if>
+	</select>
+
+
+	<select id="getTotalAmountByType" resultType="FEntrustHistory" parameterType="java.util.Map">
+		select ifnull(sum(fcount-fleftcount),0) fcount,ifnull(sum(fleftcount),0) fleftcount,ifnull(sum(famount), 0) famount,
+		ifnull(sum(fsuccessamount), 0) fsuccessamount,ifnull(sum(ffees), 0) ffees
+		from
+		f_entrust_history
+		where fstatus in (2,3,5)
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="buycoinid != null">
+			and fbuycoinid = #{buycoinid}
+		</if>
+		<if test="sellcoinid != null">
+			and fsellcoinid = #{sellcoinid}
+		</if>
+		<if test="type != null">
+			and ftype = #{type}
+		</if>
+		<if test="buycoinid == null">
+			and fbuycoinid > 0
+		</if>
+		<if test="start != null">
+			<![CDATA[and fcreatetime >= #{start,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="end != null">
+			<![CDATA[and fcreatetime <= #{end,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+
+
+	<resultMap id="allInfo" type="java.util.Map">
+		<result column="buyCount" property="buyCount" jdbcType="INTEGER" />
+		<result column="sellCount" property="sellCount" jdbcType="INTEGER" />
+		<result column="sumBuy" property="sumBuy" jdbcType="DOUBLE" />
+		<result column="sumSell" property="sumSell" jdbcType="DOUBLE" />
+		<result column="feesBuy" property="feesBuy" jdbcType="DOUBLE" />
+		<result column="feesSell" property="feesSell" jdbcType="DOUBLE" />
+	</resultMap>
+
+	<resultMap id="personAllInfo" type="java.util.Map">
+		<result column="buyCount" property="buyCount" jdbcType="INTEGER" />
+		<result column="sellCount" property="sellCount" jdbcType="INTEGER" />
+	</resultMap>
+
+	<select id="selectTotal" resultMap="allInfo">
+		select
+		sum(case when ftype = 0 then 1 else 0 end ) as buyCount ,
+		sum(case when ftype = 1 then 1 else 0 end ) as sellCount,
+		sum(case when ftype = 0 then fcount - fleftcount else 0 end ) as sumBuy ,
+		sum(case when ftype = 1 then fcount - fleftcount else 0 end ) as sumSell ,
+		sum(case when ftype = 0 then ffees else 0 end ) as feesBuy ,
+		sum(case when ftype = 1 then ffees else 0 end ) as feesSell
+		from f_entrust_history where ftradeid = #{ftradeid} and date_format(fcreatetime, "%Y-%m-%d") = #{fcreatetime} ;
+	</select>
+
+	<select id="selectPerson" resultMap="personAllInfo">
+  	select
+	sum(case when ftype = 0 then 1 else 0 end ) as buyCount ,
+	sum(case when ftype = 1 then 1 else 0 end ) as sellCount
+	from (select fuid, ftype from f_entrust_history where ftradeid = #{ftradeid} and date_format(fcreatetime, "%Y-%m-%d") = #{fcreatetime} group by fuid, ftype) as fen;
+  	</select>
+
+</mapper>

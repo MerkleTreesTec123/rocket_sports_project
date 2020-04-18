@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FLogUserActionMapper" >
+
+  <insert id="insert" parameterType="FLogUserAction" keyProperty="fid">
+    insert into f_log_user_action (
+      fuid, 
+      ftype, 
+      fdatatype, 
+      fcapitaltype, 
+      fdata, 
+      ffees,
+      fcontent, 
+      fip, 
+      fupdatetime,
+      fcreatetime,
+      fagentid
+    ) values (
+      #{fuid,jdbcType=INTEGER}, 
+      #{ftype,jdbcType=INTEGER}, 
+      #{fdatatype,jdbcType=INTEGER}, 
+      #{fcapitaltype,jdbcType=INTEGER}, 
+      #{fdata,jdbcType=DECIMAL}, 
+      #{ffees,jdbcType=DECIMAL}, 
+      #{fcontent,jdbcType=VARCHAR}, 
+      #{fip,jdbcType=VARCHAR}, 
+      #{fupdatetime,jdbcType=TIMESTAMP},
+      #{fcreatetime,jdbcType=TIMESTAMP}, 
+      #{fagentid,jdbcType=INTEGER} )
+  </insert>
+  
+</mapper>

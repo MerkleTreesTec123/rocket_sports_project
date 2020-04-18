@@ -1,0 +1,56 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form"
+     lay-href="/report/dayCapitalCoinList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">虚拟币类型：</label>
+            <div class="layui-input-inline">
+                <select name="ftype">
+                    <option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">日期：</label>
+            <div class="layui-input-inline">
+                <input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({elem: this})" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>虚拟币名称</th>
+                <th data-order-field="frecharge">充值</th>
+                <th data-order-field="fwithdraw">提现</th>
+                <th data-order-field="fwithdrawwait">等待提现</th>
+                <th data-order-field="ffees">提现手续费</th>
+                <th data-order-field="fnetfees">网络手续费</th>
+                <th data-order-field="fupdatetime">最后更新时间</th>
+                <th data-order-field="fcreatetime">创建日期</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td th:text="${state.count}"></td>
+                <td th:text="${list.fcoinname}"></td>
+                <td th:text="${#decimal.format(list.frecharge,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fwithdraw,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fwithdrawwait,1,10)}"></td>
+                <td th:text="${#decimal.format(list.ffees,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fnetfees,1,10)}"></td>
+                <td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

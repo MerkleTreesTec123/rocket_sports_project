@@ -1,0 +1,32 @@
+<div class="layui-form" lay-href="/activity/shareCoinDetailInfo.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+
+
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th>登录名</th>
+                <th>批次号</th>
+                <th>排名</th>
+                <th>访问量</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${list.data}">
+                <td th:text="${item.loginName}"></td>
+                <td th:text="${item.batch}"></td>
+                <td th:text="${item.ranking}"></td>
+                <td th:text="${item.pv}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${list.totalPages}, lay-curr=${list.currentPage}"></div>
+</div>

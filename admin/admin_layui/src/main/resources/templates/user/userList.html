@@ -1,0 +1,193 @@
+<div class="layui-form" lay-href="admin/userList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">会员信息</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">UID</label>
+            <div class="layui-input-inline">
+                <input name="uid" th:value="${uid }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">会员状态</label>
+            <div class="layui-input-inline">
+                <select name="ftype">
+                    <option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == ftype}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">注册日期</label>
+            <div class="layui-input-inline">
+                <input name="regDate" th:value="${regDate }" class="layui-input" onclick="layui.laydate({elem: this})"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">最近登陆日期</label>
+            <div class="layui-input-inline">
+                <input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({elem: this})"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">会员生日</label>
+            <div class="layui-input-inline">
+                <select name="fisbirthday">
+                    <option value="0">全部</option>
+                    <option value="1" th:selected="${fisbirthday eq 1 ?true:false}">是</option>
+                    <option value="2" th:selected="${fisbirthday eq 2 ?true:false}">否</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=1"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=1" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">禁用
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=2"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=2" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">解除禁用
+            </button>
+        </div>
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=3"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=3" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">重置登录密码
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=4"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=4" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">重置交易密码
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=9"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=9" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">重置GOOGLE
+            </button>
+        </div>
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=5"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=5" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">禁止提现
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=6"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=6" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">启用提现
+            </button>
+        </div>
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=7"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=7" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">禁止提币
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userForbbin.html?status=8"
+                    lay-href="user/goPage?url=user/userRemark&amp;status=8" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="200">启用提币
+            </button>
+        </div>
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateUser.html"
+                    lay-href="user/goPage?url=user/userEdit" lay-checked="uid" lay-target="dialog" lay-height="480"
+                    lay-width="530">修改用户信息
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateLevel.html"
+                    lay-href="user/goPage?url=user/levelEdit" lay-checked="uid" lay-target="dialog" lay-height="380"
+                    lay-width="430">修改用户等级
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/levelScore.html"
+                    lay-href="user/goPage?url=user/levelScore" lay-checked="uid" lay-target="dialog" lay-height="380"
+                    lay-width="430">积分赠送
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userBeautiful.html"
+                    lay-href="user/goPage?url=user/userBeautiful" lay-checked="uid" lay-target="dialog" lay-width="400"
+                    lay-height="250">分配靓号
+            </button>
+            <button class="layui-btn layui-btn-small" lay-href="user/userExport.html" lay-target="export"
+                    lay-tips="实要导出这些记录吗?">导出
+            </button>
+        </div>
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="user/userForbbin.html?status=10"
+                    lay-href="user/userForbbin.html?status=10" lay-checked="uid" lay-target="ajax" lay-tips="确定已完成视频认证吗?">
+                视频认证
+            </button>
+        </div>
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="user/userForbbin.html?status=11"
+                    lay-href="user/userForbbin.html?status=11" lay-checked="uid" lay-target="ajax" lay-tips="确定要解除资产冻结吗?">
+                解除资产冻结
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="160%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>UID</th>
+                <th>显示ID</th>
+                <th>状态</th>
+                <th>提现状态</th>
+                <th>提币状态</th>
+                <th>视频认证</th>
+                <th>登录名</th>
+                <th>昵称</th>
+                <th>邮箱</th>
+                <th>积分</th>
+                <th>等级</th>
+                <th>真实姓名</th>
+                <th>证件号码</th>
+                <th>推荐人</th>
+                <th>转移UID</th>
+                <th>注册平台</th>
+                <th>生日</th>
+                <th data-order-field="fregisterTime">
+                    注册时间
+                </th>
+                <th data-order-field="flastlogintime">
+                    登录时间
+                </th>
+                <th>修改密码时间</th>
+            </tr>
+            </thead>
+            <tbody th:if="${not #lists.isEmpty(userList)}">
+            <tr th:each="user : ${userList.data}">
+                <td>
+                    <input type="checkbox" th:name="${user.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${user.fid}"></td>
+                <td th:text="${user.fshowid}"></td>
+                <td th:text="${user.fstatus==1?'正常':'禁用'}"></td>
+                <td th:text="${user.fiscny==1?'正常':'禁用'}"></td>
+                <td th:text="${user.fiscoin==1?'正常':'禁用'}"></td>
+                <td th:text="${(user.isVideo eq null or !user.isVideo)?'未认证':'已认证'}"></td>
+                <td th:text="${user.floginname}"></td>
+                <td th:text="${user.fnickname}"></td>
+                <td th:text="${user.femail}"></td>
+                <td th:text="${user.score}"></td>
+                <td th:text="${'VIP'+user.level}"></td>
+                <td th:text="${user.frealname}"></td>
+                <td th:text="${user.fidentityno}"></td>
+                <td th:text="${user.fintrouid}"></td>
+                <td th:text="${user.folduid}"></td>
+                <td th:text="${platformMap[user.fplatform] }"></td>
+                <td th:text="${user.fbirth eq null ? '': #dates.format(user.fbirth, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#dates.format(user.fregistertime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${#dates.format(user.flastlogintime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${user.ftradepwdtime == null ? '' : #dates.format(user.ftradepwdtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:if="${not #lists.isEmpty(userList)}"
+         th:attr="lay-pages=${userList.totalPages}, lay-curr=${userList.currentPage}"></div>
+</div>

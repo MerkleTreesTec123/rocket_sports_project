@@ -1,0 +1,38 @@
+<div class="layui-form" lay-href="admin/walletAddressList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">虚拟币名称</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>虚拟币名称</th>
+					<th>数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="walletAddress : ${walletAddressList.data}">
+					<td>
+						<input type="checkbox" lay-skin="primary" />
+					</td>
+					<td th:text="${walletAddress.name}"></td>
+					<td th:text="${walletAddress.num}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${walletAddressList.totalPages}, lay-curr=${walletAddressList.currentPage}"></div>
+</div>

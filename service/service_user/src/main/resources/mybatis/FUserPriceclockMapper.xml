@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.FUserPriceclockMapper" >
+
+  <sql id="priceclockColumn">fid, fuid, ftradeid, fmaxprice, fminprice, fisopen, fupdatetime, version</sql>
+  
+  <insert id="insert" parameterType="FUserPriceclock" >
+    insert into f_user_priceclock (fid, fuid, ftradeid,
+      fmaxprice, fminprice, fisopen, 
+      fupdatetime, version)
+    values (#{fid,jdbcType=INTEGER}, #{fuid,jdbcType=INTEGER}, #{ftradeid,jdbcType=INTEGER},
+      #{fmaxprice,jdbcType=DECIMAL}, #{fminprice,jdbcType=DECIMAL}, #{fisopen,jdbcType=BIT}, 
+      #{fupdatetime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FUserPriceclock" >
+    update f_user_priceclock
+    set fuid = #{fuid,jdbcType=INTEGER},
+      ftradeid = #{ftradeid,jdbcType=INTEGER},
+      fmaxprice = #{fmaxprice,jdbcType=DECIMAL},
+      fminprice = #{fminprice,jdbcType=DECIMAL},
+      fisopen = #{fisopen,jdbcType=BIT},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      version = version + 1
+    where fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByParam" resultType="FUserPriceclock" parameterType="FUserPriceclock" >
+    select <include refid="priceclockColumn" />
+    from f_user_priceclock
+    where fuid = #{fuid,jdbcType=INTEGER} and ftradeid = #{ftradeid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUser" resultType="FUserPriceclock" parameterType="java.lang.Integer">
+    select <include refid="priceclockColumn" />
+    from f_user_priceclock
+    where fuid = #{fuid,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

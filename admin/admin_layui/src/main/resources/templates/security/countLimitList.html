@@ -1,0 +1,52 @@
+<div class="layui-form" lay-href="admin/limitList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">IP地址：</label>
+            <div class="layui-input-inline">
+                <input name="ip" th:value="${ip }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">限制类型：</label>
+            <div class="layui-input-inline">
+                <select name="type">
+                    <option th:each="type : ${typeMap }" th:value="${type.key}" th:text="${type.value}"
+                            th:selected="${type.key == type}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteCountLimit.html"
+                lay-href="admin/deleteLimit.html" lay-checked="key" lay-target="ajax" lay-tips="确定要解除限制吗?">解除限制
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>IP地址</th>
+                <th>限制类型</th>
+                <th>错误次数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,listStart : ${array}">
+                <td>
+                    <input type="checkbox" th:name="${list.key}" lay-skin="primary" />
+                </td>
+                <td th:text="${list.ip}"></td>
+                <td th:text="${list.type_s}"></td>
+                <td th:text="${list.limit}"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>

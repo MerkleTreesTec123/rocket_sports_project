@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FUserPriceclockMapper" >
+
+  <sql id="priceclockColumn">
+  		fid, fuid, ftradeid, fmaxprice, fminprice, fisopen, fupdatetime, version
+  </sql>
+
+  <select id="selectByCoin" resultType="FUserPriceclock" parameterType="FUserPriceclock">
+    select <include refid="priceclockColumn" /> from f_user_priceclock
+    where ftradeid = #{ftradeid} and fisopen = #{fisopen}
+	<![CDATA[ and (fmaxprice <= ${flastprice} or fminprice >= ${flastprice})]]>
+  </select>
+  
+</mapper>

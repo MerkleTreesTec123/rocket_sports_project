@@ -1,0 +1,52 @@
+<div class="layui-form" lay-href="admin/roleList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">角色名称：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small"
+                shiro:hasPermission="admin/createRole.html"
+                lay-href="admin/goRoleJSP.html?url=security/createRole&amp;uid=1"
+                lay-target="dialog">
+            新增
+        </button>
+        <button class="layui-btn layui-btn-small"
+                shiro:hasPermission="admin/updateRole.html"
+                lay-href="admin/goRoleJSP.html?url=security/updateRole&amp;uid=1"
+                lay-checked="roleId" lay-target="dialog">修改
+        </button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="160%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>序号</th>
+                <th>角色名称</th>
+                <th>描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,listStart : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${list.fid}" lay-skin="primary" />
+                </td>
+                <td th:text="${listStart.count}"></td>
+                <td th:text="${list.fname}"></td>
+                <td th:text="${list.fdescription}"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

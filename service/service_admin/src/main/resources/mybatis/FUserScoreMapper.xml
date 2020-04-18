@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FUserScoreMapper" >
+  <resultMap id="BaseResultMap" type="FUserScore" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fscore" property="fscore" jdbcType="DECIMAL" />
+    <result column="flevel" property="flevel" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="ftradingqty" property="ftradingqty" jdbcType="INTEGER" />
+    <result column="fleveltime" property="fleveltime" jdbcType="TIMESTAMP" />
+    <result column="fuid" property="fuid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="scoreColumns">fid, fscore, flevel, 
+      version, ftradingqty, fleveltime, fuid</sql>
+  
+  <!-- Base -->
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_user_score
+    where 
+    	fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="FUserScore" keyProperty="fid">
+    insert into f_user_score (
+    	fscore, 
+    	flevel, 
+      	version, 
+      	ftradingqty, 
+      	fleveltime,
+      	fuid
+    )
+    values (
+    	#{fscore,jdbcType=DECIMAL}, 
+    	#{flevel,jdbcType=INTEGER}, 
+      	#{version,jdbcType=INTEGER}, 
+      	#{ftradingqty,jdbcType=INTEGER}, 
+      	#{fleveltime,jdbcType=TIMESTAMP},
+      	#{fuid,jdbcType=INTEGER}
+    )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="FUserScore" >
+    update f_user_score
+    set 
+    	fscore = #{fscore,jdbcType=DECIMAL},
+      	flevel = #{flevel,jdbcType=INTEGER},
+      	version = version + 1,
+      	ftradingqty = #{ftradingqty,jdbcType=INTEGER},
+      	fleveltime = #{fleveltime,jdbcType=TIMESTAMP},
+      	fuid = #{fuid,jdbcType=INTEGER}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="FUserScore" parameterType="java.lang.Integer" >
+    select <include refid="scoreColumns"/>
+    from f_user_score
+    where 
+    	fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultType="FUserScore" >
+    select <include refid="scoreColumns"/>
+    from f_user_score
+  </select>
+  
+   <select id="selectByUid" resultType="FUserScore" parameterType="java.lang.Integer" >
+    select <include refid="scoreColumns"/>
+    from f_user_score
+    where 
+    	fuid = #{fuid,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

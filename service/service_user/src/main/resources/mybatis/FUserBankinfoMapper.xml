@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.user.dao.FUserBankinfoMapper">
+  
+  <sql id="bankinfoColumn">fid, fuid, fname, fbanknumber, fbanktype, fcreatetime, fstatus, version, 
+    init, faddress, frealname, fprov, fcity, ftype, fdist</sql>
+    
+  <select id="getBankInfoListByUser" resultType="com.qkwl.service.user.model.FUserBankinfoDO" >
+    select 
+    	f_user_bankinfo.fid, 
+    	f_user_bankinfo.fuid, 
+    	f_user_bankinfo.fname, 
+    	f_user_bankinfo.fbanknumber, 
+   	 	f_user_bankinfo.fbanktype, 
+   	 	f_system_bankinfo_withdraw.fcnname as fbanktype_s,
+   	 	f_user_bankinfo.fcreatetime, 
+   	 	f_user_bankinfo.fstatus, 
+    	f_user_bankinfo.version, 
+    	f_user_bankinfo.init, 
+    	f_user_bankinfo.faddress, 
+    	f_user_bankinfo.frealname, 
+    	f_user_bankinfo.fprov, 
+    	f_user_bankinfo.fcity, 
+    	f_user_bankinfo.ftype, 
+    	f_user_bankinfo.fdist
+    from 
+    	f_user_bankinfo left join 
+    	f_system_bankinfo_withdraw 
+    	on f_user_bankinfo.fbanktype = f_system_bankinfo_withdraw.fid
+    where 
+    	f_user_bankinfo.fuid = #{fuid,jdbcType=INTEGER} 
+    <if test="ftype != null">
+    	and f_user_bankinfo.ftype= #{ftype,jdbcType=INTEGER} 
+    </if>
+    	and f_user_bankinfo.init=1 
+  </select>
+  
+  <select id="getBankInfoListByBankInfo" resultType="com.qkwl.service.user.model.FUserBankinfoDO" parameterType="com.qkwl.service.user.model.FUserBankinfoDO" >
+    select <include refid="bankinfoColumn" />
+    from f_user_bankinfo
+    where 1=1 
+	<if test="fuid != null">
+	 	and fuid = #{fuid,jdbcType=INTEGER} 
+	</if>
+	<if test="ftype != null">
+	 	and ftype= #{ftype,jdbcType=INTEGER} 
+	</if>
+	<if test="init != null">
+	 	and init= #{init,jdbcType=BIT} 
+	</if>
+	<if test="fbanknumber != null">
+	 	and fbanknumber= #{fbanknumber,jdbcType=VARCHAR} 
+	</if>
+	<if test="frealname != null">
+	  and frealname= #{frealname,jdbcType=VARCHAR}
+	</if>
+	<if test="fstatus != null">
+	 	and fstatus= #{fstatus,jdbcType=VARCHAR} 
+	</if>
+  </select>
+  
+  
+  <insert id="insert" parameterType="com.qkwl.service.user.model.FUserBankinfoDO" keyProperty="fid">
+    insert into f_user_bankinfo (
+    	fuid, 
+    	fname, 
+      	fbanknumber, 
+      	fbanktype, 
+      	fcreatetime, 
+      	fstatus, 
+      	version, 
+      	init, 
+      	faddress, 
+      	frealname, 
+      	fprov, 
+      	fcity, 
+      	ftype, 
+      	fdist
+    )
+    values (
+    	#{fuid,jdbcType=INTEGER}, 
+    	#{fname,jdbcType=VARCHAR}, 
+      	#{fbanknumber,jdbcType=VARCHAR}, 
+      	#{fbanktype,jdbcType=INTEGER}, 
+      	#{fcreatetime,jdbcType=TIMESTAMP}, 
+      	#{fstatus,jdbcType=INTEGER}, 
+      	#{version,jdbcType=INTEGER}, 
+      	#{init,jdbcType=BIT}, 
+      	#{faddress,jdbcType=VARCHAR}, 
+      	#{frealname,jdbcType=VARCHAR}, 
+      	#{fprov,jdbcType=VARCHAR}, 
+      	#{fcity,jdbcType=VARCHAR}, 
+      	#{ftype,jdbcType=INTEGER}, 
+      	#{fdist,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <delete id="delete">
+	  DELETE from f_user_bankinfo WHERE fid = #{fid,jdbcType=INTEGER}   AND fuid= #{fuid,jdbcType=INTEGER}
+  </delete>
+  
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.user.model.FUserBankinfoDO">
+    update f_user_bankinfo
+    set 
+    	fuid = #{fuid,jdbcType=INTEGER},
+      	fname = #{fname,jdbcType=VARCHAR},
+      	fbanknumber = #{fbanknumber,jdbcType=VARCHAR},
+      	fbanktype = #{fbanktype,jdbcType=INTEGER},
+      	fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      	fstatus = #{fstatus,jdbcType=INTEGER},
+      	version = version + 1,
+      	init = #{init,jdbcType=BIT},
+      	faddress = #{faddress,jdbcType=VARCHAR},
+      	frealname = #{frealname,jdbcType=VARCHAR},
+      	fprov = #{fprov,jdbcType=VARCHAR},
+      	fcity = #{fcity,jdbcType=VARCHAR},
+      	ftype = #{ftype,jdbcType=INTEGER},
+      	fdist = #{fdist,jdbcType=VARCHAR}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version}
+  </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.qkwl.service.user.model.FUserBankinfoDO">
+	select <include refid="bankinfoColumn" />
+	from f_user_bankinfo
+	where
+		fid = #{fid,jdbcType=INTEGER}
+  </select>
+
+	<select id="getBankInfoByCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select ifnull(count(fid),0) from f_user_bankinfo
+		where 1 = 1
+		<if test="banknumber != null">
+			and fbanknumber = #{banknumber,jdbcType=VARCHAR}
+		</if>
+		<if test="init != null">
+			and init = #{init,jdbcType=BIT}
+		</if>
+	</select>
+
+  
+</mapper>

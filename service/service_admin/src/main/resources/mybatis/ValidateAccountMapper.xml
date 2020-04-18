@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.validate.dao.ValidateAccountMapper">
+
+    <sql id="accountColumn">id, name, type, access_key, secret_key, url, gmt_create, gmt_modified, version</sql>
+
+    <insert id="insert" parameterType="ValidateAccountDO">
+    insert into validate_account (name, type, access_key,
+      secret_key, url, gmt_create, 
+      gmt_modified, version)
+    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{accessKey,jdbcType=VARCHAR},
+      #{secretKey,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+  </insert>
+
+    <update id="update" parameterType="ValidateAccountDO">
+    update validate_account
+    set
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      access_key = #{accessKey,jdbcType=VARCHAR},
+      secret_key = #{secretKey,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+    <select id="select" resultType="ValidateAccountDO" parameterType="java.lang.Integer">
+        select
+        <include refid="accountColumn"/>
+        from validate_account
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAll" resultType="ValidateAccountDO" >
+        select
+        <include refid="accountColumn"/>
+        from validate_account
+    </select>
+
+    <select id="listPage" resultType="ValidateAccountDO" parameterType="java.util.Map">
+        select
+        <include refid="accountColumn"/>
+        from validate_account
+        where 1 = 1
+        <if test="orderField != null and orderDirection != null">
+            order by ${orderField} ${orderDirection}
+        </if>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="countPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*)
+    from validate_account
+    where 1 = 1
+  </select>
+</mapper>

@@ -1,0 +1,15 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/createWalletAddress.html">
+		<div class="layui-form-item">
+			<label class="layui-form-label">钱包密码：</label>
+			<div class="layui-input-block">
+				<input type="hidden" name="fid" th:value="${coinType.id}" />
+				<input type="password" class="layui-input" name="passWord" lay-verify="required"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">生成数量：</label>
+			<div class="layui-input-block">
+				<input class="layui-input" name="count" lay-verify="required"/>
+			</div>
+		</div>
+</div>

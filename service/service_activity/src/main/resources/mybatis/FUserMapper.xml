@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FUserMapper">
+
+    <sql id="userColumns">
+        fid, floginname, fnickname, floginpassword, ftradepassword, ftelephone,
+        femail, frealname, fidentityno, fidentitytype, fgoogleauthenticator, fgoogleurl,
+        fstatus, fhasrealvalidate, fhasrealvalidatetime, fistelephonebind, fismailbind, fgooglebind,
+        fupdatetime, fareacode, version, fintrouid, finvalidateintrocount, fiscny,
+        fiscoin, fbirth, flastlogintime, fregistertime, fleverlock, fqqopenid, funionid, fagentid, fshowid
+    </sql>
+
+    <select id="selectAll" resultType="FUser">
+        select
+        <include refid="userColumns"/>
+        from f_user
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="FUser">
+        select
+        <include refid="userColumns"/>
+        from f_user where fid = #{fid,jdbcType=INTEGER}
+    </select>
+
+    <select id="listBrush" resultType="FUser">
+        select
+        <include refid="userColumns"/>
+        FROM `f_user` WHERE flastip in(
+        SELECT flastip FROM (
+        SELECT `flastip` ,COUNT(*)count FROM `f_user` WHERE fregistertime>'2017-08-01' GROUP BY flastip ) a
+        where count >= 3)
+        and `folduid` is null and fregistertime>'2017-08-01'
+        and `fid` not in(SELECT fuid from `f_wallet_capital_operation` WHERE `fstatus` !=5)
+        and `fid` not in(SELECT fuid from `f_virtual_capital_operation` WHERE `fstatus` =3)
+    </select>
+
+    <update id="updateStatus" parameterType="FUser">
+        UPDATE f_user
+        SET
+            fstatus     = #{fstatus,jdbcType=INTEGER},
+            fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+            version     = version + 1
+        WHERE
+            fid = #{fid,jdbcType=INTEGER} AND version = #{version}
+    </update>
+
+</mapper>

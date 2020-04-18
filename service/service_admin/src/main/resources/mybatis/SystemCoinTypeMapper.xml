@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.SystemCoinTypeMapper">
+
+    <sql id="systemCoinTypeColumn">
+        id, sort_id, name, short_name, symbol, type, coin_type, status, is_withdraw,
+        is_recharge, risk_num, is_push, is_finances, platform_id, ip, port, access_key, secrt_key,
+        eth_account, contract_account, contract_wei, asset_id,
+        network_fee, confirmations, web_logo, app_logo, gmt_create, gmt_modified,
+        version, explorer_url
+    </sql>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM system_coin_type
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="SystemCoinType" keyProperty="id">
+        INSERT INTO system_coin_type (
+        id, sort_id, name,
+        short_name, symbol, type,
+        coin_type, status, is_withdraw,
+        is_recharge, risk_num, is_push,
+        is_finances, platform_id, ip, port, access_key,
+        secrt_key, eth_account, contract_account,
+        contract_wei, asset_id, network_fee,
+        confirmations, web_logo,
+        app_logo, gmt_create, gmt_modified, explorer_url,
+        version)
+        VALUES (
+        #{id,jdbcType=INTEGER}, #{sortId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+        #{shortName,jdbcType=VARCHAR}, #{symbol,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},
+        #{coinType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},#{isWithdraw,jdbcType=BIT},
+        #{isRecharge,jdbcType=BIT}, #{riskNum,jdbcType=DECIMAL}, #{isPush,jdbcType=BIT},
+        #{isFinances,jdbcType=BIT},#{platformId,jdbcType=INTEGER},#{ip,jdbcType=VARCHAR},#{port,jdbcType=VARCHAR},
+        #{accessKey,jdbcType=VARCHAR},#{secrtKey,jdbcType=VARCHAR},#{ethAccount,jdbcType=VARCHAR},
+        #{contractAccount,jdbcType=VARCHAR}, #{contractWei,jdbcType=INTEGER},
+        #{assetId,jdbcType=BIGINT},#{networkFee,jdbcType=DECIMAL},
+        #{confirmations,jdbcType=INTEGER}, #{webLogo,jdbcType=VARCHAR},
+        #{appLogo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{explorerUrl,jdbcType=VARCHAR},
+        #{version,jdbcType=INTEGER})
+    </insert>
+    <update id="updateSystemCoinType" parameterType="SystemCoinType">
+        UPDATE system_coin_type
+        SET
+            sort_id       = #{sortId,jdbcType=INTEGER},
+            name          = #{name,jdbcType=VARCHAR},
+            short_name    = #{shortName,jdbcType=VARCHAR},
+            symbol        = #{symbol,jdbcType=VARCHAR},
+            type          = #{type,jdbcType=INTEGER},
+            coin_type     = #{coinType,jdbcType=INTEGER},
+            status        = #{status,jdbcType=INTEGER},
+            is_withdraw   = #{isWithdraw,jdbcType=BIT},
+            is_recharge   = #{isRecharge,jdbcType=BIT},
+            risk_num      = #{riskNum,jdbcType=DECIMAL},
+            is_push       = #{isPush,jdbcType=BIT},
+            is_finances   = #{isFinances,jdbcType=BIT},
+            platform_id   = #{platformId,jdbcType=INTEGER},
+            ip            = #{ip,jdbcType=VARCHAR},
+            port          = #{port,jdbcType=VARCHAR},
+            access_key    = #{accessKey,jdbcType=VARCHAR},
+            secrt_key     = #{secrtKey,jdbcType=VARCHAR},
+            eth_account   = #{ethAccount,jdbcType=VARCHAR},
+            contract_account = #{contractAccount,jdbcType=VARCHAR},
+            contract_wei  = #{contractWei,jdbcType=INTEGER},
+            asset_id      = #{assetId,jdbcType=BIGINT},
+            network_fee   = #{networkFee,jdbcType=DECIMAL},
+            confirmations = #{confirmations,jdbcType=INTEGER},
+            web_logo      = #{webLogo,jdbcType=VARCHAR},
+            app_logo      = #{appLogo,jdbcType=VARCHAR},
+            gmt_create    = #{gmtCreate,jdbcType=TIMESTAMP},
+            gmt_modified  = #{gmtModified,jdbcType=TIMESTAMP},
+            explorer_url  = #{explorerUrl,jdbcType=VARCHAR},
+            version       = version + 1
+        WHERE id = #{id,jdbcType=INTEGER} AND version = #{version,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultType="SystemCoinType" parameterType="java.lang.Integer">
+        select
+        <include refid="systemCoinTypeColumn"/>
+        from system_coin_type
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultType="SystemCoinType">
+        select
+        <include refid="systemCoinTypeColumn"/>
+        from system_coin_type ORDER BY sort_id ASC
+    </select>
+
+    <!-- Admin -->
+
+    <select id="getSystemCoinTypeList" parameterType="java.util.Map" resultType="SystemCoinType">
+        select
+        <include refid="systemCoinTypeColumn"/>
+        from system_coin_type where 1=1
+        <if test="keyword != null">
+            and (
+            name like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            short_name like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+            )
+        </if>
+        order by ${orderfield} ${orderdirection}
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getSystemCoinTypeCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(id) from system_coin_type where 1=1
+        <if test="keyword != null">
+            and (
+            name like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+            short_name like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+            )
+        </if>
+    </select>
+
+    <update id="updateSystemCoinTypeStatus" parameterType="SystemCoinType">
+        UPDATE system_coin_type
+        SET
+            status  = #{status,jdbcType=INTEGER},
+            version = version + 1
+        WHERE id = #{id,jdbcType=INTEGER} AND version = #{version,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSystemCoinTypeLink" parameterType="SystemCoinType">
+        UPDATE system_coin_type
+        SET
+            access_key  = #{accessKey,jdbcType=VARCHAR},
+            secrt_key   = #{secrtKey,jdbcType=VARCHAR},
+            ip          = #{ip,jdbcType=VARCHAR},
+            port        = #{port,jdbcType=VARCHAR},
+            is_recharge = #{isRecharge,jdbcType=BIT},
+            is_withdraw = #{isWithdraw,jdbcType=BIT},
+            version     = version + 1
+        WHERE id = #{id,jdbcType=INTEGER} AND version = #{version}
+    </update>
+
+</mapper>

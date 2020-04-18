@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.market.mapper.FEntrustMapper" >
+	
+  <sql id="entrustColumns">
+  	 fid, fuid, fuid, ftradeid, fbuycoinid, fstatus, ftype, flast, fprize, fcount, famount, fsuccessamount, fleftcount, fleftfees, ffees,
+  	 fmatchtype, fsource, fhuobientrustid, fhuobiaccountid, flastupdatTime, fcreateTime
+  </sql>
+  
+  <select id="selectGoingByType" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where ftradeid = #{ftradeid} and ftype = #{ftype} and (fstatus = 1 or fstatus = 2)
+  </select>
+  
+  <select id="selectByState" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where ftradeid = #{ftradeid} and fstatus = #{fstatus}
+  </select>
+  
+  <select id="selectBySList" resultType = "FEntrust">
+  	select <include refid="entrustColumns"/> from f_entrust where fuid = #{fuid} and ftradeid = #{ftradeid} and fstatus in
+		<foreach collection="statelist" item="item" open="(" separator="," close=")">
+		 #{item} 
+		</foreach>
+		order by fid desc limit #{start},#{end}
+  </select>
+</mapper>

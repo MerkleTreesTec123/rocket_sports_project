@@ -1,0 +1,64 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="admin/userRegSort.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">注册日期</label>
+            <div class="layui-input-inline">
+                <input name="startDate" th:value="${startDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+                       style="width:160px;"/>
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline">
+                <input name="endDate" th:value="${endDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+                       style="width:160px;"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>会员UID</th>
+                <th>登录名</th>
+                <th>昵称</th>
+                <th>手机号码</th>
+                <th>邮箱</th>
+                <th>真实姓名</th>
+                <th>证件号码</th>
+                <th>会员积分</th>
+                <th>会员等级</th>
+                <th>会员状态</th>
+                <th>提现状态</th>
+                <th>提币状态</th>
+                <th data-order-field="fregistertime">注册时间</th>
+                <th data-order-field="flastlogintime">上次登录时间</th>
+            </tr>
+            </thead>
+            <tbody th:if="${not #lists.isEmpty(userList)}">
+                <tr th:each="user : ${userList.data}">
+                    <td th:text="${user.fid}"></td>
+                    <td th:text="${user.floginname}"></td>
+                    <td th:text="${user.fnickname}"></td>
+                    <td th:text="${user.ftelephone}"></td>
+                    <td th:text="${user.femail}"></td>
+                    <td th:text="${user.frealname}"></td>
+                    <td th:text="${user.fidentityno}"></td>
+                    <td th:text="${user.score}"></td>
+                    <td th:text="${'VIP'+user.level}"></td>
+                    <td th:text="${user.fstatus==1?'正常':'禁用'}"></td>
+                    <td th:text="${user.fiscny==1?'正常':'禁用'}"></td>
+                    <td th:text="${user.fiscoin==1?'正常':'禁用'}"></td>
+                    <td th:text="${#dates.format(user.fregistertime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${#dates.format(user.flastlogintime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:if="${not #lists.isEmpty(userList)}" th:attr="lay-pages=${userList.totalPages}, lay-curr=${userList.currentPage}"></div>
+</div>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.user.dao.FUserInfoMapper">
+	<resultMap id="BaseResultMap" type="com.qkwl.common.dto.user.FUserInfo">
+		<id column="fid" jdbcType="INTEGER" property="fid" />
+		<result column="fuid" jdbcType="INTEGER" property="fuid" />
+		<result column="fname" jdbcType="VARCHAR" property="fname" />
+		<result column="fphone" jdbcType="VARCHAR" property="fphone" />
+		<result column="fzipcode" jdbcType="VARCHAR" property="fzipcode" />
+		<result column="fprov" jdbcType="VARCHAR" property="fprov" />
+		<result column="fcity" jdbcType="VARCHAR" property="fcity" />
+		<result column="fdist" jdbcType="VARCHAR" property="fdist" />
+		<result column="faddress" jdbcType="VARCHAR" property="faddress" />
+		<result column="fcreatetime" jdbcType="TIMESTAMP" property="fcreatetime" />
+		<result column="version" jdbcType="INTEGER" property="version" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.qkwl.common.dto.user.FUserInfo">
+		insert into f_user_info (fid, fuid, fname,
+		fphone, fzipcode, fprov,
+		fcity, fdist, faddress,
+		fcreatetime, version)
+		values (#{fid,jdbcType=INTEGER}, #{fuid,jdbcType=INTEGER}, #{fname,jdbcType=VARCHAR},
+		#{fphone,jdbcType=VARCHAR}, #{fzipcode,jdbcType=VARCHAR}, #{fprov,jdbcType=VARCHAR},
+		#{fcity,jdbcType=VARCHAR}, #{fdist,jdbcType=VARCHAR}, #{faddress,jdbcType=VARCHAR},
+		#{fcreatetime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+	</insert>
+
+	<update id="update" parameterType="FUserInfo">
+		UPDATE f_user_info SET
+		fuid = #{fuid,jdbcType=INTEGER},
+		fname = #{fname,jdbcType=VARCHAR},
+		fphone = #{fphone,jdbcType=VARCHAR},
+		fzipcode = #{fzipcode,jdbcType=VARCHAR},
+		fprov = #{fprov,jdbcType=VARCHAR},
+		fcity = #{fcity,jdbcType=VARCHAR},
+		fdist = #{fdist,jdbcType=VARCHAR},
+		faddress = #{faddress,jdbcType=VARCHAR},
+		fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+		version = version + 1
+		WHERE fid = #{fid,jdbcType=INTEGER} AND version = #{version,jdbcType=INTEGER}
+	</update>
+	
+	<select id="selectByFuid" resultMap="BaseResultMap">
+		select fid, fuid, fname, fphone, fzipcode, fprov, fcity, fdist, faddress, fcreatetime,
+		version
+		from f_user_info
+		where fuid = #{fuid,jdbcType=INTEGER}
+	</select>
+</mapper>

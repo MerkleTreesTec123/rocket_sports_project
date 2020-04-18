@@ -1,0 +1,47 @@
+<div class="layui-form" lay-href="/systemArgs/systemArgsList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">KEY：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addSystemArgs.html"
+                lay-href="systemArgs/goSystemArgsJSP.html?url=systemArgs/addSystemArgs"
+                lay-target="dialog" lay-height="670" lay-width="800">新增</button>
+
+        <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateSystemArgs.html"
+                lay-href="systemArgs/goSystemArgsJSP.html?url=systemArgs/updateSystemArgs"
+                lay-checked="fid" lay-target="dialog" lay-height="670" lay-width="800">修改</button>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>KEY</th>
+                <th width="*">参数值</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="systemArgs : ${systemArgsList.data}">
+                <td>
+                    <input type="checkbox" th:name="${systemArgs.fid}" lay-skin="primary" />
+                </td>
+                <td th:text="${systemArgs.fkey}"></td>
+                <td th:text="${systemArgs.fvalue_s}"></td>
+                <td th:text="${systemArgs.fdescription}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${systemArgsList.totalPages}, lay-curr=${systemArgsList.currentPage}"></div>
+</div>

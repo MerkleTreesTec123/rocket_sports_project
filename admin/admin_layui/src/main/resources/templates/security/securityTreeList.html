@@ -1,0 +1,132 @@
+<link rel="stylesheet" href="js/ztree/css/metroStyle/metroStyle.css"/>
+<div class="layui-form" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lay-href="admin/goSecurityJSP.html">
+    <div id="jbsxBox2moduleTree"
+         style="float: left; display: block; overflow: auto; width: 300px; border: solid 1px #CCC; line-height: 21px; background: #fff">
+        <ul id="securityTree" class="ztree"></ul>
+        <input type="hidden" th:value="${securityTree}" id="securityTreeJSON"/>
+        <input type="hidden" th:value="${treeId}" id="treeId"/>
+    </div>
+    <div id="jbsxBox2moduleList" class="unitBox" style="margin-left: 306px;">
+        <div xmlns:th="http://www.thymeleaf.org"
+             class="layui-form" lay-href="admin/goSecurityJSP.html"
+             style="float: left;width: 100%;">
+            <div class="layui-form-item layui-search-box">
+                <div class="layui-inline">
+                    <label class="layui-form-label">权限名称：</label>
+                    <div class="layui-input-inline">
+                        <input name="keywords" th:value="${keywords }" class="layui-input"
+                               style="width:200px"/>
+                        <input type="hidden" name="treeId" th:value="${treeId}"/>
+                        <input type="hidden" name="url" value="security/securityTreeList"/>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-small">查询</button>
+                </div>
+            </div>
+            <hr/>
+            <div class="layui-btn-box">
+                <button class="layui-btn layui-btn-small"
+                        shiro:hasPermission="admin/addSecurity.html" lay-height="300" lay-width="800"
+                        th:attr="lay-href=${'admin/goSecurityJSP.html?url=security/addSecurity&amp;status=add&amp;treeId1='+ treeId }"
+                        lay-target="dialog">
+                    新增
+                </button>
+                <button class="layui-btn layui-btn-small"
+                        shiro:hasPermission="admin/deleteSecurity.html"
+                        lay-href="admin/deleteSecurity.html" lay-checked="uid" lay-target="ajax"
+                        lay-tips="确定要删除吗?">删除
+                </button>
+                <button class="layui-btn layui-btn-small"
+                        shiro:hasPermission="admin/updateSecurity.html"  lay-height="300" lay-width="800"
+                        th:attr="lay-href=${'admin/goSecurityJSP.html?url=security/updateSecurity&amp;status=update&amp;treeId1='+ treeId }"
+                        lay-checked="uid" lay-target="dialog">修改
+                </button>
+            </div>
+            <div class="layui-conten-box">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>权限名称</th>
+                        <th>访问地址</th>
+                        <th>备注</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="security : ${page.data}">
+                        <td>
+                            <input type="checkbox" th:name="${security.fid}" lay-skin="primary"/>
+                        </td>
+                        <td th:text="${security.fname}">security.fname</td>
+                        <td th:text="${security.furl}">security.furl</td>
+                        <td th:text="${security.fdescription}">security.fdescription</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="layui-laypage-box"
+                 th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var $ = layui.jquery, jQuery = layui.jquery;
+</script>
+<script type="text/javascript" src="js/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var setting = {
+        view: {
+            //showIcon: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pId",
+                rootPId: ""
+            }
+        },
+        callback: {
+            onClick: function (event, treeId, treeNode) {
+                onClickCallback(treeNode.url);
+                event.preventDefault();
+            }
+        }
+    }
+        , onClickCallback = function (url) {
+        $("#jbsxBox2moduleList").load(url, function () {
+            grid.init(lay_id);
+        });
+    }
+        , zNodes = $("#securityTreeJSON").val()
+        , grid = layui.grid
+        , lay_id = $("#jbsxBox2moduleList").parents("layui-tab-item").attr("lay-id")
+        , treeId = $("#treeId").val()
+        , treeResize = function () {
+        var treeBox = $("#jbsxBox2moduleTree")
+            , listBox = $("#jbsxBox2moduleList")
+            , height = treeBox.parents(".layui-tab-content").height();
+        treeBox.height(height);
+        listBox.height(height);
+    };
+    zNodes = eval("[" + zNodes + "]");
+    $(document).ready(function () {
+        var t = $("#securityTree");
+        t = $.fn.zTree.init(t, setting, zNodes);
+        var node = t.getNodeByParam("id", treeId);
+        if (node != null) {
+            t.selectNode(node);
+            t.expandNode(node, true, true, true);
+        }
+    });
+    $(function(){
+        setTimeout(function () {
+            treeResize();
+        },50);
+        $(window).on("resize", treeResize);
+    })
+    /*]]>*/
+</script>

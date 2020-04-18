@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FArticleMapper" >
+
+  <resultMap id="BaseResultMap" type="FArticle">
+    <id column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="fcreateadmin" jdbcType="INTEGER" property="fcreateadmin" />
+    <result column="fmodifyadmin" jdbcType="INTEGER" property="fmodifyadmin" />
+    <result column="farticletype" jdbcType="INTEGER" property="farticletype" />
+    <result column="ftitle" jdbcType="VARCHAR" property="ftitle" />
+    <result column="fkeyword" jdbcType="VARCHAR" property="fkeyword" />
+    <result column="fdescription" jdbcType="VARCHAR" property="fdescription" />
+    <result column="fcreatedate" jdbcType="TIMESTAMP" property="fcreatedate" />
+    <result column="fupdatetime" jdbcType="TIMESTAMP" property="fupdatetime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="flookcount" jdbcType="INTEGER" property="flookcount" />
+    <result column="fistop" jdbcType="BIT" property="fistop" />
+    <result column="findeximg" jdbcType="VARCHAR" property="findeximg" />
+    <result column="fcontent" jdbcType="LONGVARCHAR" property="fcontent" />
+    <result column="ftypename" jdbcType="VARCHAR" property="farticletype_s" />
+    <result column="fcadminname" jdbcType="LONGVARCHAR" property="fcreateadmin_s" />
+    <result column="fmadminname" jdbcType="LONGVARCHAR" property="fmodifyadmin_s" />
+    <result column="fagentid" jdbcType="INTEGER" property="fagentid" />
+    <result column="ftype" jdbcType="INTEGER" property="ftype" />
+  </resultMap>
+  
+  <sql id="articleColumn">
+    f_article.fid, fcreateadmin, fmodifyadmin, farticletype, ftitle, fkeyword, f_article.fdescription, 
+    fcreatedate, f_article.fupdatetime, f_article.version, flookcount, fistop, findeximg, fcontent, f_article.fagentid, f_article.ftype
+  </sql>
+  
+   <select id="getFArticlePaginationList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select <include refid="articleColumn" /> from f_article where farticletype = #{farticletype} and fagentid = #{fagentid} and (ftype=#{ftype} or ftype = 0) order by fcreatedate desc limit #{offset},#{limit}
+  </select>
+  
+  <select id="getFArticleCount" resultType="java.lang.Integer">
+    select count(fid) from f_article where farticletype = #{farticletype}  and fagentid = #{fagentid} and (ftype=#{ftype} or ftype = 0)
+  </select>
+  
+  <select id="getArticlePageList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select <include refid="articleColumn" />,f_article_type.fname as ftypename,createAdmin.fname as fcadminname,modifyAdmin.fname as fmadminname
+      	from f_article left join f_article_type on f_article.farticletype = f_article_type.fid 
+    	left join f_admin as createAdmin on f_article.fcreateadmin = createAdmin.fid
+		left join f_admin as modifyAdmin on f_article.fmodifyadmin = modifyAdmin.fid
+    where 1=1
+    and f_article.fagentid = #{fagentid}
+    <if test="keyword != null">
+      and (
+      	f_article.ftitle like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	f_article.fkeyword like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	f_article.fdescription like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="farticletype != null">
+      and f_article.farticletype = #{farticletype}
+    </if>
+     <if test="ftype != null">
+      and f_article.ftype = #{ftype}
+    </if>
+    order by ${orderField} ${orderDirection} 
+    limit #{offset},#{limit}
+  </select>
+  
+  <select id="countArticlePageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(fid) from f_article where 1=1 and fagentid = #{fagentid}
+    <if test="keyword != null">
+      and (
+      	f_article.ftitle like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	f_article.fkeyword like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+      	f_article.fdescription like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="farticletype != null">
+      and farticletype = #{farticletype}
+    </if>
+    <if test="ftype != null">
+      and f_article.ftype = #{ftype}
+    </if>
+  </select>
+  
+  <!-- Base -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_article where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="FArticle" keyProperty="fid">
+    insert into f_article (
+      fcreateadmin, 
+      fmodifyadmin, 
+      farticletype, 
+      ftitle, 
+      fkeyword, 
+      fdescription, 
+      fcreatedate, 
+      fupdatetime, 
+      version, 
+      flookcount,
+      fistop, 
+      findeximg, 
+      fcontent,
+      fagentid,
+      ftype
+    ) values (
+      #{fcreateadmin,jdbcType=INTEGER}, 
+      #{fmodifyadmin,jdbcType=INTEGER}, 
+      #{farticletype,jdbcType=INTEGER}, 
+      #{ftitle,jdbcType=VARCHAR}, 
+      #{fkeyword,jdbcType=VARCHAR}, 
+      #{fdescription,jdbcType=VARCHAR}, 
+      #{fcreatedate,jdbcType=TIMESTAMP}, 
+      #{fupdatetime,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER}, 
+      #{flookcount,jdbcType=INTEGER},
+      #{fistop,jdbcType=BIT}, 
+      #{findeximg,jdbcType=VARCHAR}, 
+      #{fcontent,jdbcType=LONGVARCHAR},
+      #{fagentid,jdbcType=INTEGER},
+      #{ftype,jdbcType=INTEGER} )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="FArticle" >
+    update f_article set 
+      fcreateadmin = #{fcreateadmin,jdbcType=INTEGER},
+      fmodifyadmin = #{fmodifyadmin,jdbcType=INTEGER},
+      farticletype = #{farticletype,jdbcType=INTEGER},
+      ftitle = #{ftitle,jdbcType=VARCHAR},
+      fkeyword = #{fkeyword,jdbcType=VARCHAR},
+      fdescription = #{fdescription,jdbcType=VARCHAR},
+      fcreatedate = #{fcreatedate,jdbcType=TIMESTAMP},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      version = version + 1,
+      flookcount = #{flookcount,jdbcType=INTEGER},
+      fistop = #{fistop,jdbcType=BIT},
+      findeximg = #{findeximg,jdbcType=VARCHAR},
+      fcontent = #{fcontent,jdbcType=LONGVARCHAR},
+      fagentid = #{fagentid,jdbcType=INTEGER},
+      ftype = #{ftype,jdbcType=INTEGER}
+    	where fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="FArticle" parameterType="java.lang.Integer" >
+    select <include refid="articleColumn" /> from f_article where fid = #{fid,jdbcType=INTEGER}
+  </select>
+
+</mapper>

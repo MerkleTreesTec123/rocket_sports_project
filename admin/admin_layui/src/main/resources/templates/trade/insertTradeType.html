@@ -1,0 +1,158 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/insertTradeType.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">交易类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="type">
+				<option th:each="v:${typeMap}" th:value="${v.key}" th:text="${v.value}"></option>
+			</select>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">交易版本：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="blockType">
+				<option th:each="v:${blockMap}" th:value="${v.key}" th:text="${v.value}"></option>
+			</select>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">排序：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="sortId" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">状态：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="status">
+				<option th:each="v : ${statusMap}" th:value="${v.key}" th:text="${v.value}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">买方币种：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="buyCoinId">
+					<option th:each="v : ${coinTypeMap}" th:value="${v.key}" th:text="${v.value}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">卖方币种：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="sellCoinId">
+					<option th:each="v : ${coinTypeMap}" th:value="${v.key}" th:text="${v.value}"></option>
+			</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否交易：</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="isShare" checked='1' />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否停盘：</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="isStop" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">开盘时间：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="openTime" onclick="layui.laytime.format(this)"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">停盘时间：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="stopTime" onclick="layui.laytime.format(this)"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">买手续费：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="buyFee" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">卖手续费：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="sellFee" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">涨跌停（买单）：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="priceWave" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">涨跌幅（卖单）：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="priceRange" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">最小下单：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="minCount" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">最大下单：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="maxCount" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">最小价格：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="minPrice" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">最大价格：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="maxPrice" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">最小下单金额：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="orderAmount" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">数量偏移量</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="amountOffset" lay-verify="required" value="1#1"/>-(卖#买)(百分比)
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">价格偏移量</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="priceOffset" lay-verify="required" value="0#0"/>-(卖#买)(偏移量)
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">交易小数位</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="digit" lay-verify="required" value="2#4"/>-整数2#4
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">开盘价格：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="openPrice" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">特殊交易id：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="remoteId" value="0"/>
+		</div>
+	</div>
+</div>

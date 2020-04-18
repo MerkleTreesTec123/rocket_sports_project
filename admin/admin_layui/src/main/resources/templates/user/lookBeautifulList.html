@@ -1,0 +1,39 @@
+<div class="layui-form" lay-href="user/lookBeautifulList.html" xmlns:th="http://www.thymeleaf.org">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词：</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+			<div class="layui-input-inline">[靓号ID，靓号替换ID]</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="160%">
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>靓号ID</th>
+					<th>替换ID</th>
+					<th>创建时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="list : ${page.data}">
+					<td th:text="${list.fid}"></td>
+					<td th:text="${list.fbid}"></td>
+					<td th:text="${list.fuid}"></td>
+					<td th:text="${#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td>
+						<button class="layui-btn layui-btn-small" th:onclick="${'layui.lookup.backLook({id:'+list.fid+',floginName:'''+list.fbid+'''})'}">带回</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

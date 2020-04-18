@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.rocket</groupId>
+	<artifactId>rocket_parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
+	<url>http://www.rocket.com</url>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.2.RELEASE</version>
+	</parent>
+
+	<modules>
+		<module>common</module>
+		<module>admin</module>
+        <module>service</module>
+		<module>bc</module>
+    </modules>
+
+	<properties>
+		<skip_maven_deploy>true</skip_maven_deploy>
+
+		<custom_maven_url>http://127.0.0.1:8081/nexus</custom_maven_url>
+
+		<!-- build -->
+		<project.build.source.version>1.8</project.build.source.version>
+		<project.build.target.version>1.8</project.build.target.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- SpringBoot -->
+		<spring_boot_version>1.5.2</spring_boot_version>
+		<!-- AOP -->
+		<aspectj.version>1.8.6</aspectj.version>
+		<!-- 动态代理 -->
+		<cglib.version>3.1</cglib.version>
+		<!-- SOAP -->
+		<axis2.version>1.7.1</axis2.version>
+
+		<!-- Aliyun -->
+		<aliyun.mq.version>1.7.9.Final</aliyun.mq.version>
+		<aliyun.edas.version>1.5.1</aliyun.edas.version>
+		<aliyun.schedulerX.version>1.6.6</aliyun.schedulerX.version>
+		<aliyun.oss.version>2.2.3</aliyun.oss.version>
+		<aliyun.hsf.schema.version>edas1.0.1</aliyun.hsf.schema.version>
+		<aliyun.hsf.app.spring.version>2.1.1.5.1</aliyun.hsf.app.spring.version>
+		<aliyun.java.sdk.core.version>3.0.0</aliyun.java.sdk.core.version>
+		<aliyun.java.sdk.dm.version>3.1.0</aliyun.java.sdk.dm.version>
+		
+		<!-- 连接池 -->
+		<druid.version>1.1.20</druid.version>
+
+		<!-- Shiro -->
+		<shiro.version>1.2.4</shiro.version>
+
+		<!-- Third Party -->
+		<quartz.version>2.2.1</quartz.version>
+		<swagger2.version>2.4.0</swagger2.version>
+		<qq.sdk4j.version>1.0</qq.sdk4j.version>
+		
+		<!-- Redis连接池 -->
+		<jedis.version>2.8.2</jedis.version>
+		
+		<!-- log -->
+		<slf4j.version>1.7.7</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
+		<log4jdbc.version>1.2</log4jdbc.version>
+
+		<!-- json -->
+		<jackson.version>2.8.5</jackson.version>
+		<json.lib.version>2.4</json.lib.version>
+		<fastjson.version>1.2.28</fastjson.version>
+		<gson.version>2.6.2</gson.version>
+
+		<!-- Servlet -->
+		<servlet.api.version>3.0.1</servlet.api.version>
+
+		<!-- jstl -->
+		<jstl.version>1.2</jstl.version>
+
+		<!-- commons -->
+		<commons-fileupload.version>1.3</commons-fileupload.version>
+		<commons.lang3.version>3.3.2</commons.lang3.version>
+		<commons.pool2.version>2.3</commons.pool2.version>
+
+		<!-- Object Mapping -->
+		<modelmapper.version>0.7.4</modelmapper.version>
+
+		<!-- Mybatis -->
+		<mybatis.spring.version>1.3.1</mybatis.spring.version>
+		<mybatis.generator.version>1.3.5</mybatis.generator.version>
+		<mybatis.version>3.4.2</mybatis.version>
+
+		<!-- Mysql -->
+		<mysql.version>5.1.41</mysql.version>
+		<javax.faces.version>2.3.0</javax.faces.version>
+		<persistence.version>1.0.2</persistence.version>
+
+		<!-- Google Code -->
+		<zxing.core.version>3.2.0</zxing.core.version>
+		<zxing.javase.version>3.2.0</zxing.javase.version>
+		<kaptcha.version>0.0.9</kaptcha.version>
+
+		<!-- Image Operation -->
+		<thumbnailator.version>0.4.8</thumbnailator.version>
+		<imageio.version>1.1-alpha</imageio.version>
+
+		<!-- TemplatePage (console) -->
+		<sitemesh.version>2.4.2</sitemesh.version>
+
+		<!-- XML -->
+		<dom4j.version>1.6.1</dom4j.version>
+
+		<!-- HTTP -->
+		<httpclient.version>4.5</httpclient.version>
+		<httpmime.version>4.5</httpmime.version>
+		<okhttp.version>3.6.0</okhttp.version>
+		<!-- Sumapay Signature -->
+		<SignatureUtil.version>1.0</SignatureUtil.version>
+
+		<!-- Export -->
+		<poi.version>3.16</poi.version>
+		<jxl.version>2.6.12</jxl.version>
+		<opencsv.version>3.9</opencsv.version>
+
+		<!-- Maven and MybatisMaven -->
+		<maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+		<maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
+		<surefire.junit47.version>2.5</surefire.junit47.version>
+		<maven.war.plugin.version>2.1.1</maven.war.plugin.version>
+		<mybatis.generator.maven.plugin.version>1.3.2</mybatis.generator.maven.plugin.version>
+
+		<guava.version>21.0</guava.version>
+		<lombok.version>1.16.16</lombok.version>
+
+		<com.lowagie.version>2.1.7</com.lowagie.version>
+
+		<mybatis.spring.boot.version>1.2.0</mybatis.spring.boot.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- SpringBoot -->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis.spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.theborakompanioni</groupId>
+				<artifactId>thymeleaf-extras-shiro</artifactId>
+				<version>1.2.1</version>
+			</dependency>
+			<!-- aliyun -->
+			<dependency>
+				<groupId>com.alibaba.edas</groupId>
+				<artifactId>edas-sdk</artifactId>
+				<version>${aliyun.edas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aliyun.openservices</groupId>
+				<artifactId>ons-client</artifactId>
+				<version>${aliyun.mq.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba.edas</groupId>
+				<artifactId>schedulerX-client</artifactId>
+				<version>${aliyun.schedulerX.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aliyun.oss</groupId>
+				<artifactId>aliyun-sdk-oss</artifactId>
+				<version>${aliyun.oss.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>hsf.schema</artifactId>
+				<version>${aliyun.hsf.schema.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.taobao.hsf</groupId>
+				<artifactId>hsf.app.spring</artifactId>
+				<version>${aliyun.hsf.app.spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aliyun</groupId>
+				<artifactId>aliyun-java-sdk-core</artifactId>
+				<version>${aliyun.java.sdk.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aliyun</groupId>
+				<artifactId>aliyun-java-sdk-dm</artifactId>
+				<version>${aliyun.java.sdk.dm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${fastjson.version}</version>
+			</dependency>
+			<!-- servlet -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${servlet.api.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- jstl 标签库 -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl.version}</version>
+			</dependency>
+			<!-- jackson -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.json-lib</groupId>
+				<artifactId>json-lib</artifactId>
+				<version>${json.lib.version}</version>
+				<classifier>jdk15</classifier>
+			</dependency>
+			<!-- 文件上传依赖包 -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons.lang3.version}</version>
+			</dependency>
+			<!-- ModelMapper依赖包 -->
+			<dependency>
+				<groupId>org.modelmapper</groupId>
+				<artifactId>modelmapper</artifactId>
+				<version>${modelmapper.version}</version>
+			</dependency>
+			<!-- Excel操作 依赖包 -->
+			<dependency>
+				<groupId>net.sourceforge.jexcelapi</groupId>
+				<artifactId>jxl</artifactId>
+				<version>${jxl.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.opencsv</groupId>
+				<artifactId>opencsv</artifactId>
+				<version>${opencsv.version}</version>
+			</dependency>
+			<!-- 数据源组件 -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${druid.version}</version>
+			</dependency>
+			<!-- Redis -->
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>${jedis.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-pool2</artifactId>
+				<version>${commons.pool2.version}</version>
+			</dependency>
+			<!-- mysql的数据库驱动包 -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish</groupId>
+				<artifactId>javax.faces</artifactId>
+				<version>${javax.faces.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>persistence-api</artifactId>
+				<version>${persistence.version}</version>
+			</dependency>
+
+			<!-- 验证码组件 -->
+			<dependency>
+				<groupId>com.github.axet</groupId>
+				<artifactId>kaptcha</artifactId>
+				<version>${kaptcha.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpmime</artifactId>
+				<version>${httpmime.version}</version>
+			</dependency>
+			<!-- IMAGEIO依赖 -->
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.qq.connect</groupId>
+				<artifactId>SDK4J</artifactId>
+				<version>${qq.sdk4j.version}</version>
+			</dependency>
+			<!-- Swagger2 -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger2.version}</version>
+			</dependency>
+			<!-- Shiro -->
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>okhttp</artifactId>
+				<version>${okhttp.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${commons-fileupload.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+				<artifactId>com.lowagie.text</artifactId>
+				<version>${com.lowagie.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${project.build.source.version}</source>
+					<target>${project.build.target.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.plugin.version}</version>
+				<configuration>
+					<skipTests>false</skipTests>
+					<testFailureIgnore>true</testFailureIgnore>
+					<argLine>-Dfile.encoding=UTF-8</argLine>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>${surefire.junit47.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven.war.plugin.version}</version>
+				<configuration>
+					<packagingExcludes>WEB-INF/web.xml</packagingExcludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- Mybatis generator 使用 命令：mvn mybatis-generator:generate -->
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>${mybatis.generator.maven.plugin.version}</version>
+				<configuration>
+					<verbose>true</verbose>
+					<overwrite>true</overwrite>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>public</id>
+			<name>Public Repositories</name>
+			<url>${custom_maven_url}/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>thirdparty</id>
+			<name>3rd party</name>
+			<url>${custom_maven_url}/content/repositories/thirdparty/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public</id>
+			<name>Public Repositories</name>
+			<url>${custom_maven_url}/content/groups/public/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>thirdparty</id>
+			<name>3rd party</name>
+			<url>${custom_maven_url}/content/repositories/thirdparty/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<url>${custom_maven_url}/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<url>${custom_maven_url}/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profileActive>prod</profileActive>
+            </properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+        </profile>
+    </profiles>
+</project>

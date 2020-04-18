@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.ValidateEmailMapper" >
+
+  <insert id="insert" parameterType="com.qkwl.service.activity.model.ValidateEmailDO" >
+    insert into validate_email (id, uid, email, 
+      platform, template_id, title, 
+      code, uuid, status, 
+      gmt_create, gmt_send, version, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, 
+      #{platform,jdbcType=INTEGER}, #{templateId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtSend,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.qkwl.service.activity.model.ValidateEmailDO" >
+    update validate_email
+    set uid = #{uid,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      platform = #{platform,jdbcType=INTEGER},
+      template_id = #{templateId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_send = #{gmtSend,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByPrimaryKey" resultType="com.qkwl.service.activity.model.ValidateEmailDO" parameterType="java.lang.Integer" >
+    select id, uid, email, platform, template_id, title, code, uuid, status, gmt_create, 
+    gmt_send, version, content
+    from validate_email
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+</mapper>

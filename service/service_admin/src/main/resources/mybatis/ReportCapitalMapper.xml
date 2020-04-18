@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.ReportCapitalMapper" >
+
+  <select id="selectReportByHour" resultType="ReportCapital" parameterType="java.util.Map">
+    select * from report_capital
+    where 1 = 1
+    <if test="type != null">
+      AND type = #{type}
+    </if>
+    <if test="coinId != null">
+      AND coin_id = #{coinId}
+    </if>
+    <if test="begin != null">
+      <![CDATA[ AND gmt_begin >= #{begin} ]]>
+    </if>
+    <if test="end != null">
+      <![CDATA[AND gmt_end <= #{end} ]]>
+    </if>
+    ORDER BY gmt_begin
+  </select>
+
+  <select id="selectReportByDay" parameterType="java.util.Map" resultType="ReportCapital">
+    select
+    left(gmt_begin,10) as gmt_begin,
+    sum(amount) as amount,
+    sum(fee) as fee
+    from report_capital
+    where 1 = 1
+    <if test="type != null">
+      AND type = #{type}
+    </if>
+    <if test="coinId != null">
+      AND coin_id = #{coinId}
+    </if>
+    <if test="begin != null">
+      <![CDATA[ AND gmt_begin >= #{begin} ]]>
+    </if>
+    <if test="end != null">
+      <![CDATA[AND gmt_end <= #{end} ]]>
+    </if>
+    GROUP BY left(gmt_begin,10)
+    ORDER BY gmt_begin
+  </select>
+
+
+  <select id="selectIncomeReportByHours" parameterType="java.util.Map" resultType="ReportCapital">
+    select
+      gmt_begin,
+      hour_index,
+      ifnull(sum(v_temp.fee),0) as fee
+    from
+      (
+        select
+          gmt_begin,
+          hour_index,
+          ifnull(sum(trade_fee),0) as fee
+        from report_trade
+        where 1=1
+        <if test="tradeType == 0">
+          and type = 0
+          and sell_coin_id = #{coinId}
+        </if>
+        <if test="tradeType == 1">
+          and type = 1
+          and buy_coin_id = #{coinId}
+        </if>
+        <if test="begin != null">
+          <![CDATA[ AND gmt_begin >= #{begin} ]]>
+        </if>
+        <if test="end != null">
+          <![CDATA[AND gmt_end <= #{end} ]]>
+        </if>
+        GROUP BY left(gmt_begin,#{left})
+      union all
+        select
+          gmt_begin,
+          hour_index,
+          ifnull(sum(fee),0) as fee
+        from report_capital
+        where 1=1
+        <if test="coinId != null">
+          AND coin_id = #{coinId}
+        </if>
+        <if test="begin != null">
+          <![CDATA[ AND gmt_begin >= #{begin} ]]>
+        </if>
+        <if test="end != null">
+          <![CDATA[AND gmt_end <= #{end} ]]>
+        </if>
+        GROUP BY left(gmt_begin,#{left})
+      ) v_temp
+    GROUP BY left(gmt_begin,#{left})
+    order by gmt_begin
+  </select>
+
+</mapper>

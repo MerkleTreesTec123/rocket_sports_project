@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.SystemCoinInfoMapper">
+    <sql id="systemCoinInfoColumn">
+        id,coin_id, name_zh, name_en, name_short, total, price, circulation, algorithm,
+        block_velocity, block_size, ico, ico_platform, link_website, link_wallet, link_block,link_whitepaper,official_qq, official_wechat,
+        official_phone, info, short_info, lan_name,
+        gmt_release, gmt_create, gmt_modified,version
+    </sql>
+
+    <resultMap id="SystemCoinInfoResultMap" type="com.qkwl.common.dto.coin.SystemCoinInfo">
+        <result column="coin_id" property="coinId"/>
+        <result column="name_zh" property="nameZh"/>
+        <result column="name_en" property="nameEn"/>
+        <result column="nameShort" property="name_short"/>
+        <result column="blockVelocity" property="block_velocity"/>
+        <result column="icoPlatform" property="ico_platform"/>
+        <result column="officialQq" property="official_qq"/>
+        <result column="officialWechat" property="official_wechat"/>
+        <result column="officialPhone" property="official_phone"/>
+        <result column="shortInfo" property="short_info"/>
+        <result column="lanName" property="lan_name"/>
+        <result column="gmtRelease" property="gmt_release"/>
+        <result column="gmtCreate" property="gmt_create"/>
+        <result column="gmtModified" property="gmt_modified"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM system_coin_info
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.qkwl.common.dto.coin.SystemCoinInfo" keyProperty="id">
+        INSERT INTO system_coin_info (
+        --         id,coin_id,
+        --         nameZh, nameEn,
+        --         nameShort, total, price,
+        --         circulation, algorithm, blockVelocity,
+        --         blockSize, ico, icoPlatform, linkWebsite, linkWallet,
+        --         linkBlock, officialQq, officialWechat,
+        --         officialPhone, info, shortInfo,
+        --         lanName, gmtRelease,
+        --         gmtCreate, gmtModified,version
+        <include refid="systemCoinInfoColumn"/>
+        )
+        VALUES (
+        #{id,jdbcType=INTEGER}, #{coinId,jdbcType=INTEGER}, #{nameZh,jdbcType=VARCHAR},
+        #{nameEn,jdbcType=VARCHAR}, #{nameShort,jdbcType=VARCHAR},#{total,jdbcType=VARCHAR},
+        #{price,jdbcType=VARCHAR}, #{circulation,jdbcType=VARCHAR},#{algorithm,jdbcType=VARCHAR},
+        #{blockVelocity,jdbcType=VARCHAR}, #{blockSize,jdbcType=VARCHAR}, #{ico,jdbcType=VARCHAR},
+        #{icoPlatform,jdbcType=VARCHAR},#{linkWebsite,jdbcType=INTEGER},#{linkWallet,jdbcType=VARCHAR},#{linkBlock,jdbcType=VARCHAR},
+        #{linkWhitepaper,jdbcType=VARCHAR},
+        #{officialQq,jdbcType=VARCHAR},#{officialWechat,jdbcType=VARCHAR},#{officialPhone,jdbcType=VARCHAR},
+        #{info,jdbcType=VARCHAR}, #{shortInfo,jdbcType=INTEGER},
+        #{lanName,jdbcType=VARCHAR},#{gmtRelease,jdbcType=TIMESTAMP},
+        #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP},
+        #{version,jdbcType=INTEGER})
+    </insert>
+    <update id="updateSystemCoinInfo" parameterType="com.qkwl.common.dto.coin.SystemCoinInfo">
+        UPDATE system_coin_info
+        SET
+        name_zh = #{nameZh,jdbcType=VARCHAR},
+        name_en = #{nameEn,jdbcType=VARCHAR},
+        name_short = #{nameShort,jdbcType=VARCHAR},
+        total = #{total,jdbcType=VARCHAR},
+        price = #{price,jdbcType=VARCHAR},
+        circulation = #{circulation,jdbcType=VARCHAR},
+        algorithm = #{algorithm,jdbcType=VARCHAR},
+        block_velocity = #{blockVelocity,jdbcType=VARCHAR},
+        block_size = #{blockSize,jdbcType=DECIMAL},
+        ico = #{ico,jdbcType=VARCHAR},
+        ico_platform = #{icoPlatform,jdbcType=VARCHAR},
+        link_website = #{linkWebsite,jdbcType=VARCHAR},
+        link_wallet = #{linkWallet,jdbcType=VARCHAR},
+        link_block = #{linkBlock,jdbcType=VARCHAR},
+        link_whitepaper = #{linkWhitepaper,jdbcType=VARCHAR},
+        info  = #{info,jdbcType=VARCHAR},
+        short_info = #{shortInfo,jdbcType=VARCHAR},
+        lan_name  = #{lanName,jdbcType=VARCHAR},
+        gmt_release = #{gmtRelease,jdbcType=TIMESTAMP},
+        gmt_modified  = #{gmtModified,jdbcType=TIMESTAMP}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="SystemCoinInfoResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="systemCoinInfoColumn"/>
+        from system_coin_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="SystemCoinInfoResultMap">
+        select
+        <include refid="systemCoinInfoColumn"/>
+        from system_coin_info ORDER BY id ASC
+    </select>
+    <!-- Admin -->
+    <select id="getSystemCoinInfoList" parameterType="java.util.Map" resultMap="SystemCoinInfoResultMap" >
+        select
+        <include refid="systemCoinInfoColumn"/>
+        from system_coin_info where 1=1
+        <if test="coinId != null">
+            AND coin_id = #{coinId,jdbcType=INTEGER}
+        </if>
+        <if test="lanName != null">
+            AND lan_name = #{lanName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getSystemCoinInfoCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(id) from system_coin_info where 1=1
+        <if test="coinId != null">
+            AND coin_id = #{coinId,jdbcType=INTEGER}
+        </if>
+        <if test="lanName != null">
+            AND lan_name = #{lanName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>

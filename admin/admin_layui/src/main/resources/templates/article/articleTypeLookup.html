@@ -1,0 +1,39 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" lay-href="article/articleTypeLookup.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">关键词:</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>操作</th>
+                <th>分类名称</th>
+                <th>关键词</th>
+                <th>描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list : ${page.data}">
+                <td>
+                    <button class="layui-btn layui-btn-small"
+                            th:onclick="${'layui.lookup.backLook({id:'+list.fid+',name:'''+list.fname+'''})'}">带回
+                    </button>
+                </td>
+                <td th:text="${list.fname}"></td>
+                <td th:text="${list.fkeywords}"></td>
+                <td th:text="${list.fdescription}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

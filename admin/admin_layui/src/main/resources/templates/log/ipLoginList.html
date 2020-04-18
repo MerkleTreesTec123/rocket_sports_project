@@ -1,0 +1,52 @@
+<div class="layui-form" lay-href="/log/ipLoginList.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">IP：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">开始时间：</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" name="beginDate"
+                       onclick="layui.laydate({ elem: this, format: 'YYYY-MM-DD'})"
+                       th:value="${beginDate}"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">结束时间：</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" name="endDate"
+                       onclick="layui.laydate({ elem: this, format: 'YYYY-MM-DD'})"
+                       th:value="${endDate}"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>IP地址</th>
+                <th>登录次数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log,iterStat : ${logList.data}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${log.fip}"></td>
+                <td th:text="${log.num}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${logList.totalPages}, lay-curr=${logList.currentPage}"></div>
+</div>

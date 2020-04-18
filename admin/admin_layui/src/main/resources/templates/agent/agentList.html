@@ -1,0 +1,57 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" class="layui-form"
+     lay-href="agent/agentList.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">券商名：</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addAgent.html"
+                    lay-href="agent/goAgent.html?url=agent/addAgent" lay-height="325" lay-target="dialog">新增
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateAgent.html"
+                    lay-href="agent/goAgent.html?url=agent/updateAgent" lay-height="325" lay-checked="fid" lay-target="dialog">修改
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteAgent.html"
+                    lay-href="agent/deleteAgent.html" lay-checked="fid" lay-target="ajax" lay-tips="确定要删除吗?">删除
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>序号</th>
+                <th>券商ID</th>
+                <th>券商名</th>
+                <th>联系方式</th>
+                <th>域名</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${list.fid}" lay-skin="primary"/>
+                </td>
+                <td th:text="${state.count}"></td>
+                <td th:text="${list.fid}"></td>
+                <td th:text="${list.fname}"></td>
+                <td th:text="${list.fphone}"></td>
+                <td th:text="${list.fdomain}"></td>
+                <td th:text="${list.fremark}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

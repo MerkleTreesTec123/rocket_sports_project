@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FUserIdentityMapper" >
+
+  <sql id="identityColumn">fid, fuid, fcountry, fname, fcode, ftype, fstatus, fcreatetime, fupdatetime</sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_user_identity
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insert" parameterType="FUserIdentity" >
+        insert into f_user_identity (fuid, fcountry,
+        fname, fcode, ftype,
+        fstatus, fcreatetime, fupdatetime
+        )
+        values (#{fuid,jdbcType=INTEGER}, #{fcountry,jdbcType=VARCHAR},
+        #{fname,jdbcType=VARCHAR}, #{fcode,jdbcType=VARCHAR}, #{ftype,jdbcType=INTEGER},
+        #{fstatus,jdbcType=INTEGER}, #{fcreatetime,jdbcType=TIMESTAMP}, #{fupdatetime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+  <update id="updateByPrimaryKey" parameterType="FUserIdentity" >
+    update f_user_identity
+    set fuid = #{fuid,jdbcType=INTEGER},
+      fcountry = #{fcountry,jdbcType=VARCHAR},
+      fname = #{fname,jdbcType=VARCHAR},
+      fcode = #{fcode,jdbcType=VARCHAR},
+      ftype = #{ftype,jdbcType=INTEGER},
+      fstatus = #{fstatus,jdbcType=INTEGER},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultType="FUserIdentity" parameterType="java.lang.Integer" >
+    select <include refid="identityColumn" />
+    from f_user_identity
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUser" resultType="FUserIdentity" parameterType="java.lang.Integer" >
+    select <include refid="identityColumn" />
+    from f_user_identity
+    where fuid = #{fuid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultType="FUserIdentity" >
+    select <include refid="identityColumn" />
+    from f_user_identity
+  </select>
+  
+  <select id="selectByPage" resultType="FUserIdentity" parameterType="java.util.Map" >
+    select <include refid="identityColumn" />
+    from f_user_identity
+    where 1=1
+    <if test="keyword != null">
+    	and (
+		fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+		fcode like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+		fuid like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+		fid = #{keyword,jdbcType=VARCHAR})  
+    </if>
+    <if test="fstatus != null">
+   		and fstatus = #{fstatus}
+    </if>
+    <if test="ftype != null">
+   		and ftype = #{ftype}
+    </if>
+    <if test="orderField != null">
+		order by ${orderField} ${orderDirection}
+	</if>
+	limit #{offset},#{limit}
+  </select>
+  
+  <select id="countByPage" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(*)
+    from f_user_identity
+    where 1=1
+    <if test="keyword != null">
+    	and (
+		fname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or 
+		fcode like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+		fuid like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+		fid = #{keyword,jdbcType=VARCHAR})  
+    </if>
+    <if test="fstatus != null">
+   		and fstatus = #{fstatus}
+    </if>
+    <if test="ftype != null">
+   		and ftype = #{ftype}
+    </if>
+  </select>
+  
+</mapper>

@@ -1,0 +1,35 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+     lay-href="/report/userfinancestotle.html">
+    <div class="layui-form-item layui-search-box">
+        <!--<div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>-->
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>币种</th>
+                <th>类型</th>
+                <th>存入数量</th>
+                <th>未发放收益</th>
+                <th>已发放收益</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list,state : ${page}">
+                <td th:text="${state.index + 1}"></td>
+                <td th:text="${coinMap[list.fcoinid]}"></td>
+                <td th:text="${list.fname}"></td>
+                <td th:text="${#decimal.format(list.famount,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fplanamount,1,10)}"></td>
+                <td th:text="${#decimal.format(list.fplanamountsend,1,10)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="admin/createAgentRecharge.html">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">会员：</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="userLookup.id" lay-lookup="id"/>
+                <input class="layui-input" lay-verify="required" readonly="readonly" lay-lookup="name"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <i class="layui-icon layui-lookup" lay-href="user/userLookup.html" onclick="layui.lookup.openLook(this)" title="查找带回">&#xe608;</i>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">币种:</label>
+        <div class="layui-input-block">
+            <select name="coinId">
+                <option th:each="v : ${coinMap }" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">数量(金额)：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="amount" lay-verify="required number"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">有效期至：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="gmtExpiry" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+        </div>
+    </div>
+</div>

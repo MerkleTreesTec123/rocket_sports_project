@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.entrust.dao.FEntrustMapper" >
+
+  	<sql id="entrustColumns">
+  		fid, fuid, ftradeid, fbuycoinid, fsellcoinid, fstatus, ftype, flast, fprize, fcount, famount, fsuccessamount, fleftcount, fleftfees, ffees,
+  	 	fmatchtype, fsource, fhuobientrustid, fhuobiaccountid, flastupdatTime, fcreateTime, fagentid
+  	</sql>
+
+	<insert id="insert" parameterType="EntrustDO" useGeneratedKeys="true" keyProperty="fid">
+		insert into f_entrust (
+		fuid,
+		ftradeid,
+		fbuycoinid,
+		fsellcoinid,
+		fstatus,
+		ftype,
+		flast,
+		fprize,
+		fcount,
+		famount,
+		fsuccessamount,
+		fleftcount,
+		fleftfees,
+		ffees,
+		fmatchtype,
+		fsource,
+		fhuobientrustid,
+		fhuobiaccountid,
+		flastupdatTime,
+		fcreateTime,
+		fagentid
+		) values (
+		#{fuid},
+		#{ftradeid},
+		#{fbuycoinid},
+		#{fsellcoinid},
+		#{fstatus},
+		#{ftype},
+		#{flast},
+		#{fprize},
+		#{fcount},
+		#{famount},
+		#{fsuccessamount},
+		#{fleftcount},
+		#{fleftfees},
+		#{ffees},
+		#{fmatchtype},
+		#{fsource},
+		#{fhuobientrustid},
+		#{fhuobiaccountid},
+		#{flastupdattime},
+		#{fcreatetime},
+		#{fagentid} )
+	</insert>
+
+	<update id="updateByfId" parameterType="EntrustDO">
+		update f_entrust set
+		fstatus = #{fstatus},
+		flastupdattime = #{flastupdattime}
+		where fid = #{fid}
+	</update>
+
+	<select id="selectByIdLocal" resultType="EntrustDO">
+		select
+		<include refid="entrustColumns" />
+		from f_entrust where fuid = #{fuid} and fid = #{fid} for update
+	</select>
+
+	<select id="selectById" resultType="EntrustDO">
+		select
+		<include refid="entrustColumns" />
+		from f_entrust where fuid = #{fuid} and fid = #{fid}
+	</select>
+
+	<select id="selectPageList" resultType="EntrustDO" parameterType="java.util.Map">
+		select
+		<include refid="entrustColumns" />
+		from f_entrust
+		where 1=1
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="ftradeid != null">
+			and ftradeid = #{ftradeid}
+		</if>
+		<if test="fagentid != null">
+			and fagentid = #{fagentid}
+		</if>
+		<if test="stateList != null">
+			and fstatus in
+			<foreach collection="stateList" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="begindate != null">
+			<![CDATA[and fcreatetime >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+			<![CDATA[and fcreatetime <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+		order by fid desc
+		limit #{offset},#{limit}
+	</select>
+
+	<select id="selectPageCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from f_entrust
+		where 1=1
+		<if test="fuid != null">
+			and fuid = #{fuid}
+		</if>
+		<if test="ftradeid != null">
+			and ftradeid = #{ftradeid}
+		</if>
+		<if test="fagentid != null">
+			and fagentid = #{fagentid}
+		</if>
+		<if test="stateList != null">
+			and fstatus in
+			<foreach collection="stateList" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="begindate != null">
+			<![CDATA[and fcreatetime >= #{begindate,jdbcType=VARCHAR}]]>
+		</if>
+		<if test="enddate != null">
+			<![CDATA[and fcreatetime <= #{enddate,jdbcType=VARCHAR}]]>
+		</if>
+	</select>
+</mapper>

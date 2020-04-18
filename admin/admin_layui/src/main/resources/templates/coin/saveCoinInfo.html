@@ -1,0 +1,89 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="admin/saveCoinInfo.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">币种类型：</label>
+        <div class="layui-input-block">
+            <select type="combox" name="coinId">
+                <option th:each="v : ${coinMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">语言：</label>
+        <div class="layui-input-block">
+            <select type="combox" name="lanName">
+                <option th:each="v : ${localeMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">币种名称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="nameZh" lay-verify="required" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">英文名称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="nameEn" lay-verify="required" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">简称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="nameShort" lay-verify="required" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发行总量：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="total" lay-verify="required" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发行价格：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="price" lay-verify="required" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发行时间：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="gmtRelease" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">流通量：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="circulation" lay-verify="required" />
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">官方网站：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="linkWebsite" lay-verify="required" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">区块查询：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="linkBlock" lay-verify="required"  />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">白皮书地址：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="linkWhitepaper"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">简介：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="info" lay-verify="required"  />
+        </div>
+    </div>
+
+</div>
+<script>
+
+</script>

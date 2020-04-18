@@ -1,0 +1,31 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="/question/answerQuestion.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">提问人：</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="fid" th:value="${fquestion.fid}" />
+            <input class="layui-input" name="fname" th:value="${fquestion.fname}" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提问类型：</label>
+        <div class="layui-input-block">
+            <select type="combox" name="ftype" disabled="true">
+                <option th:each="v : ${fquestionTypes}" th:value="${v.fid}"
+                        th:text="${v.value}" th:selected="${v.fid == fquestion.ftype}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">提问内容：</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-textarea-fixed" name="fdesc" th:text="${fquestion.fdesc}" readonly="readonly"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">回复内容：</label>
+        <div class="layui-input-block">
+                <textarea placeholder="请输入回复的内容" class="layui-textarea layui-textarea-fixed"
+                          name="fanswer" lay-verify="required" th:text="${fquestion.fanswer}"></textarea>
+        </div>
+    </div>
+</div>

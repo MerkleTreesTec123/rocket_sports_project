@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.admin.bc.dao.UserCoinWalletMapper">
+
+  <sql id="userCoinWalletColumn">id, uid, coin_id, total, frozen, borrow,ico, gmt_create, gmt_modified</sql>
+
+  <insert id="insert" parameterType="UserCoinWallet" >
+    insert into user_coin_wallet (
+    uid, coin_id, total, frozen, borrow,ico,
+    gmt_create, gmt_modified)
+    values (
+    #{uid,jdbcType=INTEGER}, #{coinId,jdbcType=INTEGER},
+    #{total,jdbcType=DECIMAL}, #{frozen,jdbcType=DECIMAL}, #{borrow,jdbcType=DECIMAL}, #{ico,jdbcType=DECIMAL},
+    #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+    )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="UserCoinWallet">
+    update user_coin_wallet
+    set uid = #{uid,jdbcType=INTEGER},
+      coin_id = #{coinId,jdbcType=INTEGER},
+      total = #{total,jdbcType=DECIMAL},
+      frozen = #{frozen,jdbcType=DECIMAL},
+      borrow = #{borrow,jdbcType=DECIMAL},
+      ico = #{ico,jdbcType=DECIMAL},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByUidAndCoin" resultType="UserCoinWallet">
+    select <include refid="userCoinWalletColumn" />
+    from user_coin_wallet
+    where uid = #{uid} and coin_id = #{coinId}
+  </select>
+  
+  <select id="selectByUidAndCoinLock" resultType="UserCoinWallet">
+    select <include refid="userCoinWalletColumn" />
+    from user_coin_wallet
+    where uid = #{uid} and coin_id = #{coinId} for update
+  </select>
+
+  <resultMap id="allInfo" type="java.util.Map">
+    <result column="sum(total)" property="total" jdbcType="DECIMAL" />
+    <result column="sum(frozen)" property="frozen" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <select id="selectSum" resultMap="allInfo" parameterType="java.lang.Integer">
+    select sum(total), sum(frozen) from user_coin_wallet where coin_id = #{coinid}
+  </select>
+
+  <select id="getAdminPageList" resultType="UserCoinWallet" parameterType="java.util.Map">
+    select
+    user_coin_wallet.id,
+    user_coin_wallet.uid,
+    user_coin_wallet.total,
+    user_coin_wallet.frozen,
+    user_coin_wallet.borrow,
+    user_coin_wallet.ico,
+    user_coin_wallet.gmt_modified,
+    user_coin_wallet.coin_id,
+    f_user.floginname loginName,
+    f_user.fnickname nickName,
+    f_user.frealname realName,
+    system_coin_type.name coinName
+    from
+    user_coin_wallet left join
+    f_user on f_user.fid = user_coin_wallet.uid left join
+    system_coin_type on system_coin_type.id = user_coin_wallet.coin_id
+    where 1=1
+    <if test="keyword != null">
+      and (
+      f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+      f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+      f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="fuids != null">
+      and f_user.fid in
+      <foreach collection="fuids" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="coinId != null">
+      and user_coin_wallet.coin_id = ${coinId}
+    </if>
+    <if test="orderField != null">
+      order by user_coin_wallet.${orderField} ${orderDirection}
+    </if>
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countAdminPage" resultType="int" parameterType="java.util.Map">
+    select
+    count(*)
+    from
+    user_coin_wallet left join
+    f_user on f_user.fid = user_coin_wallet.uid
+    where 1=1
+    <if test="keyword != null">
+      and (
+      f_user.floginname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+      f_user.fnickname like concat('%',#{keyword,jdbcType=VARCHAR},'%') or
+      f_user.frealname like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="coinId != null">
+      and user_coin_wallet.coin_id = ${coinId}
+    </if>
+    <if test="fuids != null">
+      and f_user.fid in
+      <foreach collection="fuids" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </select>
+
+
+  <select id="selectExistCoinWallet" resultType="UserCoinWallet" parameterType="java.lang.Integer">
+    select <include refid="userCoinWalletColumn" />
+    from user_coin_wallet
+    where
+    <![CDATA[ (total > 0 or frozen > 0 or borrow > 0) ]]>
+    and coin_id = #{coinid}
+  </select>
+
+  <select id="listWalletCapitalBalanceDTOByUids" resultType="WalletCapitalBalanceDTO" parameterType="java.util.Map">
+    SELECT *,(result-total) diff FROM(
+    SELECT temp0.fid fuid,
+    ifnull(rechargeRMB, 0)+
+    ifnull(rechargeRMBWork, 0)+
+    ifnull(rewardRMB, 0)-
+    ifnull(withdrawRMB, 0)-
+    ifnull(icoRMB, 0)+
+    ifnull(send_amount, 0)-
+    ifnull(vip6, 0)+
+    ifnull(hissellamount, 0)+
+    ifnull(cursellamount, 0)+
+    IFNULL(pushinfamount,0)+
+    ifnull(transferAmount,0)-
+    IFNULL(pushoutfamount,0)-
+    ifnull(hisbuyamount, 0)-
+    ifnull(curbuyamount, 0)-
+    ifnull(hissellffees, 0)-
+    ifnull(cursellffees, 0)+
+    ifnull(activityAmount,0)+
+    ifnull(zsjfAmount,0)  result,
+    total
+
+    FROM f_user temp0
+    LEFT JOIN(
+    SELECT fuid,ifnull(sum(ifnull(famount, 0) + ifnull(ffees, 0)),0) rechargeRMB
+    FROM f_wallet_capital_operation
+    WHERE	fstatus = 3 AND finouttype = 1
+    GROUP BY fuid) temp1 ON temp0.fid=temp1.fuid
+    LEFT JOIN(
+    SELECT fuid,ifnull(sum(ifnull(famount, 0) + ifnull(ffees, 0)),0) withdrawRMB
+    FROM f_wallet_capital_operation
+    WHERE	fstatus = 3 AND finouttype = 2
+    GROUP BY fuid) temp2 ON temp0.fid=temp2.fuid
+    LEFT JOIN(
+    SELECT fuid,ifnull(sum(famount), 0) rechargeRMBWork
+    FROM	f_log_console_virtual_recharge
+    WHERE	fstatus = 2 and fcoinid=${coinId}
+    GROUP BY fuid) temp3 ON temp0.fid=temp3.fuid
+    LEFT JOIN(
+    SELECT	fuid,ifnull(sum(famount), 0) rewardRMB
+    FROM	f_reward_code
+    WHERE	fstate = 1 AND ftype = 0
+    GROUP BY fuid) temp4 ON temp0.fid=temp4.fuid
+    LEFT JOIN(
+    SELECT fuid,ifnull(sum(fcny), 0) icoRMB
+    FROM	f_ico_record
+    GROUP BY fuid) temp5 ON temp0.fid=temp5.fuid
+    LEFT JOIN(
+    SELECT	fuid,	(	CASE WHEN flevel = 6 THEN	3888	ELSE	0	END	) vip6
+    FROM	f_user_score
+    GROUP BY fuid) temp6 ON temp0.fid=temp6.fuid
+    LEFT JOIN(
+    select fuid,ifnull(sum(fsuccessamount), 0) hisbuyamount
+    from 	f_entrust_history
+    where fstatus in (2,3,5)  and ftype =0
+    GROUP BY fuid) temp7 ON temp0.fid=temp7.fuid
+    LEFT JOIN(
+    select fuid,ifnull(sum(fsuccessamount), 0) hissellamount,ifnull(sum(ffees), 0) hissellffees
+    from 	f_entrust_history
+    where fstatus in (2,3,5)  and ftype =1
+    GROUP BY fuid) temp8 ON temp0.fid=temp8.fuid
+    LEFT JOIN(
+    select fuid,ifnull(sum(fsuccessamount), 0) curbuyamount
+    from 	f_entrust
+    where fstatus in (2,3,5)  and ftype =0
+    GROUP BY fuid) temp9 ON temp0.fid=temp9.fuid
+    LEFT JOIN(
+    select fuid,ifnull(sum(fsuccessamount), 0) cursellamount,ifnull(sum(ffees), 0) cursellffees
+    from 	f_entrust
+    where fstatus in (2,3,5)  and ftype =1
+    GROUP BY fuid) temp10 ON temp0.fid=temp10.fuid
+    LEFT JOIN(
+    select fuid,sum(fcount) pushoutfcount,sum(famount) pushinfamount from f_user_push
+    where f_user_push.fstate = 2
+    GROUP BY fuid) temp11 ON temp0.fshowid=temp11.fuid
+    LEFT JOIN(
+    select fpushuid,sum(fcount) pushinfcount,sum(famount) pushoutfamount from f_user_push
+    where f_user_push.fstate = 2
+    GROUP BY fpushuid) temp12 ON temp0.fshowid=temp12.fpushuid
+    LEFT JOIN(
+    SELECT sum(pay_amount) pay_amount,uid FROM ico_record
+    where pay_coin_id = ${coinId}
+    GROUP BY uid) temp13 ON temp0.fid=temp13.uid
+    LEFT JOIN(
+    SELECT sum(send_amount) send_amount,uid FROM ico_record
+    LEFT JOIN ico_info ON ico_info.id = ico_record.ico_id
+    WHERE ico_info.ico_coin_id = ${coinId}
+    GROUP BY uid) temp14 ON temp0.fid=temp14.uid
+    LEFT JOIN(
+    select ifnull(sum(famount), 0) transferAmount,fuid
+    from f_log_capital_transfer
+    where fstatus = 1 AND fcoinid = ${coinId}
+    GROUP BY fuid) temp15 ON temp0.fid=temp15.fuid
+    LEFT JOIN(
+    select ifnull(sum(famount), 0) activityAmount,fuid
+    from `f_activity_record`
+    where fstate = 2 AND fcoinid = ${coinId}
+    GROUP BY fuid) temp16 ON temp0.fid=temp16.fuid
+    LEFT JOIN(
+    select ifnull(sum(amount), 0) zsjfAmount,uid
+    from `wallet_zsjf_capital_operation_recharge`
+    where (`status` = 1 or `status` = 4) AND coin_id = ${coinId}
+    GROUP BY uid) temp17 ON temp0.fid=temp17.uid
+    LEFT JOIN(
+    SELECT uid,(total+frozen) total FROM user_coin_wallet where coin_id=${coinId}
+    ) temp50 ON temp0.fid=temp50.uid
+    WHERE 1 = 1
+    <if test="uids != null">
+      AND temp0.fid IN
+      <foreach collection="uids" item="item" open="(" separator="," close=")">
+        ${item}
+      </foreach>
+    </if>
+    ) temp
+  </select>
+</mapper>

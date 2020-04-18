@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:hsf="http://www.taobao.com/hsf" xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.taobao.com/hsf
+		http://www.taobao.com/hsf/hsf.xsd"
+		   default-autowire="byName">
+ 		
+ 	<!-- Admin  -->
+	<hsf:provider id="adminUserServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminUserService"
+		ref="adminUserService" version="1.0" group="admin">
+	</hsf:provider>
+	
+	<hsf:provider id="adminUserCapitalServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminUserCapitalService"
+		ref="adminUserCapitalService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminQuestionServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminQuestionService"
+		ref="adminQuestionService" version="1.0" group="admin">
+	</hsf:provider>
+	
+	<hsf:provider id="adminRewardCodeServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminRewardCodeService"
+		ref="adminRewardCodeService" version="1.0" group="admin">
+	</hsf:provider>
+ 
+ 	<hsf:provider id="adminManageServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminManageService"
+		ref="adminManageService" version="1.0" group="admin">
+	</hsf:provider>
+	
+	<hsf:provider id="adminSystemCoinTypeServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminSystemCoinTypeService"
+		ref="adminSystemCoinTypeService" version="1.0" group="admin">
+		<hsf:methodSpecials>
+			<hsf:methodSpecial name="updateVirtualCoinByEnabled" timeout="60000"></hsf:methodSpecial>
+		</hsf:methodSpecials>
+	</hsf:provider>
+
+	<hsf:provider id="adminArticleServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminArticleService"
+		ref="adminArticleService" version="1.0" group="admin">
+	</hsf:provider>
+	
+	<hsf:provider id="adminSettingServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminSettingService"
+		ref="adminSettingService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminEntrustServerConsumer" interface="com.qkwl.common.rpc.admin.IAdminEntrustServer"
+		ref="adminEntrustServer" version="1.0" group="admin">
+	</hsf:provider>
+	
+	<hsf:provider id="adminDayLogServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminDayLogService"
+		ref="adminDayLogService" version="1.0" group="admin">
+	</hsf:provider>
+	
+	<hsf:provider id="adminLogServiceConsumer" interface="com.qkwl.common.rpc.admin.IAdminLogService"
+		ref="adminLogService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminBeautifulServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminBeautifulService"
+		ref="adminBeautifulService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminCsQuestionServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminCsQuestionService"
+		ref="adminCsQuestionService" version="1.0" group="admin">
+	</hsf:provider>
+	
+	<hsf:provider id="adminStatisticsServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminStatisticsService"
+		ref="adminStatisticsService" version="1.0" group="admin">
+		<hsf:methodSpecials>
+           <hsf:methodSpecial name="sumRWrmb" timeout="8000" ></hsf:methodSpecial>
+           <hsf:methodSpecial name="sumRWcoin" timeout="8000" ></hsf:methodSpecial>
+           <hsf:methodSpecial name="sumBSrmb" timeout="8000" ></hsf:methodSpecial>
+           <hsf:methodSpecial name="sumBScoin" timeout="8000" ></hsf:methodSpecial>
+      	</hsf:methodSpecials>
+	</hsf:provider>
+	
+	<hsf:provider id="redisServiceProvider" interface="com.qkwl.common.rpc.redis.IRedisService"
+		ref="redisInitService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminUserFinancesProvider" interface="com.qkwl.common.rpc.admin.IAdminUserFinances"
+		ref="adminUserFinances" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminIdentityServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminIdentityService"
+		ref="adminIdentityService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminSystemTradeTypeServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminSystemTradeTypeService"
+				  ref="adminSystemTradeTypeService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminValidateServiceProvider" interface="com.qkwl.common.rpc.admin.validate.IAdminValidateSettingService"
+				  ref="adminValidateService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminUserIdentityServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminUserIdentityService"
+				  ref="adminUserIdentityService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminReportServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminReportService"
+				  ref="adminReportService" version="1.0" group="admin">
+	</hsf:provider>
+
+	<hsf:provider id="adminApiAuthServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminApiAuthService"
+				  ref="adminApiAuthService" version="1.0" group="admin">
+	</hsf:provider>
+	<hsf:provider id="adminCommissionRecordServiceProvider" interface="com.qkwl.common.rpc.admin.IAdminCommissionRecordService"
+				  ref="adminCommissionRecordService" version="1.0" group="admin">
+	</hsf:provider>
+
+</beans>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.validate.dao.ValidateTemplateMapper" >
+
+  <sql id="templateColumn">id, send_type, business_type, platform, language, template, params, gmt_create,
+    gmt_modified, version</sql>
+
+  <update id="update" parameterType="ValidateTemplateDO" >
+    update validate_template
+    set send_type = #{sendType,jdbcType=INTEGER},
+      business_type = #{businessType,jdbcType=VARCHAR},
+      platform = #{platform,jdbcType=INTEGER},
+      language = #{language,jdbcType=INTEGER},
+      template = #{template,jdbcType=LONGVARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      version = version + 1
+    where id = #{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+
+  <select id="select" resultType="ValidateTemplateDO" parameterType="java.lang.Integer" >
+    select <include refid="templateColumn" />
+    from validate_template
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultType="ValidateTemplateDO">
+    select <include refid="templateColumn" />
+    from validate_template
+  </select>
+
+  <select id="listPage" resultType="ValidateTemplateDO" parameterType="java.util.Map">
+    select <include refid="templateColumn" />
+    from validate_template
+    where 1 = 1
+    <if test="orderField != null and orderDirection != null">
+      order by ${orderField} ${orderDirection}
+    </if>
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="countPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*)
+    from validate_template
+    where 1 = 1
+  </select>
+</mapper>

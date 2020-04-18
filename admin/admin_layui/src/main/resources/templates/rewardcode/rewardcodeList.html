@@ -1,0 +1,113 @@
+<div class="layui-form" lay-href="admin/rewardcodeList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">登录名</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="ftype">
+					<option th:each="v : ${codetype}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == ftype}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="fstate">
+					<option th:each="v : ${stateMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == fstate}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">批次</label>
+			<div class="layui-input-inline">
+				<input name="fbatch" th:value="${fbatch }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">创建时间</label>
+			<div class="layui-input-inline">
+				<input name="startCreateDate" th:value="${startCreateDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+			<div class="layui-form-mid">-</div>
+			<div class="layui-input-inline">
+				<input name="endCreateDate" th:value="${endCreateDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">使用时间</label>
+			<div class="layui-input-inline">
+				<input name="startUseDate" th:value="${startUseDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+			<div class="layui-form-mid">-</div>
+			<div class="layui-input-inline">
+				<input name="endUseDate" th:value="${endUseDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<div class="layui-btn-group">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/createRewardcode.html"
+					lay-href="admin/goRewardcodeJSP.html?url=rewardcode/createRewardcode" lay-target="dialog" lay-height="500" lay-width="800">新增</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/createRewardcode.html"
+					lay-href="admin/goRewardcodeJSP.html?url=rewardcode/createRewardcodebatch" lay-target="dialog" lay-height="500" lay-width="800">批量新增</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteRewardcode.html"
+					lay-href="admin/deleteRewardcode.html" lay-checked="codeid" lay-target="ajax" lay-tips="确定要删除吗?">删除</button>
+		</div>
+		<button class="layui-btn layui-btn-small" lay-href="admin/RewardcodeExport.html" lay-target="export" lay-tips="确实要导出这些记录吗?">导出</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>UID</th>
+					<th>登录名</th>
+					<th>类型</th>
+					<th>激活码</th>
+					<th data-order-field="famount">数量(金额)</th>
+					<th>批次</th>
+					<th>是否限制使用</th>
+					<th>使用次数</th>
+					<th data-order-field="fusedate">有效期至</th>
+					<th>状态</th>
+					<th data-order-field="fcreatetime">创建时间</th>
+					<th data-order-field="fupdatetime">使用时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="list : ${codelist.data}">
+					<td>
+						<input type="checkbox" th:name="${list.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${list.fuid}"></td>
+					<td th:text="${list.floginname}"></td>
+					<td th:text="${list.ftype_s }"></td>
+					<td th:text="${list.fcode }"></td>
+					<td><span class="amount" th:text="${#decimal.format(list.famount, 1, 10)}"></span></td>
+					<td th:text="${list.fbatch }"></td>
+					<td th:text="${list.fislimituse }"></td>
+					<td th:text="${list.fusenum }"></td>
+					<td th:text="${list.fusedate == null ? '':#dates.format(list.fusedate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${list.fstate ? '已使用':'未使用' }"></td>
+					<td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${codelist.totalPages}, lay-curr=${codelist.currentPage}"></div>
+</div>

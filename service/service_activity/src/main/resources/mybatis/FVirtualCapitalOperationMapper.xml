@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qkwl.service.activity.dao.FVirtualCapitalOperationMapper">
+
+
+	<sql id="operationColumn">
+		fid, fuid, fcoinid, fcreatetime, famount, ffees, ftype, fstatus, fupdatetime,
+		fwithdrawaddress, frechargeaddress, funiquenumber, fconfirmations, fhasowner, fblocknumber, version, fagentid, fsource
+	</sql>
+
+	<select id="selectReport" resultType="ReportCapital" parameterType="java.util.Map">
+		<![CDATA[
+		SELECT
+			ifnull(sum(famount),0) AS amount,
+			ifnull(sum(ffees),0) AS fee
+		FROM f_virtual_capital_operation
+		WHERE fcoinid = #{coin, jdbcType=INTEGER}
+		AND fstatus = 3
+		AND ftype = #{type, jdbcType=INTEGER}
+		AND fupdatetime >= #{begin, jdbcType=VARCHAR}
+		AND fupdatetime < #{end, jdbcType=VARCHAR}
+		]]>
+	</select>
+
+	<select id="countVirtualCapitalOperation" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(fid)
+		from f_virtual_capital_operation
+		where
+		fuid = #{fuid,jdbcType=INTEGER} and
+		ftype = #{ftype,jdbcType=INTEGER}
+		<if test="fcoinid != null">
+			and fcoinid = #{fcoinid,jdbcType=INTEGER}
+		</if>
+		<if test="fstatus != null">
+			and fstatus = #{fstatus,jdbcType=INTEGER}
+		</if>
+	</select>
+
+</mapper>

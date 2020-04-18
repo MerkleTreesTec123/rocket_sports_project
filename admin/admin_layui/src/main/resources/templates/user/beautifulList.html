@@ -1,0 +1,48 @@
+<div class="layui-form" lay-href="admin/beautifulList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/addBeautiful.html"
+				lay-href="admin/goBeautifulJSP.html?url=user/addBeautiful"  lay-target="dialog" lay-height="250" lay-width="400">添加靓号</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/editBeautiful.html"
+			lay-href="admin/goBeautifulJSP.html?url=user/editBeautiful" lay-checked="fid" lay-target="dialog" lay-height="250" lay-width="400">修改靓号</button>
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/deleteBeautiful.html"
+				lay-href="admin/deleteBeautiful.html" lay-checked="fid" lay-target="ajax" lay-tips="确定要删除靓号吗?">删除</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="160%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>靓号ID</th>
+					<th>替换ID</th>
+					<th>创建时间</th>
+					<th>使用时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="list : ${dataList.data}">
+					<td>
+						<input type="checkbox" th:name="${list.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${list.fbid}"></td>
+					<td th:text="${list.fuid}"></td>
+					<td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${dataList.totalPages}, lay-curr=${dataList.currentPage}"></div>
+</div>

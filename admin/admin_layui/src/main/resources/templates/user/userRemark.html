@@ -1,0 +1,10 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="user/userForbbin.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">操作备注：</label>
+		<div class="layui-input-block">
+			<input type="hidden" name="uid" th:value="${fuser.fid}"/>
+			<input type="hidden" name="status" th:value="${status}"/>
+			<input class="layui-input" name="remark" lay-verify="required" />
+		</div>
+	</div>
+</div>

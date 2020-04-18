@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.FUserVirtualAddressMapper" >
+ 
+  <sql id="addressColumn">fid, fcoinid, fadderess, fuid, fcreatetime</sql>
+
+  <select id="selectByUserAndCoin" resultType="com.qkwl.service.user.model.FUserVirtualAddressDO" parameterType="com.qkwl.service.user.model.FUserVirtualAddressDO" >
+    select <include refid="addressColumn" /> from f_user_virtual_address
+    where fuid = #{fuid,jdbcType=INTEGER} and fcoinid = #{fcoinid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUser" resultType="com.qkwl.service.user.model.FUserVirtualAddressDO" parameterType="java.lang.Integer">
+    select <include refid="addressColumn" /> from f_user_virtual_address where fuid= #{fuid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByCoinAndAddress" resultType="com.qkwl.service.user.model.FUserVirtualAddressDO" >
+    select <include refid="addressColumn" /> from f_user_virtual_address where fcoinid = #{fcoinid,jdbcType=INTEGER} and fadderess = #{fadderess,jdbcType=INTEGER}
+  </select>
+
+   <select id="selectByAddress" resultType="com.qkwl.service.user.model.FUserVirtualAddressDO" >
+    select <include refid="addressColumn" /> from f_user_virtual_address where fadderess = #{faddress,jdbcType=INTEGER}
+  </select>
+  
+   <insert id="insert" parameterType="com.qkwl.service.user.model.FUserVirtualAddressDO" keyProperty="fid">
+    insert into f_user_virtual_address (
+    	fcoinid, 
+    	fadderess, 
+    	fuid, 
+    	fcreatetime
+    ) values (
+    	#{fcoinid,jdbcType=INTEGER}, 
+    	#{fadderess,jdbcType=VARCHAR}, 
+    	#{fuid,jdbcType=INTEGER},
+    	#{fcreatetime,jdbcType=TIMESTAMP} )
+  </insert>
+
+</mapper>

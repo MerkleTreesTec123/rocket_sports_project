@@ -1,0 +1,52 @@
+<div class="layui-form layui-form-pane" lay-href="validate/platformadd.html" xmlns:th="http://www.thymeleaf.org">
+    <div class="layui-form-item">
+        <label class="layui-form-label">平台名称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="name" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">域名：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="domain" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">签名：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="sign"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">普通短信账号：</label>
+        <div class="layui-input-block">
+            <select name="smsId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">语音短信账号：</label>
+        <div class="layui-input-block">
+            <select name="voiceSmsId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">国际短信账号：</label>
+        <div class="layui-input-block">
+            <select name="internationalSmsId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮件账号：</label>
+        <div class="layui-input-block">
+            <select name="emailId">
+                <option th:each="v:${accountMap}" th:value="${v.key}" th:text="${v.value}"></option>
+            </select>
+        </div>
+    </div>
+</div>

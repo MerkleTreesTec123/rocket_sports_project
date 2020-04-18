@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.mapper.FUserScoreMapper" >
+  
+  <sql id="scoreColumns">fid, fscore, flevel, 
+      version, ftradingqty, fleveltime, fuid
+  </sql>
+  
+  <update id="updateByPrimaryKey" parameterType="FUserScore" >
+    update f_user_score
+    set 
+    	fscore = #{fscore,jdbcType=DECIMAL},
+      	flevel = #{flevel,jdbcType=INTEGER},
+      	fuid = #{fuid,jdbcType=INTEGER},
+      	version = version + 1,
+      	ftradingqty = #{ftradingqty,jdbcType=INTEGER},
+      	fleveltime = #{fleveltime,jdbcType=TIMESTAMP}
+    where 
+    	fid = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByUid" resultType="FUserScore" >
+    select <include refid="scoreColumns"/> from f_user_score where fuid = #{fuid}
+  </select>
+  
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.admin.bc.dao.FDayCapitalCoinMapper" >
+  <sql id="capitalColumn">
+  	 fid, fcoinid, frecharge, fwithdraw, fwithdrawwait, ffees, fnetfees, fleverborrow, fleverrepay, fupdatetime, fcreatetime
+  </sql>
+  
+  <select id="getAdminPageList" resultType="FDayCapitalCoin"  parameterType="java.util.Map">
+   select <include refid="capitalColumn" />
+   from f_day_capital_coin
+   where 1=1
+   <if test="fcoinid != null">
+   and fcoinid = #{fcoinid}
+   </if>
+   <if test="fcreatetime != null">
+   and date_format(fcreatetime, '%Y-%m-%d') = date_format(#{fcreatetime}, '%Y-%m-%d')
+   </if>
+   order by ${orderField} ${orderDirection}
+   limit #{offset},#{limit}
+  </select>
+  
+   <select id="countAdminPageList" resultType="java.lang.Integer" parameterType="java.util.Map">
+   select count(fid)
+   from f_day_capital_coin
+   where 1=1
+   <if test="fcoinid != null">
+   and fcoinid = #{fcoinid}
+   </if>
+   <if test="fcreatetime != null">
+   and date_format(fcreatetime, '%Y-%m-%d') = date_format(#{fcreatetime}, '%Y-%m-%d')
+   </if>
+  </select>
+</mapper>

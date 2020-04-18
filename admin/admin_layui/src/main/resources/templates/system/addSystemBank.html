@@ -1,0 +1,42 @@
+<div class="layui-form layui-form-pane" xmlns:th="http://www.thymeleaf.org" lay-href="admin/saveSystemBank.html">
+	<div class="layui-form-item">
+		<label class="layui-form-label">银行名称：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="systemBank.fbankName" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">开户姓名：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="systemBank.fownerName" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">开户地址：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="systemBank.fbankAddress" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">银行卡号：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="systemBank.fbankNumber" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">排序：</label>
+		<div class="layui-input-block">
+			<input class="layui-input" name="systemBank.FSortId" lay-verify="required"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">类型：</label>
+		<div class="layui-input-block">
+			<select type="combox" name="systemBank.fBankType">
+				<option value="0">银行卡</option>
+				<option value="1">支付宝</option>
+				<option value="5">质数金服</option>
+			</select>
+		</div>
+	</div>
+</div>

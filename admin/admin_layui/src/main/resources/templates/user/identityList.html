@@ -1,0 +1,55 @@
+<div class="layui-form" lay-href="/admin/identityList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词</label>
+			<div class="layui-input-inline">
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">通过状态</label>
+			<div class="layui-input-inline">
+				<select name="fisok">
+					<option th:value="2" th:text="未通过"
+							th:selected="${fisok == 2}"></option>
+					<option th:value="1" th:text="通过"
+							th:selected="${fisok == 1}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/updateIdentity.html"
+				lay-href="admin/goIdentity?url=user/updateIdentity" lay-checked="fid" lay-target="dialog" lay-height="380" lay-width="430">修改</button>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="160%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>真实姓名</th>
+					<th>证件编号</th>
+					<th>状态</th>
+					<th data-order-field="fcreatetime">更新时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="identity : ${page.data}">
+					<td>
+						<input type="checkbox" th:name="${identity.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${identity.fusername}"></td>
+					<td th:text="${identity.fidentityno}"></td>
+					<td th:text="${identity.fisok == 1 ? '通过':'未通过'}"></td>
+					<td th:text="${identity.fcreatetime == null ? '': #dates.format(identity.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.activity.dao.FDayCapitalCoinMapper" >
+  
+  <sql id="dayCapitalCoinColumns">
+  	 fid, fcoinid, frecharge, fwithdraw, fwithdrawwait, ffees, fnetfees, fleverborrow, fleverrepay, fupdatetime, fcreatetime, fagentid
+  </sql>
+  
+  <insert id="insert" parameterType="FDayCapitalCoin" keyProperty="fid">
+    insert into f_day_capital_coin (
+      fcoinid, 
+      frecharge, 
+      fwithdraw, 
+      fwithdrawwait, 
+      ffees, 
+      fnetfees, 
+      fleverborrow,
+      fleverrepay,
+      fupdatetime,
+      fcreatetime,
+      fagentid
+    ) values (
+      #{fcoinid,jdbcType=INTEGER}, 
+      #{frecharge,jdbcType=DECIMAL}, 
+      #{fwithdraw,jdbcType=DECIMAL}, 
+      #{fwithdrawwait,jdbcType=DECIMAL}, 
+      #{ffees,jdbcType=DECIMAL}, 
+      #{fnetfees,jdbcType=DECIMAL}, 
+      #{fleverborrow,jdbcType=DECIMAL}, 
+      #{fleverrepay,jdbcType=DECIMAL}, 
+      #{fupdatetime,jdbcType=TIMESTAMP},
+      #{fcreatetime,jdbcType=TIMESTAMP},
+      #{fagentid,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateByModel" parameterType="FDayCapitalCoin" >
+    update f_day_capital_coin set 
+      fcoinid = #{fcoinid,jdbcType=INTEGER},
+      frecharge = #{frecharge,jdbcType=DECIMAL},
+      fwithdraw = #{fwithdraw,jdbcType=DECIMAL},
+      fwithdrawwait = #{fwithdrawwait,jdbcType=DECIMAL},
+      ffees = #{ffees,jdbcType=DECIMAL},
+      fnetfees = #{fnetfees,jdbcType=DECIMAL},
+      fleverborrow = #{fleverborrow,jdbcType=DECIMAL},
+      fleverrepay = #{fleverrepay,jdbcType=DECIMAL},
+      fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP},
+      fcreatetime = #{fcreatetime,jdbcType=TIMESTAMP},
+      fagentid = #{fagentid,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByDate" resultType="FDayCapitalCoin">
+    select <include refid="dayCapitalCoinColumns"/> from f_day_capital_coin 
+    where date_format(fcreatetime, "%Y-%m-%d") = #{time} and fcoinid = #{fcoinid} and fagentid = #{fagentid}
+  </select>
+  
+  <select id="selectAll" resultType="FDayCapitalCoin" >
+    select <include refid="dayCapitalCoinColumns"/> from f_day_capital_coin
+  </select>
+</mapper>

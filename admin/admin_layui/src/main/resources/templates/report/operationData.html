@@ -1,0 +1,43 @@
+g'i't<div xmlns:th="http://www.thymeleaf.org" class="layui-form" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+     lay-href="/charts/operationData.html">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">起始时间：</label>
+            <div class="layui-input-inline">
+                <input name="begin" th:value="${begin }" class="layui-input" onclick="layui.laydate({elem: this})"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">结束时间：</label>
+            <div class="layui-input-inline">
+                <input name="end" th:value="${end }" class="layui-input" onclick="layui.laydate({elem: this})"/>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="layui-btn-box">
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>数据类型</th>
+                <th>数量</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>邮件</td>
+                <td th:text="${data == null ? '':data.email}"></td>
+            </tr>
+            <tr>
+                <td>短信</td>
+                <td th:text="${data == null ? '':data.sms}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

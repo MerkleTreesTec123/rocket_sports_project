@@ -1,0 +1,121 @@
+<div class="layui-form" lay-href="admin/capitaloperationList.html" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<div class="layui-form-item layui-search-box">
+		<div class="layui-inline">
+			<label class="layui-form-label">关键词[会员登录名、银行帐户、金额]</label>
+			<div class="layui-input-inline">
+				<input type="hidden" name="type" th:value="${type}" />
+				<input name="keywords" th:value="${keywords }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">充值ID</label>
+			<div class="layui-input-inline">
+				<input name="capitalId" th:value="${capitalId }" class="layui-input" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="fstatus">
+					<option th:each="v : ${statusMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == fstatus}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline" th:if="${type == 2}">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select type="combox" name="orderType">
+					<option value="0" th:selected="${0 == orderType}">全部</option>
+					<option value="1" th:selected="${1 == orderType}">手工提现</option>
+					<option value="2" th:selected="${2 == orderType}">在线审核</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">开始时间</label>
+			<div class="layui-input-inline">
+				<input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">结束时间</label>
+			<div class="layui-input-inline">
+				<input name="endDate" th:value="${endDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
+					   style="width:160px;"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-small">查询</button>
+		</div>
+	</div>
+	<hr />
+	<div class="layui-btn-box">
+		<button class="layui-btn layui-btn-small" lay-href="admin/capitaloperationExport.html" lay-target="export" lay-tips="确实要导出这些记录吗?">导出</button>
+
+		<div class="layui-btn-group" th:if="${type == 1}">
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalInRestore.html"
+			lay-href="admin/capitalInRestore.html" lay-checked="uid" lay-target="ajax" lay-tips="确定要恢复充值吗?">恢复充值</button>
+		</div>
+		<div class="layui-btn-group" th:if="${type == 2}">
+			<button  class="layui-btn layui-btn-small" shiro:hasPermission="admin/capitalOutAudit.html?type=5"
+					lay-href="admin/capitalOutAudit.html?type=5&amp;online=0" lay-checked="uid" lay-target="ajax" lay-tips="确定要恢复提现吗?">恢复提现</button>
+			<button class="layui-btn layui-btn-small" shiro:hasPermission="admin/onLineTradeWithdrawQuery.html"
+					lay-href="admin/onLineTradeWithdrawQuery.html" lay-checked="uid" lay-target="info" lay-height="380" lay-width="900">在线状态查询</button>
+		</div>
+	</div>
+	<div class="layui-conten-box">
+		<table class="layui-table" width="100%">
+			<thead>
+				<tr>
+					<th></th>
+					<th>会员UID</th>
+					<th>登录名</th>
+					<th>会员昵称</th>
+					<th>会员真实姓名</th>
+					<th>收款银行</th>
+					<th>卡号</th>
+					<th>类型</th>
+					<th data-order-field="fstatus">状态</th>
+					<th data-order-field="famount">金额</th>
+					<th data-order-field="ffees">手续费</th>
+					<th>备注</th>
+					<th>开户行地址</th>
+					<th>订单来源</th>
+					<th data-order-field="fcreatetime">创建时间</th>
+					<th data-order-field="fupdatetime">最后修改时间</th>
+					<th>审核人</th>
+					<th>描述</th>
+					<th>订单号</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="capitaloperation : ${capitaloperationList.data}">
+					<td>
+						<input type="checkbox" th:name="${capitaloperation.fid}" lay-skin="primary" />
+					</td>
+					<td th:text="${capitaloperation.fuid}"></td>
+					<td th:text="${capitaloperation.floginname}"></td>
+					<td th:text="${capitaloperation.fnickname}"></td>
+					<td th:text="${capitaloperation.frealname}"></td>
+					<td th:text="${capitaloperation.fbank}"></td>
+					<td th:text="${capitaloperation.faccount}"></td>
+					<td th:text="${capitaloperation.ftype_s}"></td>
+					<td th:text="${capitaloperation.fstatus_s}"></td>
+					<td><span class="amount" th:text="${#decimal.format(capitaloperation.famount, 1, 10)}"></span></td>
+					<td th:text="${#decimal.format(capitaloperation.ffees, 1, 10)}"></td>
+					<td th:text="${capitaloperation.fid}"></td>
+					<td th:text="${capitaloperation.faddress}"></td>
+					<td th:text="${capitaloperation.fsource_s}"></td>
+					<td th:text="${capitaloperation.fcreatetime == null ? '':#dates.format(capitaloperation.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${capitaloperation.fupdatetime == null ? '':#dates.format(capitaloperation.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${capitaloperation.fadminname}"></td>
+					<td th:text="${capitaloperation.fremark}"></td>
+					<td th:text="${capitaloperation.fserialno}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-laypage-box" th:attr="lay-pages=${capitaloperationList.totalPages}, lay-curr=${capitaloperationList.currentPage}"></div>
+</div>

@@ -1,0 +1,151 @@
+<div class="layui-form">
+    <div id="register" style="display:inline-block;width:400px;height:400px;"></div>
+    <div id="coin" style="display:inline-block;width:1000px;height:400px;"></div>
+</div>
+<script type="text/javascript" src="js/echarts/echarts.min.js"></script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var $ = layui.jquery;
+    var register = echarts.init(document.getElementById('register'));
+    var coin = echarts.init(document.getElementById('coin'));
+    // 指定图表的配置项和数据
+    var regoption = {
+        title: {
+            text: '平台总注册人数'
+        },
+        tooltip: {},
+        legend: {
+            data: ['注册人数']
+        },
+        grid: {
+            width: '50%'
+        },
+        xAxis: {
+            boundaryGap: true,
+            data: ["注册人数"]
+        },
+        yAxis: {},
+
+        series: [{
+            type: 'bar',
+            barWidth: 30,
+            barGap: '10%',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top'
+                }
+            },
+            data: []
+        }]
+    };
+
+    var coinoption = {
+        title: {
+            text: '平台总币种存量'
+        },
+        tooltip: {},
+        legend: {
+            data: ['可用', '冻结', '总量']
+        },
+        xAxis: {
+            data: ['比特币', '莱特币', '以太经典']
+        },
+        yAxis: {},
+        series: [{
+            name: '可用',
+            type: 'bar',
+            barWidth: 30,
+            barCategoryGap: '10%',
+            barGap: '100%',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top'
+                }
+            },
+            data: []
+        },
+            {
+                name: '冻结',
+                type: 'bar',
+                barWidth: 30,
+                barCategoryGap: '10%',
+                barGap: '100%',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                data: []
+            },
+            {
+                name: '总量',
+                type: 'bar',
+                barWidth: 30,
+                barCategoryGap: '10%',
+                barGap: '100%',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                data: []
+            }]
+    };
+
+    refreshCharts();
+    // 使用刚指定的配置项和数据显示图表。
+    register.setOption(regoption);
+    coin.setOption(coinoption);
+    $(function () {
+        setTimeout(function () {
+            $("#register").parent(".layui-form").css("overflow-y","auto").height($("#register").parents(".layui-tab-content").height());
+        }, 50);
+        $(window).on("resize",function(){
+            setTimeout(function () {
+                $("#register").parent(".layui-form").css("overflow-y","auto").height($("#register").parents(".layui-tab-content").height());
+            }, 50);
+        });
+    })
+    function refreshCharts() {
+        // 异步加载数据
+        $.get('/report/chartsrefresh').done(function (data) {
+            var btc = data.data.btc;
+            var ltc = data.data.ltc;
+            var etc = data.data.etc;
+            // 填入数据
+            register.setOption({
+                                   series: [{
+                                       // 根据名字对应到相应的系列
+                                       name: '注册人数',
+                                       type: 'bar',
+                                       data: [data.data.regnum]
+                                   }]
+                               });
+
+            coin.setOption({
+                               series: [
+                                   {
+                                       // 根据名字对应到相应的系列
+                                       name: '可用',
+                                       data: [btc.free, ltc.free, etc.free]
+                                   },
+                                   {
+                                       // 根据名字对应到相应的系列
+                                       name: '冻结',
+                                       data: [btc.frozen, ltc.frozen, etc.frozen]
+                                   },
+                                   {
+                                       // 根据名字对应到相应的系列
+                                       name: '总量',
+                                       data: [btc.total, ltc.total, etc.total]
+                                   }
+
+                               ]
+                           });
+        });
+    }
+</script>

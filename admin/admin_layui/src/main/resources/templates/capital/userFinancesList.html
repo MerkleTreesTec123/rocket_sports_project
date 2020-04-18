@@ -1,0 +1,81 @@
+<div class="layui-form" lay-href="admin/userFinances.html" xmlns:th="http://www.thymeleaf.org"
+     xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <div class="layui-form-item layui-search-box">
+        <div class="layui-inline">
+            <label class="layui-form-label">会员UID</label>
+            <div class="layui-input-inline">
+                <input name="keywords" th:value="${keywords }" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">虚拟币类型</label>
+            <div class="layui-input-inline">
+                <select type="combox" name="fcoinid">
+                    <option th:each="v : ${coinMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == fcoinid}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select type="combox" name="fstate">
+                    <option th:each="v : ${stateMap}" th:value="${v.key}" th:text="${v.value}" th:selected="${v.key == fstate}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">日期</label>
+            <div class="layui-input-inline">
+                <input name="logDate" th:value="${logDate }" class="layui-input" onclick="layui.laydate({ elem: this, istime: true, format: 'YYYY-MM-DD'})"/>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-small">查询</button>
+        </div>
+    </div>
+    <hr />
+    <div class="layui-btn-box">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userFinancesRedeem.html"
+                    lay-href="admin/userFinancesRedeem.html" lay-checked="fid" lay-target="ajax" lay-tips="确定要赎回吗?">赎回
+            </button>
+            <button class="layui-btn layui-btn-small" shiro:hasPermission="admin/userFinancesRedeem.html"
+                    lay-href="admin/userFinancesRedeemBatch.html" lay-checked="ids" lay-filter="allChoose" lay-target="ajax" lay-tips="确定要批量赎回吗?">批量赎回
+            </button>
+        </div>
+    </div>
+    <div class="layui-conten-box">
+        <table class="layui-table" width="100%">
+            <thead>
+            <tr>
+                <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose" /></th>
+                <th>UID</th>
+                <th>币种</th>
+                <th>类型</th>
+                <th data-order-field="famount">数量</th>
+                <th data-order-field="fplanamount">预计收益</th>
+                <th>状态</th>
+                <th data-order-field="fcreatetime">创建时间</th>
+                <th data-order-field="fupdatetime">预计发放时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list : ${page.data}">
+                <td>
+                    <input type="checkbox" th:name="${list.fid}" lay-skin="primary" />
+                </td>
+                <td th:text="${list.fuid}"></td>
+                <td th:text="${coinMap[list.fcoinid]}"></td>
+                <td th:text="${list.fname}"></td>
+                <td><span class="amount" th:text="${#decimal.format(list.famount, 1, 10)}"></span></td>
+                <td th:text="${#decimal.format(list.fplanamount, 1, 10)}"></td>
+                <td th:text="${list.fstate_s}"></td>
+                <td th:text="${list.fcreatetime == null ? '':#dates.format(list.fcreatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${list.fupdatetime == null ? '':#dates.format(list.fupdatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="layui-laypage-box" th:attr="lay-pages=${page.totalPages}, lay-curr=${page.currentPage}"></div>
+</div>

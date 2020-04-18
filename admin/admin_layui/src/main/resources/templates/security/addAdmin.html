@@ -1,0 +1,42 @@
+<div xmlns:th="http://www.thymeleaf.org" class="layui-form layui-form-pane" lay-href="admin/saveAdmin.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">管理员名称：</label>
+        <div class="layui-input-block">
+            <input class="layui-input" name="fname" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码：</label>
+        <div class="layui-input-block">
+            <input type="password" id="fpassword" class="layui-input" name="fpassword" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码：</label>
+        <div class="layui-input-block">
+            <input type="password" id="confirmfpassword" class="layui-input" lay-verify="required|equalto"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">管理员角色：</label>
+        <div class="layui-input-block">
+            <select name="froleid">
+                <option th:each="type : ${roleMap }" th:value="${type.key}" th:text="${type.value}"></option>
+            </select>
+        </div>
+    </div>
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form()
+                , $ = layui.jquery;
+            //自定义验证规则
+            form.verify({
+                            equalto: function () {
+                                if ($("#confirmfpassword").val() != $("#fpassword").val()) {
+                                    return "两次输入密码不相等";
+                                }
+                            }
+                        });
+        });
+    </script>
+</div>

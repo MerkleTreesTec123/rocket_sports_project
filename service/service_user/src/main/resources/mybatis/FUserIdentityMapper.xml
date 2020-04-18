@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qkwl.service.user.dao.FUserIdentityMapper" >
+
+  <sql id="identityColumn">fid, fuid, fcountry, fname, fcode, ftype, fstatus, fcreatetime, fupdatetime,idCardZmImgURL,idCardFmImgURL,idCardScImgURL</sql>
+
+
+  <insert id="insert" parameterType="FUserIdentity" >
+    insert into f_user_identity (fuid, fcountry,
+    fname, fcode, ftype,
+    fstatus, fcreatetime, fupdatetime,idCardZmImgURL,idCardFmImgURL,idCardScImgURL
+    )
+    values (#{fuid,jdbcType=INTEGER}, #{fcountry,jdbcType=VARCHAR},
+    #{fname,jdbcType=VARCHAR}, #{fcode,jdbcType=VARCHAR}, #{ftype,jdbcType=INTEGER},
+    #{fstatus,jdbcType=INTEGER}, #{fcreatetime,jdbcType=TIMESTAMP}, #{fupdatetime,jdbcType=TIMESTAMP},
+    #{idCardZmImgURL,jdbcType=VARCHAR},#{idCardFmImgURL,jdbcType=VARCHAR},#{idCardScImgURL,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="FUserIdentity" >
+    update f_user_identity
+    set
+    fcountry = #{fcountry,jdbcType=VARCHAR},
+    fname = #{fname,jdbcType=VARCHAR},
+    fcode = #{fcode,jdbcType=VARCHAR},
+    idCardZmImgURL = #{idCardZmImgURL,jdbcType=VARCHAR},
+    idCardFmImgURL = #{idCardFmImgURL,jdbcType=VARCHAR},
+    idCardScImgURL = #{idCardScImgURL,jdbcType=VARCHAR},
+    ftype = #{ftype,jdbcType=INTEGER},
+    fstatus = #{fstatus,jdbcType=INTEGER},
+    fupdatetime = #{fupdatetime,jdbcType=TIMESTAMP}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByUser" resultType="FUserIdentity" parameterType="java.lang.Integer" >
+    select <include refid="identityColumn" />
+    from f_user_identity
+    where fuid = #{fuid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByCode" resultType="FUserIdentity" parameterType="java.lang.String" >
+    select <include refid="identityColumn" />
+    from f_user_identity
+    where fcode = #{fcode,jdbcType=VARCHAR}
+  </select>
+</mapper>
