@@ -71,7 +71,7 @@
 		<log4jdbc.version>1.2</log4jdbc.version>
 
 		<!-- json -->
-		<jackson.version>2.8.5</jackson.version>
+		<jackson.version>2.10.3</jackson.version>
 		<json.lib.version>2.4</json.lib.version>
 		<fastjson.version>1.2.28</fastjson.version>
 		<gson.version>2.6.2</gson.version>
