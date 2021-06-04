@@ -116,7 +116,7 @@
 		<dom4j.version>1.6.1</dom4j.version>
 
 		<!-- HTTP -->
-		<httpclient.version>4.5</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<httpmime.version>4.5</httpmime.version>
 		<okhttp.version>3.6.0</okhttp.version>
 		<!-- Sumapay Signature -->
