@@ -123,7 +123,7 @@
 		<SignatureUtil.version>1.0</SignatureUtil.version>
 
 		<!-- Export -->
-		<poi.version>3.16</poi.version>
+		<poi.version>4.1.1</poi.version>
 		<jxl.version>2.6.12</jxl.version>
 		<opencsv.version>3.9</opencsv.version>
 
